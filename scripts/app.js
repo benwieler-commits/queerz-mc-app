@@ -3573,3 +3573,91 @@ function exportPlayerData(playerName) {
 // This prevents duplicate event listener registration and ensures proper initialization order.
 
 console.log('✅ QUEERZ! MC Companion script loaded successfully!');
+// ==============================
+// FIREBASE BROADCASTING - MC APP
+// ==============================
+
+// REQUIREMENT: window.firebaseDB must exist (we initialize it in index.html)
+if (!window.firebaseDB) {
+  console.warn("Firebase DB not found. Did you add the firebase config/script to index.html?");
+}
+
+// Session / broadcast code utilities
+function makeSessionCode(length = 6) {
+  // e.g. 'AB3F9Z'
+  return Math.random().toString(36).slice(2, 2 + length).toUpperCase();
+}
+
+// Expose the current broadcast session code (MC sets this when starting a session)
+if (!window.MC_SESSION_CODE) {
+  window.MC_SESSION_CODE = makeSessionCode(6);
+}
+
+// Optional: show the session code in the UI if an element exists
+function displaySessionCode() {
+  const el = document.getElementById('mcSessionCodeDisplay');
+  if (el) el.textContent = window.MC_SESSION_CODE;
+}
+displaySessionCode();
+
+// Current in-memory MC state
+let currentSceneData = currentSceneData || { image: null, text: null };
+let currentMusicData = currentMusicData || { title: null, url: null };
+
+// Broadcast to Firebase (session-scoped)
+function broadcastToPlayersFirebase(sessionCode = window.MC_SESSION_CODE) {
+  if (!window.firebaseDB) return console.warn('firebaseDB not initialised');
+
+  const mcState = {
+    currentScene: currentSceneData || null,
+    currentMusic: currentMusicData || null,
+    timestamp: Date.now()
+  };
+
+  // Path: /sessions/<code>
+  const sessionPath = 'sessions/' + sessionCode;
+  window.firebaseDB.ref(sessionPath).set(mcState)
+    .then(() => console.log('📡 Broadcasted to Firebase session', sessionCode, mcState))
+    .catch(err => console.error('Broadcast error:', err));
+}
+
+// Replace your old update functions to also call Firebase writer
+function updateSceneData(imageUrl, sceneText) {
+  currentSceneData = { image: imageUrl, text: sceneText };
+  broadcastToPlayersFirebase();
+}
+
+function updateMusicData(title, url) {
+  currentMusicData = { title: title, url: url };
+  broadcastToPlayersFirebase();
+}
+
+// If you still want an interval broadcast (optional). Recommend broadcasting on-change instead.
+// Comment out setInterval if you don't want periodic writes.
+window._firebaseBroadcastInterval = setInterval(() => {
+  broadcastToPlayersFirebase();
+}, 10000);
+
+// On page load broadcast current state once (helps players that join right after session starts)
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(broadcastToPlayersFirebase, 500);
+});
+
+// Helper shortcuts (keeping names from your template for compatibility)
+function broadcastCharacterSpotlight(characterId) {
+  if (window.characterProfiles && window.characterProfiles[characterId]) {
+    const char = window.characterProfiles[characterId];
+    updateSceneData(char.image, char.name);
+  } else {
+    console.warn('Character not found for broadcast:', characterId);
+  }
+}
+function broadcastScene(sceneName, sceneImageUrl) {
+  updateSceneData(sceneImageUrl, sceneName);
+}
+function broadcastMusic(trackTitle, trackUrl) {
+  updateMusicData(trackTitle, trackUrl);
+}
+// ==============================================
+// END FIREBASE BROADCASTING - MC APP
+// ===================================

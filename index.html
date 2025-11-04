@@ -10,6 +10,22 @@
 <body>
 <!-- TOP HEADER -->
 <header class="app-header">
+<!-- Put this somewhere visible in your MC UI (e.g., header) -->
+<div id="mcBroadcastUI" style="display:flex; gap:8px; align-items:center;">
+  <strong>Session Code:</strong>
+  <span id="mcSessionCodeDisplay" style="font-family:monospace; padding:4px 8px; background:#222; color:#fff; border-radius:4px"></span>
+  <button id="mcCopySessionBtn">Copy</button>
+</div>
+
+<script>
+  document.getElementById('mcCopySessionBtn').addEventListener('click', () => {
+    const code = window.MC_SESSION_CODE;
+    if (!code) return;
+    navigator.clipboard.writeText(code).then(()=> {
+      alert('Session code copied: ' + code);
+    });
+  });
+</script>
 <h1>QUEERZ! MC Companion</h1>
 <div class="campaign-info">
 <label for="chapterSelect">Chapter:</label>
