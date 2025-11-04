@@ -37,7 +37,11 @@ const sceneDisplay = document.getElementById('sceneDisplay');
 const characterSelect = document.getElementById('characterSelect');
 const characterDisplay = document.getElementById('characterDisplay');
 const characterInfo = document.getElementById('characterInfo');
-const characterSheetDisplay = document.getElementById('characterSheetDisplay');
+let characterSheetDisplay = document.getElementById('characterSheetDisplay');
+if (!characterSheetDisplay) {
+    // Provide a safe stub so downstream code doesn't throw when the sheet UI is removed
+    characterSheetDisplay = document.createElement('div');
+}
 const characterPanelTitle = document.getElementById('characterPanelTitle');
 
 // Audio Player
@@ -85,29 +89,29 @@ const chapterSelect = document.getElementById('chapterSelect');
 const characterData = {
     'mama-jay': {
         name: 'Mama Jay Rainbow',
-        image: 'images/locations/placeholder.jpg',
-        characterSheet: 'images/locations/placeholder.jpg',
+        image: 'images/characters/mama-jay-portrait.png',
+        characterSheet: 'images/characters/mama-jay-portrait.png',
 
         info: 'Founder of House Rainbow and owner of Café Greenwich. A wise mentor figure who guides the heroes.'
     },
     'danny-civilian': {
         name: 'Danny "Dice" Carbone',
-        image: 'images/locations/placeholder.jpg',
-        characterSheet: 'images/locations/placeholder.jpg',
+        image: 'images/characters/danny-civilian.png',
+        characterSheet: 'images/characters/danny-civilian.png',
 
         info: 'Former stand-up comedian who feels left behind by changing times. Currently civilian form.'
     },
     'danny-justice': {
         name: 'Danny "Dice" Carbone - The Jester',
-        image: 'images/locations/placeholder.jpg',
-        characterSheet: 'images/locations/placeholder.jpg',
+        image: 'images/characters/danny-justice-knight.png',
+        characterSheet: 'images/characters/danny-justice-knight.png',
 
         info: 'Justice Knight form. Spreads "Nostalgic Justice" through comedy that cuts and excludes. Ignorance Limit: 5'
     },
     'pawn': {
         name: 'Tough Crowd (Pawn)',
-        image: 'images/locations/placeholder.jpg',
-        characterSheet: 'images/locations/placeholder.jpg',
+        image: 'images/characters/pawn-tough-crowd-general.png',
+        characterSheet: 'images/characters/pawn-tough-crowd-general.png',
 
         info: 'Brainwashed follower of Danny. Working-class person infected with Nostalgic Ignorance. Ignorance Limit: 2-3'
     }
@@ -117,7 +121,7 @@ const characterData = {
 const locationData = {
     'cafe-greenwich': 'images/locations/cafe-greenwich.jpg',
     'theater-district': 'images/locations/theater-district.jpg',
-    'morettis': 'images/locations/placeholder.jpg'
+    'morettis': 'images/locations/morettis-comedy-cellar.webp'
 };
 
 // === SCRIPT DATA - CHAPTER 1 ===
