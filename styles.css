@@ -956,3 +956,10 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
+
+/* Firebase indicator */
+.fb-indicator{position:fixed;right:14px;bottom:14px;padding:6px 10px;font-size:12px;font-weight:700;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.3);z-index:9999}
+.fb-online{background:#1b5e20}
+.fb-offline{background:#7f1d1d}
+.player-btn.broadcast-btn{background:linear-gradient(90deg,#6a5acd,#7c3aed);color:#fff;font-weight:700}
+.player-btn.broadcast-btn:hover{filter:brightness(1.05)}

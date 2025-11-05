@@ -3570,51 +3570,42 @@ function exportPlayerData(playerName) {
 
 console.log('✅ QUEERZ! MC Companion script loaded successfully!');
 
-// --- Firebase Broadcast Integration ---
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js';
-import { getDatabase, ref, set } from 'https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js';
-import { firebaseConfig } from './firebase-config.js';
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-const broadcastBtn = document.getElementById('broadcastBtn');
-const statusIndicator = document.getElementById('firebaseStatus');
-const testBtn = document.getElementById('testConnectionBtn');
-
-async function checkConnection() {
-  try {
-    await set(ref(db, 'debug/connection'), { timestamp: Date.now() });
-    statusIndicator.textContent = '🟢 Connected';
-    statusIndicator.classList.remove('offline');
-    statusIndicator.classList.add('online');
-  } catch (err) {
-    console.error('Firebase connection failed:', err);
-    statusIndicator.textContent = '🔴 Offline';
-    statusIndicator.classList.remove('online');
-    statusIndicator.classList.add('offline');
+// --- Broadcast wiring (non-invasive) ---
+(function(){
+  if (window.__broadcast_wired) return;
+  window.__broadcast_wired = true;
+  function collectBroadcastPayload(){
+    const sceneSel = document.getElementById('locationSelect');
+    const charSel  = document.getElementById('characterSelect');
+    const trackSel = document.getElementById('trackSelect');
+    const sceneKey = sceneSel ? sceneSel.value : '';
+    const charKey  = charSel ? charSel.value : '';
+    const trackUrl = trackSel ? trackSel.value : '';
+    let sceneImage = '';
+    const img = document.querySelector('#sceneDisplay img');
+    if (img && img.src) sceneImage = img.src;
+    let characterImage = '';
+    const cimg = document.querySelector('#characterDisplay img');
+    if (cimg && cimg.src) characterImage = cimg.src;
+    return {
+      sceneName: sceneKey || (sceneSel && sceneSel.options[sceneSel.selectedIndex]?.text) || '',
+      sceneImage, characterKey: charKey, characterImage, musicUrl: trackUrl
+    };
   }
-}
-
-async function broadcastToPlayers() {
-  try {
-    const scene = window.currentSceneName || 'Default Scene';
-    const image = `https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/${window.currentSceneImagePath || 'images/locations/default.jpg'}`;
-    const music = `https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/${window.currentMusicPath || 'music/locations/default.mp3'}`;
-
-    await set(ref(db, 'broadcast/current'), {
-      scene, image, music, timestamp: Date.now()
+  function wire(){
+    const btn = document.getElementById('broadcastBtn');
+    if (!btn) return;
+    btn.addEventListener('click', async ()=>{
+      try{
+        const payload = collectBroadcastPayload();
+        if (window.Broadcast && window.Broadcast.send){
+          await window.Broadcast.send(payload);
+          btn.classList.add('pulse'); setTimeout(()=>btn.classList.remove('pulse'), 600);
+        } else {
+          alert('Broadcast module not ready.');
+        }
+      }catch(e){ console.error(e); alert('Broadcast failed.'); }
     });
-    console.log('✅ Broadcast sent successfully:', scene);
-    broadcastBtn.textContent = '✅ Broadcast Sent!';
-    setTimeout(() => { broadcastBtn.textContent = '📡 Broadcast to Players'; }, 2000);
-  } catch (error) {
-    console.error('❌ Broadcast failed:', error);
   }
-}
-
-if (broadcastBtn) broadcastBtn.addEventListener('click', broadcastToPlayers);
-if (testBtn) testBtn.addEventListener('click', checkConnection);
-
-checkConnection();
-// --- End Firebase Integration ---
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire); else wire();
+})();

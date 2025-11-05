@@ -1,44 +1,41 @@
-import { database } from './firebase-config.js';
-import { ref, set } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
 
-const statusEl = document.getElementById('firebaseStatus');
-const testBtn = document.getElementById('testConnectionBtn');
-const broadcastBtn = document.getElementById('broadcastBtn');
+const firebaseConfig = {
+  apiKey: "AIzaSyDOeJQjTm0xuFDAhhLaWP6d_kK_hNwRY58",
+  authDomain: "queerz-mc-live.firebaseapp.com",
+  databaseURL: "https://queerz-mc-live-default-rtdb.firebaseio.com",
+  projectId: "queerz-mc-live",
+  storageBucket: "queerz-mc-live.firebasestorage.app",
+  messagingSenderId: "155846709409",
+  appId: "1:155846709409:web:8c12204dc7d502586a20e0"
+};
 
-function updateStatus(online) {
-    if (online) {
-        statusEl.textContent = 'Online';
-        statusEl.classList.add('online');
-        statusEl.classList.remove('offline');
-    } else {
-        statusEl.textContent = 'Offline';
-        statusEl.classList.add('offline');
-        statusEl.classList.remove('online');
-    }
+function setIndicator(online){
+  const el = document.getElementById('firebaseStatus');
+  if (!el) return;
+  el.textContent = online ? "● Online" : "● Offline";
+  el.classList.toggle('fb-online', online);
+  el.classList.toggle('fb-offline', !online);
 }
 
-async function testConnection() {
-    try {
-        await set(ref(database, 'connectionTest'), { timestamp: Date.now() });
-        updateStatus(true);
-    } catch {
-        updateStatus(false);
-    }
+let app, db;
+try{
+  app = initializeApp(firebaseConfig);
+  db  = getDatabase(app);
+  setIndicator(true);
+}catch(e){
+  console.error("Firebase init error:", e);
+  setIndicator(false);
 }
 
-if (testBtn) testBtn.addEventListener('click', testConnection);
-if (broadcastBtn) {
-    broadcastBtn.addEventListener('click', async () => {
-        const scene = document.getElementById('locationSelect')?.value || 'none';
-        const music = document.getElementById('trackSelect')?.value || 'none';
-        const character = document.getElementById('characterSelect')?.value || 'none';
-        try {
-            await set(ref(database, 'broadcast/current'), { scene, music, character, timestamp: Date.now() });
-            updateStatus(true);
-        } catch {
-            updateStatus(false);
-        }
-    });
+const ROOM = "default-room";
+async function send(payload){
+  if (!db) throw new Error("DB not ready");
+  const ts = Date.now();
+  await set(ref(db, `broadcast/${ROOM}/state`), { ...payload, ts });
+  return ts;
 }
 
-window.addEventListener('load', testConnection);
+window.Broadcast = { send };
+export { send };
