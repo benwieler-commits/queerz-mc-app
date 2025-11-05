@@ -3570,10 +3570,12 @@ function exportPlayerData(playerName) {
 
 console.log('✅ QUEERZ! MC Companion script loaded successfully!');
 
+
 // --- Broadcast wiring (non-invasive) ---
 (function(){
   if (window.__broadcast_wired) return;
   window.__broadcast_wired = true;
+
   function collectBroadcastPayload(){
     const sceneSel = document.getElementById('locationSelect');
     const charSel  = document.getElementById('characterSelect');
@@ -3581,31 +3583,47 @@ console.log('✅ QUEERZ! MC Companion script loaded successfully!');
     const sceneKey = sceneSel ? sceneSel.value : '';
     const charKey  = charSel ? charSel.value : '';
     const trackUrl = trackSel ? trackSel.value : '';
+
     let sceneImage = '';
-    const img = document.querySelector('#sceneDisplay img');
-    if (img && img.src) sceneImage = img.src;
+    const sceneImg = document.querySelector('#sceneDisplay img');
+    if (sceneImg && sceneImg.src) sceneImage = sceneImg.src;
+
     let characterImage = '';
-    const cimg = document.querySelector('#characterDisplay img');
-    if (cimg && cimg.src) characterImage = cimg.src;
+    const charImg = document.querySelector('#characterDisplay img');
+    if (charImg && charImg.src) characterImage = charImg.src;
+
     return {
       sceneName: sceneKey || (sceneSel && sceneSel.options[sceneSel.selectedIndex]?.text) || '',
-      sceneImage, characterKey: charKey, characterImage, musicUrl: trackUrl
+      sceneImage,
+      characterKey: charKey,
+      characterImage,
+      musicUrl: trackUrl
     };
   }
-  function wire(){
+
+  function wireBroadcastButton(){
     const btn = document.getElementById('broadcastBtn');
     if (!btn) return;
     btn.addEventListener('click', async ()=>{
       try{
         const payload = collectBroadcastPayload();
-        if (window.Broadcast && window.Broadcast.send){
+        if (window.Broadcast && typeof window.Broadcast.send === 'function'){
           await window.Broadcast.send(payload);
-          btn.classList.add('pulse'); setTimeout(()=>btn.classList.remove('pulse'), 600);
+          btn.classList.add('pulse');
+          setTimeout(()=>btn.classList.remove('pulse'), 600);
         } else {
-          alert('Broadcast module not ready.');
+          alert('Broadcast module not ready (firebase-broadcast.js).');
         }
-      }catch(e){ console.error(e); alert('Broadcast failed.'); }
+      }catch(err){
+        console.error('Broadcast failed:', err);
+        alert('Broadcast failed. See console.');
+      }
     });
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire); else wire();
+
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', wireBroadcastButton);
+  }else{
+    wireBroadcastButton();
+  }
 })();
