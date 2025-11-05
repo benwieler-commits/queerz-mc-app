@@ -1,0 +1,36 @@
+{
+  "scenes": [
+    {
+      "id": "intro_park",
+      "title": "Harmony Park — Strange Skies",
+      "image": "images/locations/harmony-park.jpg",
+      "music": "audio/harmony-theme.mp3",
+      "text": "Jagged black streaks tear across the sky as color drains from the trees.",
+      "next": ["club_call"]
+    },
+    {
+      "id": "club_call",
+      "title": "Call from the Club",
+      "image": "images/locations/club.jpg",
+      "music": "audio/club-ambient.mp3",
+      "text": "Your phone buzzes: 'We need you. Now.'",
+      "next": ["alley_confrontation","backstage"]
+    },
+    {
+      "id": "alley_confrontation",
+      "title": "Alley Confrontation",
+      "image": "images/locations/alley.jpg",
+      "music": "audio/alley-tense.mp3",
+      "text": "Shadows gather; a hush falls as footsteps approach from both ends.",
+      "next": []
+    },
+    {
+      "id": "backstage",
+      "title": "Backstage Nerves",
+      "image": "images/locations/backstage.jpg",
+      "music": "audio/backstage-soft.mp3",
+      "text": "Makeup mirrors glow. The murmur of the crowd swells just beyond the curtain.",
+      "next": []
+    }
+  ]
+}

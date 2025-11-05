@@ -1,41 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUEERZ! MC App</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QUEERZ! MC Director Dashboard</title>
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-    <header>
-        <h1>🌈 QUEERZ! MC App</h1>
-    </header>
+  <header class="app-header">
+    <div class="brand">
+      <h1>🌈 QUEERZ! MC — Director</h1>
+      <span class="badge">v3.0</span>
+    </div>
+    <div class="header-actions">
+      <button id="btnPreview" class="btn secondary">Preview Locally</button>
+      <button id="btnBroadcast" class="btn primary">📡 Broadcast to Players</button>
+    </div>
+  </header>
 
-    <main>
-        <section class="input-section">
-            <input type="text" id="sceneImage" placeholder="Scene Image URL (https://...jpg/png/webp)">
-            <input type="text" id="musicURL" placeholder="Music MP3 URL (https://...mp3)">
-            <textarea id="sceneText" placeholder="Scene text/description..."></textarea>
-            
-            <div class="button-group">
-                <button id="previewBtn" class="preview-btn">Preview Locally</button>
-                <button id="broadcastBtn" class="broadcast-btn">Broadcast to Players</button>
-            </div>
-        </section>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <h3>Characters</h3>
+        <div id="characterList" class="list list-characters"></div>
+      </div>
 
-        <section class="preview-section">
-            <div id="previewArea" class="preview-area">
-                <p class="placeholder">Preview appears here…</p>
+      <div class="sidebar-section">
+        <h3>Quick Broadcast</h3>
+        <div class="field">
+          <label>Scene Image URL</label>
+          <input id="qbImage" type="text" placeholder="https://...jpg|png|webp" />
+        </div>
+        <div class="field">
+          <label>Music MP3 URL</label>
+          <input id="qbMusic" type="text" placeholder="https://...mp3" />
+        </div>
+        <div class="field">
+          <label>Scene Text</label>
+          <textarea id="qbText" placeholder="Enter narration..."></textarea>
+        </div>
+        <button id="btnQuickPreview" class="btn secondary small">Preview</button>
+        <button id="btnQuickBroadcast" class="btn primary small">Broadcast</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <nav class="tabs">
+        <button class="tab active" data-tab="tab-scenes">Scenes</button>
+        <button class="tab" data-tab="tab-moves">Moves</button>
+        <button class="tab" data-tab="tab-characters">Character Sheet</button>
+      </nav>
+
+      <section id="tab-scenes" class="tab-panel active">
+        <div class="panel two-col">
+          <div class="col">
+            <h2>Branching Scenes</h2>
+            <div id="sceneTree" class="scene-tree"></div>
+          </div>
+          <div class="col">
+            <h2>Scene Details</h2>
+            <div id="sceneDetails" class="card">
+              <div class="muted">Select a scene on the left.</div>
             </div>
-            <audio id="audioPlayer" controls></audio>
-        </section>
+            <div class="actions">
+              <button id="btnSetActiveScene" class="btn secondary" disabled>Set Active</button>
+              <button id="btnBroadcastScene" class="btn primary" disabled>Broadcast This Scene</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-moves" class="tab-panel">
+        <div class="panel">
+          <h2>Moves Reference</h2>
+          <div id="movesGrid" class="grid moves-grid"></div>
+        </div>
+      </section>
+
+      <section id="tab-characters" class="tab-panel">
+        <div class="panel two-col">
+          <div class="col">
+            <h2>Active Character</h2>
+            <div id="activeCharacterCard" class="character-card card"></div>
+          </div>
+          <div class="col">
+            <h2>Tags & Status</h2>
+            <div id="tagControls" class="card">
+              <div class="muted">Select a character from the sidebar first.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Live Preview</h2>
+        <div id="previewArea" class="preview">
+          <div class="preview-scene" id="previewScene">
+            <div class="placeholder">Preview appears here…</div>
+          </div>
+          <div class="preview-text" id="previewText"></div>
+          <audio id="previewAudio" controls></audio>
+        </div>
+      </section>
     </main>
+  </div>
 
-    <footer>
-        <p id="firebaseStatus" class="status-indicator disconnected">🔴 Disconnected from Firebase</p>
-    </footer>
+  <footer class="footer">
+    <div id="firebaseStatus" class="status-chip">🔴 Firebase: Disconnected</div>
+  </footer>
 
-    <script type="module" src="mc-firebase-config.js"></script>
-    <script type="module" src="app.js"></script>
+  <script type="module" src="mc-firebase-config.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>
