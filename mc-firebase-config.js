@@ -1,6 +1,4 @@
-// Firebase config (MC)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-import { getDatabase } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyDOeJQjTm0xuFDAhhLaWP6d_kK_hNwRY58",
@@ -13,4 +11,3 @@ export const firebaseConfig = {
 };
 
 export const app = initializeApp(firebaseConfig);
-export const db = getDatabase(app);

@@ -1,44 +1,59 @@
-// Basic local preview logic
-const sceneDisplay = document.getElementById('sceneDisplay');
-const audioPlayer = document.getElementById('audioPlayer');
-const sceneImageUrl = document.getElementById('sceneImageUrl');
-const musicUrl = document.getElementById('musicUrl');
-const sceneTextInput = document.getElementById('sceneTextInput');
-const applyLocal = document.getElementById('applyLocal');
+import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { app } from './mc-firebase-config.js';
 
-applyLocal?.addEventListener('click', ()=>{
-  const img = sceneImageUrl.value.trim();
-  const mus = musicUrl.value.trim();
-  const txt = sceneTextInput.value.trim();
-  if (img){
-    sceneDisplay.innerHTML = `<img src="${img}" alt="Scene">`;
-  } else if (txt){
-    sceneDisplay.innerHTML = `<div class="hint">${txt}</div>`;
+const db = getDatabase(app);
+
+const sceneImageInput = document.getElementById("sceneImage");
+const musicURLInput = document.getElementById("musicURL");
+const sceneTextInput = document.getElementById("sceneText");
+const previewArea = document.getElementById("previewArea");
+const audioPlayer = document.getElementById("audioPlayer");
+const broadcastBtn = document.getElementById("broadcastBtn");
+const previewBtn = document.getElementById("previewBtn");
+const statusIndicator = document.getElementById("firebaseStatus");
+
+function updateStatus(connected) {
+  if (connected) {
+    statusIndicator.textContent = "🟢 Connected to Firebase";
+    statusIndicator.classList.replace("disconnected", "connected");
   } else {
-    sceneDisplay.innerHTML = `<div class="hint">Preview appears here…</div>`;
+    statusIndicator.textContent = "🔴 Disconnected from Firebase";
+    statusIndicator.classList.replace("connected", "disconnected");
   }
-  if (mus){ audioPlayer.src = mus; audioPlayer.play().catch(()=>{}); }
-});
-
-// --- Firebase Broadcast wiring ---
-import { db } from './mc-firebase-config.js';
-import { ref, set } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js";
-
-const broadcastBtn = document.getElementById('syncBroadcastBtn');
-
-function broadcastToPlayers(imageUrl, musicUrl, sceneText=""){
-  set(ref(db,'broadcast/current'), {
-    image: imageUrl || "",
-    music: musicUrl || "",
-    sceneText: sceneText || "",
-    timestamp: Date.now()
-  }).then(()=> console.log("Broadcast updated successfully"))
-    .catch(err=> console.error("Broadcast error:", err));
 }
 
-broadcastBtn?.addEventListener('click', ()=>{
-  const img = document.getElementById('sceneImageUrl')?.value?.trim() || "";
-  const mus = document.getElementById('musicUrl')?.value?.trim() || "";
-  const txt = document.getElementById('sceneTextInput')?.value?.trim() || "";
-  broadcastToPlayers(img, mus, txt);
+window.addEventListener("load", () => {
+  try {
+    updateStatus(true);
+  } catch {
+    updateStatus(false);
+  }
+});
+
+previewBtn.addEventListener("click", () => {
+  const img = sceneImageInput.value;
+  const txt = sceneTextInput.value;
+  const music = musicURLInput.value;
+
+  previewArea.innerHTML = img ? `<img src="${img}" alt="Scene Preview">` : `<p>${txt || "Preview appears here…"}</p>`;
+  audioPlayer.src = music || "";
+  audioPlayer.load();
+  if (music) audioPlayer.play();
+});
+
+broadcastBtn.addEventListener("click", async () => {
+  const payload = {
+    image: sceneImageInput.value,
+    music: musicURLInput.value,
+    text: sceneTextInput.value,
+    timestamp: Date.now()
+  };
+
+  try {
+    await set(ref(db, "broadcast/current"), payload);
+    broadcastBtn.textContent = "✅ Broadcast Sent!";
+    setTimeout(() => (broadcastBtn.textContent = "Broadcast to Players"), 2000);
+  } catch (error) {
+    console.error("Broadcast failed:", error);
+  }
 });
