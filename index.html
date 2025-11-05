@@ -1,47 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>QUEERZ! MC App — Classic</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QUEERZ! MC Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- Classic layout preserved. Only additions: Broadcast button + Firebase status -->
-  <header class="topbar">
-    <div class="topbar-left">
-      <h1 class="app-title">🌈 QUEERZ! MC App</h1>
-    </div>
-    <div class="topbar-right">
-      <button id="broadcastBtn" class="btn btn-broadcast">📡 Broadcast to Players</button>
+  <header class="app-header">
+    <h1 class="app-title">🎭 QUEERZ! MC Companion Dashboard</h1>
+    <div class="header-actions">
+      <button id="addPlayerBtn" class="action-btn">+ Add Player</button>
+      <button id="broadcastBtn" class="action-btn">📡 Broadcast to Players</button>
     </div>
   </header>
 
-  <main>
-    <section class="card">
-      <h2>Live Preview (optional demo inputs)</h2>
-      <div class="demo-grid">
-        <div>
-          <label>Scene Name</label>
-          <input id="locationName" placeholder="Theater District" />
-        </div>
-        <div>
-          <label>Scene Image Path (repo-relative)</label>
-          <input id="locationImage" placeholder="images/locations/theater-district.jpg" />
-        </div>
-        <div>
-          <label>Music Path (repo-relative)</label>
-          <input id="currentMusicSource" placeholder="music/locations/theater-district-investigation-2.mp3" />
-        </div>
-      </div>
-      <p class="muted">Tip: If your classic UI already provides these from elsewhere,
-        you can ignore these inputs and supply a provider via
-        <code>window.setBroadcastDataProvider(fn)</code>.</p>
+  <main id="content">
+    <section id="sceneDisplay" class="panel">
+      <h2>Current Scene</h2>
+      <div id="scenePreview" class="preview-box">No scene loaded</div>
+    </section>
+
+    <section id="musicDisplay" class="panel">
+      <h2>Current Music</h2>
+      <div id="musicPreview" class="preview-box">No track playing</div>
     </section>
   </main>
 
-  <div id="firebaseStatus" class="broadcast-status">🔴 Offline</div>
+  <footer>
+    <div id="firebaseStatus" class="status-indicator offline">🔴 Offline</div>
+    <button id="testConnectionBtn" class="test-btn">Check Connection</button>
+  </footer>
 
+  <script type="module" src="firebase-config.js"></script>
   <script type="module" src="app.js"></script>
 </body>
 </html>

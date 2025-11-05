@@ -1,31 +1,44 @@
-/* Minimal additions for broadcast indicator and button */
-:root { --teal:#4ECDC4; --red:#ff4d4d; --panel:#ffffff; --shadow:rgba(0,0,0,.15); }
-* { box-sizing: border-box; }
-body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:#f6f7fb; color:#222; }
-
-.topbar { display:flex; align-items:center; justify-content:space-between; padding:10px 16px; background:#fff; box-shadow:0 2px 6px var(--shadow); position:sticky; top:0; z-index:10; }
-.app-title { margin:0; font-size:18px; }
-.btn { appearance:none; border:none; border-radius:10px; padding:10px 14px; background:#111; color:#fff; font-weight:700; cursor:pointer; }
-.btn-broadcast { background:linear-gradient(90deg, #667eea, #764ba2); }
-.btn:disabled { opacity:.6; cursor:not-allowed; }
-
-.card { background:#fff; border-radius:12px; box-shadow:0 2px 8px var(--shadow); padding:16px; margin:16px; }
-.demo-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
-.demo-grid input { width:100%; padding:10px; border-radius:8px; border:1px solid #ddd; }
-.muted { color:#666; font-size:12px; }
-
-.broadcast-status {
-  position: fixed;
-  bottom: 8px;
-  right: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--red); /* red by default */
-  background: rgba(255,255,255,0.95);
-  padding: 6px 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-  transition: color 0.25s ease;
-  border: 1px solid #eee;
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  margin: 0;
+  padding: 0;
 }
-.broadcast-status.connected { color: var(--teal); }
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: rgba(0,0,0,0.3);
+}
+.app-title { font-size: 28px; font-weight: bold; }
+.action-btn {
+  margin-left: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #FFD93D;
+  font-weight: bold;
+  cursor: pointer;
+}
+.action-btn:hover { background: #FFB347; }
+.panel { margin: 20px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 12px; }
+.preview-box { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; }
+footer {
+  position: fixed; bottom: 10px; right: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.status-indicator {
+  padding: 8px 16px; border-radius: 8px; font-weight: bold;
+}
+.status-indicator.online { background: #6BCF7F; color: #000; }
+.status-indicator.offline { background: #FF6B6B; color: #fff; }
+.test-btn {
+  padding: 8px 12px;
+  background: #95E1D3;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
