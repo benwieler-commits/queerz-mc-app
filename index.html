@@ -19,7 +19,7 @@
                 <option value="4">Chapter 4: The Mogul's Empire</option>
                 <option value="5">Chapter 5: The Titan's Domain</option>
             </select>
-            <button id="campaignSettingsBtn" class="header-btn" title="Campaign Settings">⚙️</button>
+            <button id="campaignSettingsBtn" class="header-btn" title="Campaign Settings">âš™ï¸</button>
         </div>
         <div class="header-controls">
             <button id="toggleScriptBtn" class="header-btn" title="Toggle Script Panel (S)">Script</button>
@@ -32,7 +32,7 @@
     <section class="spotlight-bar">
         <div class="spotlight-label">SPOTLIGHT:</div>
         <div id="spotlightPlayers" class="spotlight-players">
-            <button id="addPlayerBtn" class="player-btn add-btn">+ Add Player</button> <button id="broadcastBtn" class="action-btn">📡 Broadcast to Players</button>
+            <button id="addPlayerBtn" class="player-btn add-btn">+ Add Player</button> <button id="broadcastBtn" class="player-btn" title="Broadcast to Players">📡 Broadcast</button>
         </div>
     </section>
 
@@ -178,11 +178,7 @@
                 <div id="rollResult" class="roll-result"></div>
             </div>
         </div>
-    
-    <div id="firebaseStatus" class="status-indicator offline">🔴 Offline</div>
-    <button id="testConnectionBtn" class="test-btn">Check Connection</button>
-  </footer>
-
+    </footer>
 
     <!-- SCRIPT PANEL (Toggle with S) -->
     <aside id="scriptPanel" class="side-panel script-panel hidden">
@@ -358,9 +354,7 @@
     </div>
 
     <script src="app.js"></script>
-
   <script type="module" src="firebase-config.js"></script>
-  <script type="module" src="app.js"></script>
+  <script type="module" src="firebase-broadcast.js"></script>
 </body>
-
 </html>
