@@ -1,30 +1,27 @@
-/* Your existing styles.css should remain here; this file contains only the small patch below. */
-
-/* --- Firebase status indicator (surgical) --- */
 #firebaseStatus {
-  position: fixed;
-  bottom: 12px;
-  right: 16px;
-  padding: 8px 12px;
-  border-radius: 10px;
-  font-weight: 700;
-  background: #ff6b6b;
-  color: #fff;
-  z-index: 9999;
-}
-#firebaseStatus.online { background: #6bcf7f; color: #000; }
-#testConnectionBtn {
-  position: fixed;
-  bottom: 12px;
-  right: 130px;
-  padding: 8px 10px;
+  background-color: #ff6b6b;
+  color: white;
+  font-weight: bold;
+  padding: 6px 12px;
   border-radius: 8px;
-  border: none;
-  background: #95E1D3;
+  margin-left: auto;
+}
+
+#firebaseStatus.online {
+  background-color: #6BCF7F;
   color: #000;
+}
+
+#testConnectionBtn {
+  margin-left: 10px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #95E1D3;
   font-weight: 600;
   cursor: pointer;
-  z-index: 9999;
 }
-/* Match existing player button look */
-#broadcastBtn.player-btn { margin-left: 8px; }
+
+#testConnectionBtn:hover {
+  background-color: #6BCF7F;
+}
