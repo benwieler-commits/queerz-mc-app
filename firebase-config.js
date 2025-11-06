@@ -1,5 +1,4 @@
-// Shared Firebase config (compat)
-window.firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyDOeJQjTm0xuFDAhhLaWP6d_kK_hNwRY58",
   authDomain: "queerz-mc-live.firebaseapp.com",
   databaseURL: "https://queerz-mc-live-default-rtdb.firebaseio.com",
@@ -8,4 +7,3 @@ window.firebaseConfig = {
   messagingSenderId: "155846709409",
   appId: "1:155846709409:web:8c12204dc7d502586a20e0"
 };
-(function(){ if (window.firebase && !window._firebaseApp){ window._firebaseApp=firebase.initializeApp(window.firebaseConfig); window._firebaseDb=firebase.database(); }})();

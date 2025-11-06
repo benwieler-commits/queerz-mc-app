@@ -1,11 +1,1 @@
-(function(){
-  if (!window._firebaseDb){ console.warn('[Broadcast] Firebase not ready'); return; }
-  window.broadcastToPlayers = function(payload){
-    const data = {
-      sceneImage: payload.sceneImage||'', sceneName: payload.sceneName||'',
-      characterImage: payload.characterImage||'',
-      musicUrl: payload.musicUrl||'', ts: Date.now()
-    };
-    return window._firebaseDb.ref('/broadcast/current').set(data);
-  };
-})();
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';import { getDatabase, ref, set, goOnline } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';import { firebaseConfig } from './firebase-config.js';const app=initializeApp(firebaseConfig);const db=getDatabase(app);try{goOnline(db);const b=document.getElementById('connBadge');b.textContent='● Live Sync';b.classList.remove('offline');b.classList.add('online');}catch(e){}export function broadcast(p){return set(ref(db,'mcBroadcast'),p);}
