@@ -3571,53 +3571,25 @@ function exportPlayerData(playerName) {
 console.log('✅ QUEERZ! MC Companion script loaded successfully!');
 
 
-
-// ----- Broadcast Hook (non-destructive) -----
+// --- Added: GitHub Pages path fix + Broadcast hook ---
 (function(){
-  const btn = document.getElementById('broadcastBtn');
-  if (!btn) return;
-  btn.addEventListener('click', function() {
-    if (typeof window.broadcastToPlayers !== 'function') {
-      return alert('Broadcast not initialized.');
-    }
-    // Try to read from known elements/variables in existing app.js without changing logic
-    var sceneImg = '';
-    var sceneName = '';
-    var musicUrl = '';
-    var charImg = '';
-
-    // Scene image from #sceneDisplay (first <img> if present)
-    try {
-      var sd = document.getElementById('sceneDisplay');
-      var si = sd && sd.querySelector('img');
-      sceneImg = si ? si.getAttribute('src') : '';
-      var locSel = document.getElementById('locationSelect');
-      sceneName = locSel && locSel.value ? locSel.options[locSel.selectedIndex].text : '';
-    } catch(e){}
-
-    // Character image from #characterDisplay (first <img> if present)
-    try {
-      var cd = document.getElementById('characterDisplay');
-      var ci = cd && cd.querySelector('img');
-      charImg = ci ? ci.getAttribute('src') : '';
-    } catch(e){}
-
-    // Music from audio element if present, else current selection
-    try {
-      var ap = document.getElementById('audioPlayer');
-      if (ap && ap.currentSrc) musicUrl = ap.currentSrc;
-      if (!musicUrl) {
-        var ts = document.getElementById('trackSelect');
-        musicUrl = ts && ts.value ? ts.value : '';
-      }
-    } catch(e){}
-
-    window.broadcastToPlayers({
-      sceneImage: sceneImg,
-      sceneName: sceneName,
-      characterImage: charImg,
-      musicUrl: musicUrl
-    });
-    alert('Broadcast sent to players.');
+  try{
+    var gh = location.hostname.endsWith('github.io');
+    var base='/queerz-mc-app/';
+    if(!gh) return;
+    function fix(el,a){var v=el.getAttribute(a); if(!v||/^https?:|^data:|^\//i.test(v))return; if(!v.startsWith(base)) el.setAttribute(a, base+v.replace(/^\/?/,''));}
+    document.querySelectorAll('img[src]').forEach(i=>fix(i,'src'));
+    document.querySelectorAll('audio source[src]').forEach(s=>fix(s,'src'));
+  }catch(e){}
+})();
+(function(){
+  var b=document.getElementById('broadcastBtn'); if(!b) return;
+  b.addEventListener('click', function(){
+    if(typeof broadcastToPlayers!=='function'){ alert('Firebase not ready'); return; }
+    var sceneImg=(document.querySelector('#sceneDisplay img')||{}).src||'';
+    var sceneName=(function(){var s=document.getElementById('locationSelect'); return s&&s.value? s.options[s.selectedIndex].text:'';})();
+    var charImg=(document.querySelector('#characterDisplay img')||{}).src||'';
+    var musicUrl=(function(){var a=document.getElementById('audioPlayer'); if(a&&a.currentSrc) return a.currentSrc; var t=document.getElementById('trackSelect'); return t&&t.value?t.value:'';})();
+    broadcastToPlayers({sceneImage:sceneImg, sceneName:sceneName, characterImage:charImg, musicUrl:musicUrl}).then(()=>alert('Broadcast sent'));
   });
 })();
