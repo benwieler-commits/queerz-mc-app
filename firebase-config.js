@@ -1,6 +1,7 @@
-// Firebase config (no modules; works on GitHub Pages)
-// Loaded after CDN firebase-app-compat and firebase-database-compat.
-window.firebaseConfig = {
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+export const firebaseConfig = {
   apiKey: "AIzaSyDOeJQjTm0xuFDAhhLaWP6d_kK_hNwRY58",
   authDomain: "queerz-mc-live.firebaseapp.com",
   databaseURL: "https://queerz-mc-live-default-rtdb.firebaseio.com",
@@ -10,10 +11,5 @@ window.firebaseConfig = {
   appId: "1:155846709409:web:8c12204dc7d502586a20e0"
 };
 
-(function() {
-  if (!window.firebase) return;
-  if (!window._firebaseApp) {
-    window._firebaseApp = firebase.initializeApp(window.firebaseConfig);
-    window._firebaseDb  = firebase.database();
-  }
-})();
+export const app = initializeApp(firebaseConfig);
+export const db = getDatabase(app);

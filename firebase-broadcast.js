@@ -1,23 +1,16 @@
-// Simple broadcaster using Firebase Realtime Database (compat SDK)
-(function() {
-  if (!window._firebaseDb) return;
+import { db } from "./firebase-config.js";
+import { ref, set, goOnline } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-  function broadcastToPlayers(payload) {
-    try {
-      const data = {
-        sceneImage: payload.sceneImage || "",
-        sceneName:  payload.sceneName  || "",
-        characterImage: payload.characterImage || "",
-        musicUrl:   payload.musicUrl   || "",
-        ts: Date.now()
-      };
-      window._firebaseDb.ref('/broadcast/current').set(data);
-      console.log('[Broadcast] sent', data);
-    } catch (e) {
-      console.error('[Broadcast] failed', e);
-    }
-  }
+try {
+  goOnline(db);
+  const badge = document.getElementById("connBadge");
+  badge.textContent = "● Live Sync";
+  badge.classList.remove("offline");
+  badge.classList.add("online");
+} catch (e) {
+  console.warn("Firebase connection issue:", e);
+}
 
-  // expose globally but don't attach any UI here
-  window.broadcastToPlayers = broadcastToPlayers;
-})();
+export function broadcast(payload) {
+  return set(ref(db, "mcBroadcast"), payload);
+}
