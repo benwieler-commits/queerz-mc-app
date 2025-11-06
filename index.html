@@ -1,364 +1,109 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUEERZ! MC Companion</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>QUEERZ! MC Companion</title>
+  <link rel='stylesheet' href='styles.css'>
 </head>
 <body>
-    <!-- TOP HEADER -->
-    <header class="app-header">
-        <h1>QUEERZ! MC Companion</h1>
-        <div class="campaign-info">
-            <label for="chapterSelect">Chapter:</label>
-            <select id="chapterSelect" class="styled-select">
-                <option value="1">Chapter 1: The Jester's Last Laugh</option>
-                <option value="2">Chapter 2: The Professor's Prescription</option>
-                <option value="3">Chapter 3: The Champion's Last Stand</option>
-                <option value="4">Chapter 4: The Mogul's Empire</option>
-                <option value="5">Chapter 5: The Titan's Domain</option>
-            </select>
-            <button id="campaignSettingsBtn" class="header-btn" title="Campaign Settings">⚙️</button> <button id="broadcastBtn" class="header-btn" title="Broadcast to Players">📡 Broadcast</button>
-        </div>
-        <div class="header-controls">
-            <button id="toggleScriptBtn" class="header-btn" title="Toggle Script Panel (S)">Script</button>
-            <button id="toggleMcMovesBtn" class="header-btn" title="Toggle MC Moves (M)">MC Moves</button>
-            <button id="openCharMgmtBtn" class="header-btn" title="Character Management (C)">Characters</button>
-        </div>
-    </header>
+  <header class='app-header'>
+    <h1>QUEERZ! MC Companion</h1>
+    <div class='header-actions'>
+      <button id='addPlayerBtn' class='btn'>+ Add Player</button>
+      <button id='broadcastBtn' class='btn btn-primary'>📡 Broadcast to Players</button>
+      <span id='connBadge' class='badge offline'>● Offline</span>
+    </div>
+  </header>
 
-    <!-- SPOTLIGHT BAR -->
-    <section class="spotlight-bar">
-        <div class="spotlight-label">SPOTLIGHT:</div>
-        <div id="spotlightPlayers" class="spotlight-players">
-            <button id="addPlayerBtn" class="player-btn add-btn">+ Add Player</button>
-        </div>
+  <main class='grid'>
+    <section class='panel'>
+      <div class='panel-header'>
+        <h2>Location</h2>
+        <select id='locationSelect' class='select'>
+          <option value=''>Select Location…</option>
+          <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/cafe-greenwich.jpg'>Cafe Greenwich</option>
+          <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/theater-district.jpg'>Theater District</option>
+          <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/morettis-comedy-cellar.webp'>Moretti’s Comedy Cellar</option>
+        </select>
+      </div>
+      <div id='sceneDisplay' class='media-box'>Select a location to display</div>
     </section>
 
-    <!-- MAIN CONTENT AREA -->
-    <main class="main-content">
-        <!-- LEFT PANEL: Scene/Location Display -->
-        <section class="scene-panel">
-            <div class="panel-header">
-                <h3>Location</h3>
-                <select id="locationSelect" class="styled-select">
-                    <option value="">Select Location...</option>
-                    <option value="cafe-greenwich">Cafe Greenwich</option>
-                    <option value="theater-district">Theater District</option>
-                    <option value="morettis">Moretti's Comedy Cellar</option>
-                </select>
-            </div>
-            <div id="sceneDisplay" class="scene-display">
-                <div class="placeholder-text">Select a location to display</div>
-            </div>
-        </section>
-
-        <!-- RIGHT PANEL: Character Sheet (when spotlighted) or NPC Display -->
-        <section class="character-panel">
-            <div class="panel-header">
-                <h3 id="characterPanelTitle">Character/NPC</h3>
-                <select id="characterSelect" class="styled-select">
-                    <option value="">Select Character...</option>
-                    <option value="mama-jay">Mama Jay Rainbow</option>
-                    <option value="danny-civilian">Danny Carbone (Civilian)</option>
-                    <option value="danny-justice">Danny "The Jester" (Justice Knight)</option>
-                    <option value="pawn">Tough Crowd (Pawn)</option>
-                </select>
-            </div>
-            
-            <!-- Character Sheet Display (Visible to Players when spotlighted) -->
-            <div id="characterSheetDisplay" class="character-sheet-display hidden">
-                <!-- Active player's character sheet shows here -->
-            </div>
-            
-            <!-- NPC/Character Portrait Display -->
-            <div id="characterDisplay" class="character-display">
-                <div class="placeholder-text">Select a character to display</div>
-            </div>
-            <div id="characterInfo" class="character-info"></div>
-        </section>
-    </main>
-
-    <!-- MOVE ICONS BAR - YOUR CUSTOM ICONS WITH CORRECT PATHS -->
-    <section class="moves-bar">
-        <div class="moves-label">Core Moves:</div>
-        <div class="move-icons">
-            <div class="move-icon" title="Be Vulnerable">
-                <img src="images/icons/moves/move-be-vulnerable.png" alt="Be Vulnerable">
-            </div>
-            <div class="move-icon" title="Care">
-                <img src="images/icons/moves/move-care.png" alt="Care">
-            </div>
-            <div class="move-icon" title="Get a Clue">
-                <img src="images/icons/moves/move-get-a-clue.png" alt="Get a Clue">
-            </div>
-            <div class="move-icon" title="Resist">
-                <img src="images/icons/moves/move-resist.png" alt="Resist">
-            </div>
-            <div class="move-icon" title="Slay">
-                <img src="images/icons/moves/move-slay.png" alt="Slay">
-            </div>
-            <div class="move-icon" title="Strike a Pose">
-                <img src="images/icons/moves/move-strike-a-pose.png" alt="Strike a Pose">
-            </div>
-            <div class="move-icon" title="Talk It Out">
-                <img src="images/icons/moves/move-talk-it-out.png" alt="Talk It Out">
-            </div>
-        </div>
+    <section class='panel'>
+      <div class='panel-header'>
+        <h2>Character/NPC</h2>
+        <select id='characterSelect' class='select'>
+          <option value=''>Select Character…</option>
+          <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/mama-jay-portrait.png'>Mama Jay Rainbow</option>
+          <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/danny-civilian.png'>Danny Carbone (Civilian)</option>
+          <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/danny-justice-knight.png'>Danny “The Jester”</option>
+          <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/pawn-tough-crowd-general.png'>Tough Crowd (Pawn)</option>
+        </select>
+      </div>
+      <div id='characterDisplay' class='media-box'>Select a character to display</div>
     </section>
 
-    <!-- BOTTOM CONTROLS -->
-    <footer class="bottom-controls">
-        <!-- MUSIC PLAYER - COMPLETE 18-TRACK LIBRARY -->
-        <div class="music-player">
-            <h4>Music</h4>
-            <select id="trackSelect" class="styled-select">
-                <option value="">Select Track...</option>
-                <optgroup label="Locations">
-                    <option value="https://drive.google.com/uc?export=download&id=1WFC4ivl-d3LFOkypbl0kvX3QA11tGzDM">Cafe Greenwich 1</option>
-                    <option value="https://drive.google.com/uc?export=download&id=14-pkVG_pW2suhqOYSxiKmtLpGRFQ2p9T">Cafe Greenwich 2</option>
-                    <option value="https://drive.google.com/uc?export=download&id=16rD9l6ABtHG_mmQStEc_r-29t4qt0O9J">Theater District Investigation 1</option>
-                    <option value="https://drive.google.com/uc?export=download&id=1CZOFytz1oBAVwekCOC6FiCRlZz5jnLqV">Theater District Investigation 2</option>
-                    <option value="music/locations/university-1.mp3">University 1</option>
-                    <option value="music/locations/university-2.mp3">University 2</option>
-                </optgroup>
-                <optgroup label="Boss Battles">
-                    <option value="https://drive.google.com/uc?export=download&id=1UfAcY4tLkE36l0lZpKk__dT0JsQu1RdX">Danny Battle 1</option>
-                    <option value="https://drive.google.com/uc?export=download&id=1X_OAijPdVDRT8gcjAutx4y7z7tTcX1h_">Danny Battle 2</option>
-                    <option value="music/boss-battles/pierce-battle-1.mp3">Pierce Battle 1</option>
-                    <option value="music/boss-battles/pierce-battle-2.mp3">Pierce Battle 2</option>
-                    <option value="music/boss-battles/rex-battle-1.mp3">Rex Battle 1</option>
-                    <option value="music/boss-battles/rex-battle-2.mp3">Rex Battle 2</option>
-                    <option value="music/boss-battles/victoria-battle-1.mp3">Victoria Battle 1</option>
-                    <option value="music/boss-battles/victoria-battle-2.mp3">Victoria Battle 2</option>
-                    <option value="music/boss-battles/marcus-battle-1.mp3">Marcus Battle 1</option>
-                    <option value="music/boss-battles/marcus-battle-2.mp3">Marcus Battle 2</option>
-                </optgroup>
-                <optgroup label="Emotional Themes">
-                    <option value="https://drive.google.com/uc?export=download&id=1d6SIvvWKL91zAWbst7bBawyqpguDaotm">Inner Space Theme 1</option>
-                    <option value="https://drive.google.com/uc?export=download&id=1Zw56k-iJkk_U-ek3zcNwcQSc42Ts1VUG">Inner Space Theme 2</option>
-                </optgroup>
-            </select>
-            <div class="player-controls">
-                <button id="playBtn" class="control-btn">Play</button>
-                <button id="pauseBtn" class="control-btn">Pause</button>
-                <button id="stopBtn" class="control-btn">Stop</button>
-                <button id="loopBtn" class="control-btn" title="Loop Current Track">🔁 Loop</button>
-                <button id="addToPlaylistBtn" class="control-btn" title="Add to Playlist">➕ Playlist</button>
-                <input type="range" id="volumeSlider" min="0" max="100" value="70" class="volume-slider">
-                <span id="volumeLabel" class="volume-label">70%</span>
-            </div>
-            <div id="nowPlaying" class="now-playing">No track playing</div>
-            <div id="playlist" class="playlist" style="margin-top: 10px; display: none;">
-                <strong>Playlist:</strong>
-                <div id="playlistTracks" style="margin-top: 5px;"></div>
-            </div>
-            <audio id="audioPlayer"></audio>
-        </div>
+    <section class='panel full'>
+      <div class='panel-header'>
+        <h2>Music</h2>
+        <select id='trackSelect' class='select'>
+          <option value=''>Select Track…</option>
 
-        <!-- DICE ROLLER -->
-        <div class="dice-roller">
-            <h4>Dice Roller</h4>
-            <div class="dice-controls">
-                <label for="powerModifier">Power Modifier:</label>
-                <input type="number" id="powerModifier" class="power-input" value="0" min="-5" max="5">
-                <button id="rollDiceBtn" class="roll-btn">Roll 2d6</button>
-            </div>
-            <div id="diceDisplay" class="dice-display">
-                <div class="dice-formula">
-                    <span class="die1">?</span>
-                    <span class="plus">+</span>
-                    <span class="die2">?</span>
-                    <span class="plus">+</span>
-                    <span class="modifier">?</span>
-                    <span class="equals">=</span>
-                    <span class="total">?</span>
-                </div>
-                <div id="rollResult" class="roll-result"></div>
-            </div>
-        </div>
-    </footer>
+          <optgroup label='Locations'>
+            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/cafe-greenwich-1.mp3'>Cafe Greenwich 1</option>
+            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/cafe-greenwich-2.mp3'>Cafe Greenwich 2</option>
+            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/theater-district-investigation-1.mp3'>Theater District 1</option>
+            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/theater-district-investigation-2.mp3'>Theater District 2</option>
+            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/university-1.mp3'>University 1</option>
+            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/university-2.mp3'>University 2</option>
+          </optgroup>
 
-    <!-- SCRIPT PANEL (Toggle with S) -->
-    <aside id="scriptPanel" class="side-panel script-panel hidden">
-        <div class="panel-header-side">
-            <h3 id="scriptPanelTitle">Campaign Script - Chapter 1</h3>
-            <button class="close-panel-btn" id="closeScriptBtn">X</button>
-        </div>
-        <div class="panel-search">
-            <input type="text" id="scriptSearch" placeholder="Search script..." class="search-input">
-        </div>
-        <div class="panel-tabs">
-            <button class="tab-btn active" data-tab="overview">Overview</button>
-            <button class="tab-btn" data-tab="scene1">Scene 1</button>
-            <button class="tab-btn" data-tab="scene2">Scene 2</button>
-            <button class="tab-btn" data-tab="scene3">Scene 3</button>
-            <button class="tab-btn" data-tab="innerSpace">Inner Space</button>
-            <button class="tab-btn" data-tab="aftermath">Aftermath</button>
-            <button class="tab-btn" data-tab="scaling">Scaling</button>
-        </div>
-        <div class="panel-content" id="scriptContent">
-            <!-- Script content loads here -->
-        </div>
-    </aside>
+          <optgroup label='Boss Battles'>
+            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/danny-battle-1.mp3'>Danny 1</option>
+            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/danny-battle-2.mp3'>Danny 2</option>
+            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/marcus-battle-1.mp3'>Marcus 1</option>
+            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/marcus-battle-2.mp3'>Marcus 2</option>
+            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/pierce-battle-1.mp3'>Pierce 1</option>
+            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/pierce-battle-2.mp3'>Pierce 2</option>
+            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/rex-battle-1.mp3'>Rex 1</option>
+            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/rex-battle-2.mp3'>Rex 2</option>
+            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/victoria-battle-1.mp3'>Victoria 1</option>
+            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/victoria-battle-2.mp3'>Victoria 2</option>
+          </optgroup>
 
-    <!-- MC MOVES PANEL (Toggle with M) -->
-    <aside id="mcMovesPanel" class="side-panel mc-moves-panel hidden">
-        <div class="panel-header-side">
-            <h3>MC Moves</h3>
-            <button class="close-panel-btn" id="closeMcMovesBtn">X</button>
-        </div>
-        <div class="panel-content" id="mcMovesContent">
-            <div class="moves-section">
-                <h4>Soft Moves</h4>
-                <div class="move-item">
-                    <strong>Show signs of trouble</strong>
-                    <p>Foreshadow danger or complications approaching</p>
-                </div>
-                <div class="move-item">
-                    <strong>Offer an opportunity</strong>
-                    <p>Present a chance with a cost or complication</p>
-                </div>
-                <div class="move-item">
-                    <strong>Tell them the cost</strong>
-                    <p>Make the price clear before they commit</p>
-                </div>
-                <div class="move-item">
-                    <strong>Put someone in a spot</strong>
-                    <p>Force a difficult decision or dilemma</p>
-                </div>
-                <div class="move-item">
-                    <strong>Present Twisted Justice</strong>
-                    <p>Show the villain's narrow-minded worldview</p>
-                </div>
-            </div>
-            <div class="moves-section">
-                <h4>Hard Moves (On 6- or ignored threat)</h4>
-                <div class="move-item">
-                    <strong>Deal harm</strong>
-                    <p>Inflict damage or consequences</p>
-                </div>
-                <div class="move-item">
-                    <strong>Turn their move back on them</strong>
-                    <p>Use their action against them</p>
-                </div>
-                <div class="move-item">
-                    <strong>Separate them</strong>
-                    <p>Split the party or isolate someone</p>
-                </div>
-                <div class="move-item">
-                    <strong>Make a construct move</strong>
-                    <p>Use villain's construct abilities</p>
-                </div>
-                <div class="move-item">
-                    <strong>Take away their stuff</strong>
-                    <p>Remove resources or advantages</p>
-                </div>
-                <div class="move-item">
-                    <strong>Make them buy</strong>
-                    <p>Force them to accept a cost immediately</p>
-                </div>
-                <div class="move-item">
-                    <strong>Give a status</strong>
-                    <p>Apply a negative condition (conforming, shaken, etc.)</p>
-                </div>
-            </div>
-        </div>
-    </aside>
+          <optgroup label='Emotional Themes'>
+            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/emotional-themes/inner-space-theme-1.mp3'>Inner Space 1</option>
+            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/emotional-themes/inner-space-theme-2.mp3'>Inner Space 2</option>
+          </optgroup>
+        </select>
+      </div>
 
-    <!-- CAMPAIGN SETTINGS MODAL -->
-    <div id="campaignSettingsModal" class="modal hidden">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Campaign Settings</h2>
-                <button class="close-modal-btn" id="closeCampaignSettingsBtn">X</button>
-            </div>
-            <div class="modal-body">
-                <h3>Story Outcomes</h3>
-                <p>Track major story decisions to affect future chapters:</p>
-                
-                <div class="outcome-section">
-                    <h4>Chapter 1: The Jester's Last Laugh</h4>
-                    <p style="color: rgba(255,255,255,0.8); margin-bottom: 10px;">Select the outcome (affects Chapter 2 content):</p>
-                    <label>
-                        <input type="radio" name="outcome-chapter1" value="none" onchange="setOutcome('chapter1', 'none')" checked>
-                        No outcome yet / Haven't played Chapter 1
-                    </label>
-                    <br>
-                    <label>
-                        <input type="radio" name="outcome-chapter1" value="redeemed" onchange="setOutcome('chapter1', 'redeemed')">
-                        Danny was redeemed (saved from Ignorance - Success)
-                    </label>
-                    <br>
-                    <label>
-                        <input type="radio" name="outcome-chapter1" value="partial" onchange="setOutcome('chapter1', 'partial')">
-                        Danny partially reformed (escaped but affected - Partial Success)
-                    </label>
-                    <br>
-                    <label>
-                        <input type="radio" name="outcome-chapter1" value="vendetta" onchange="setOutcome('chapter1', 'vendetta')">
-                        Danny's vendetta continues (allied with Pierce - Failure)
-                    </label>
-                </div>
-                
-                <div class="outcome-section">
-                    <h4>Future Chapters</h4>
-                    <p style="color: rgba(255,255,255,0.6);">Outcome tracking for Chapters 2-5 will be added as you play through the campaign.</p>
-                </div>
-                
-                <hr style="margin: 20px 0; border-color: rgba(255,255,255,0.2);">
-                
-                <h3>Export Player Data</h3>
-                <p>Export character data to send to players for their companion apps:</p>
-                <div id="exportPlayersList" style="margin-top: 10px;">
-                    <!-- Player export buttons will be added here dynamically -->
-                </div>
-            </div>
-        </div>
+      <div class='audio-row'>
+        <audio id='audioPlayer' controls></audio>
+        <div id='nowPlaying' class='now'>No track</div>
+      </div>
+    </section>
+  </main>
+
+  <aside class='dock'>
+    <button id='toggleScriptBtn' class='dock-btn'>Script</button>
+    <button id='toggleMovesBtn' class='dock-btn'>MC Moves</button>
+    <button id='openCharMgmtBtn' class='dock-btn'>Characters</button>
+  </aside>
+
+  <div id='overlay' class='overlay hidden'>
+    <div class='sheet'>
+      <div class='sheet-header'>
+        <h3 id='sheetTitle'>Panel</h3>
+        <button id='closeSheet' class='btn'>✕</button>
+      </div>
+      <div id='sheetBody' class='sheet-body'></div>
     </div>
+  </div>
 
-    <!-- CHARACTER MANAGEMENT MODAL -->
-    <div id="charMgmtModal" class="modal hidden">
-        <div class="modal-content large-modal">
-            <div class="modal-header">
-                <h2>Character Management</h2>
-                <button class="close-modal-btn" id="closeCharMgmtModalBtn">X</button>
-            </div>
-            <div class="modal-tabs">
-                <button class="modal-tab active" data-tab="list">Character List</button>
-                <button class="modal-tab" data-tab="edit">Create/Edit Character</button>
-                <button class="modal-tab" data-tab="import">Import/Export</button>
-            </div>
-            <div class="modal-content-area" id="charMgmtContent">
-                <!-- Content loads dynamically -->
-            </div>
-        </div>
-    </div>
-
-    <!-- PLAYER NAME INPUT MODAL -->
-    <div id="playerModal" class="modal hidden">
-        <div class="modal-content">
-            <h3>Add Player to Spotlight</h3>
-            <p>Select an existing character or enter a name:</p>
-            <select id="playerCharSelect" class="styled-select">
-                <option value="">-- Select Character --</option>
-            </select>
-            <p style="text-align: center; margin: 10px 0;">- OR -</p>
-            <input type="text" id="playerNameInput" name="playerName" placeholder="Enter player name..." class="text-input">
-            <div class="modal-buttons">
-                <button id="confirmPlayerBtn" class="btn-primary">Add to Spotlight</button>
-                <button id="cancelPlayerBtn" class="btn-secondary">Cancel</button>
-            </div>
-        </div>
-    </div>
-<!-- Firebase (compat CDN to avoid ES module issues on GitHub Pages) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script src="firebase-config.js"></script>
-<script src="firebase-broadcast.js"></script>
-
-
-    <script src="app.js"></script>
+  <script type='module' src='firebase-config.js'></script>
+  <script type='module' src='firebase-broadcast.js'></script>
+  <script type='module' src='app.js'></script>
 </body>
 </html>
