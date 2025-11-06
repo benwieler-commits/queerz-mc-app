@@ -1,109 +1,113 @@
 <!DOCTYPE html>
-<html lang='en'>
-<head>
-  <meta charset='utf-8'>
-  <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <title>QUEERZ! MC Companion</title>
-  <link rel='stylesheet' href='styles.css'>
-</head>
-<body>
-  <header class='app-header'>
-    <h1>QUEERZ! MC Companion</h1>
-    <div class='header-actions'>
-      <button id='addPlayerBtn' class='btn'>+ Add Player</button>
-      <button id='broadcastBtn' class='btn btn-primary'>📡 Broadcast to Players</button>
-      <span id='connBadge' class='badge offline'>● Offline</span>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>QUEERZ! MC Companion</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <header class="app-header">
+      <h1>QUEERZ! MC Companion</h1>
+      <div class="header-actions">
+        <button id="addPlayerBtn" class="btn">+ Add Player</button>
+        <button id="broadcastBtn" class="btn btn-primary">📡 Broadcast to Players</button>
+        <span id="connBadge" class="badge offline">● Offline</span>
+      </div>
+    </header>
+
+    <main class="grid">
+      <!-- Locations -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Location</h2>
+          <select id="locationSelect" class="select">
+            <option value="">Select Location…</option>
+            <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/cafe-greenwich.jpg">Cafe Greenwich</option>
+            <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/theater-district.jpg">Theater District</option>
+            <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/morettis-comedy-cellar.webp">Moretti’s Comedy Cellar</option>
+          </select>
+        </div>
+        <div id="sceneDisplay" class="media-box">Select a location to display</div>
+      </section>
+
+      <!-- Characters -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Character/NPC</h2>
+          <select id="characterSelect" class="select">
+            <option value="">Select Character…</option>
+            <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/mama-jay-portrait.png">Mama Jay Rainbow</option>
+            <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/danny-civilian.png">Danny Carbone (Civilian)</option>
+            <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/danny-justice-knight.png">Danny “The Jester”</option>
+            <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/pawn-tough-crowd-general.png">Tough Crowd (Pawn)</option>
+          </select>
+        </div>
+        <div id="characterDisplay" class="media-box">Select a character to display</div>
+      </section>
+
+      <!-- Music -->
+      <section class="panel full">
+        <div class="panel-header">
+          <h2>Music</h2>
+          <select id="trackSelect" class="select">
+            <option value="">Select Track…</option>
+
+            <optgroup label="Locations">
+              <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/cafe-greenwich-1.mp3">Cafe Greenwich 1</option>
+              <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/cafe-greenwich-2.mp3">Cafe Greenwich 2</option>
+              <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/theater-district-investigation-1.mp3">Theater District 1</option>
+              <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/theater-district-investigation-2.mp3">Theater District 2</option>
+              <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/university-1.mp3">University 1</option>
+              <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/university-2.mp3">University 2</option>
+            </optgroup>
+
+            <optgroup label="Boss Battles">
+              <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/danny-battle-1.mp3">Danny 1</option>
+              <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/danny-battle-2.mp3">Danny 2</option>
+              <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/marcus-battle-1.mp3">Marcus 1</option>
+              <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/marcus-battle-2.mp3">Marcus 2</option>
+              <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/pierce-battle-1.mp3">Pierce 1</option>
+              <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/pierce-battle-2.mp3">Pierce 2</option>
+              <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/rex-battle-1.mp3">Rex 1</option>
+              <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/rex-battle-2.mp3">Rex 2</option>
+              <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/victoria-battle-1.mp3">Victoria 1</option>
+              <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/victoria-battle-2.mp3">Victoria 2</option>
+            </optgroup>
+
+            <optgroup label="Emotional Themes">
+              <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/emotional-themes/inner-space-theme-1.mp3">Inner Space 1</option>
+              <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/emotional-themes/inner-space-theme-2.mp3">Inner Space 2</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="audio-row">
+          <audio id="audioPlayer" controls></audio>
+          <div id="nowPlaying" class="now">No track</div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="dock">
+      <button id="toggleScriptBtn" class="dock-btn">Script</button>
+      <button id="toggleMovesBtn" class="dock-btn">MC Moves</button>
+      <button id="openCharMgmtBtn" class="dock-btn">Characters</button>
+    </aside>
+
+    <div id="overlay" class="overlay hidden">
+      <div class="sheet">
+        <div class="sheet-header">
+          <h3 id="sheetTitle">Panel</h3>
+          <button id="closeSheet" class="btn">✕</button>
+        </div>
+        <div id="sheetBody" class="sheet-body"></div>
+      </div>
     </div>
-  </header>
 
-  <main class='grid'>
-    <section class='panel'>
-      <div class='panel-header'>
-        <h2>Location</h2>
-        <select id='locationSelect' class='select'>
-          <option value=''>Select Location…</option>
-          <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/cafe-greenwich.jpg'>Cafe Greenwich</option>
-          <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/theater-district.jpg'>Theater District</option>
-          <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/morettis-comedy-cellar.webp'>Moretti’s Comedy Cellar</option>
-        </select>
-      </div>
-      <div id='sceneDisplay' class='media-box'>Select a location to display</div>
-    </section>
-
-    <section class='panel'>
-      <div class='panel-header'>
-        <h2>Character/NPC</h2>
-        <select id='characterSelect' class='select'>
-          <option value=''>Select Character…</option>
-          <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/mama-jay-portrait.png'>Mama Jay Rainbow</option>
-          <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/danny-civilian.png'>Danny Carbone (Civilian)</option>
-          <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/danny-justice-knight.png'>Danny “The Jester”</option>
-          <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/pawn-tough-crowd-general.png'>Tough Crowd (Pawn)</option>
-        </select>
-      </div>
-      <div id='characterDisplay' class='media-box'>Select a character to display</div>
-    </section>
-
-    <section class='panel full'>
-      <div class='panel-header'>
-        <h2>Music</h2>
-        <select id='trackSelect' class='select'>
-          <option value=''>Select Track…</option>
-
-          <optgroup label='Locations'>
-            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/cafe-greenwich-1.mp3'>Cafe Greenwich 1</option>
-            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/cafe-greenwich-2.mp3'>Cafe Greenwich 2</option>
-            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/theater-district-investigation-1.mp3'>Theater District 1</option>
-            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/theater-district-investigation-2.mp3'>Theater District 2</option>
-            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/university-1.mp3'>University 1</option>
-            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/university-2.mp3'>University 2</option>
-          </optgroup>
-
-          <optgroup label='Boss Battles'>
-            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/danny-battle-1.mp3'>Danny 1</option>
-            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/danny-battle-2.mp3'>Danny 2</option>
-            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/marcus-battle-1.mp3'>Marcus 1</option>
-            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/marcus-battle-2.mp3'>Marcus 2</option>
-            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/pierce-battle-1.mp3'>Pierce 1</option>
-            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/pierce-battle-2.mp3'>Pierce 2</option>
-            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/rex-battle-1.mp3'>Rex 1</option>
-            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/rex-battle-2.mp3'>Rex 2</option>
-            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/victoria-battle-1.mp3'>Victoria 1</option>
-            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/victoria-battle-2.mp3'>Victoria 2</option>
-          </optgroup>
-
-          <optgroup label='Emotional Themes'>
-            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/emotional-themes/inner-space-theme-1.mp3'>Inner Space 1</option>
-            <option value='https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/emotional-themes/inner-space-theme-2.mp3'>Inner Space 2</option>
-          </optgroup>
-        </select>
-      </div>
-
-      <div class='audio-row'>
-        <audio id='audioPlayer' controls></audio>
-        <div id='nowPlaying' class='now'>No track</div>
-      </div>
-    </section>
-  </main>
-
-  <aside class='dock'>
-    <button id='toggleScriptBtn' class='dock-btn'>Script</button>
-    <button id='toggleMovesBtn' class='dock-btn'>MC Moves</button>
-    <button id='openCharMgmtBtn' class='dock-btn'>Characters</button>
-  </aside>
-
-  <div id='overlay' class='overlay hidden'>
-    <div class='sheet'>
-      <div class='sheet-header'>
-        <h3 id='sheetTitle'>Panel</h3>
-        <button id='closeSheet' class='btn'>✕</button>
-      </div>
-      <div id='sheetBody' class='sheet-body'></div>
-    </div>
-  </div>
-
-  <script type='module' src='firebase-config.js'></script>
-  <script type='module' src='firebase-broadcast.js'></script>
-  <script type='module' src='app.js'></script>
-</body>
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="firebase-broadcast.js"></script>
+    <script type="module" src="app.js"></script>
+  </body>
 </html>
