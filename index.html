@@ -397,7 +397,155 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+<!-- Firebase Scripts -->
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="firebase-broadcast.js"></script>
+
+<!-- Your Existing App Script -->
+<script src="app.js"></script>
+
+<!-- Image Display Handler (MUST come first) -->
+<script>
+// Image display for location and character selectors
+document.addEventListener('DOMContentLoaded', function(){
+  const locSel = document.getElementById('locationSelect');
+  const charSel = document.getElementById('characterSelect');
+  const sceneBox = document.getElementById('sceneDisplay');
+  const charBox  = document.getElementById('characterDisplay');
+  const audio = document.getElementById('audioPlayer');
+
+  function setBoxImage(box, url, alt){
+    if(!box) return;
+    if(!url){ 
+      box.innerHTML = '<div class="placeholder-text">Select a location to display</div>'; 
+      return; 
+    }
+    box.innerHTML = '<img src="'+url+'" alt="'+(alt||'')+'" class="fit-cover" style="width: 100%; height: 100%; object-fit: cover;">';
+  }
+
+  if(locSel){
+    locSel.addEventListener('change', function(){
+      const opt = locSel.options[locSel.selectedIndex];
+      const url = opt && opt.dataset && opt.dataset.img;
+      if(url) setBoxImage(sceneBox, url, opt.textContent.trim());
+    });
+    console.log('✅ Location selector initialized');
+  }
   
+  if(charSel){
+    charSel.addEventListener('change', function(){
+      const opt = charSel.options[charSel.selectedIndex];
+      const url = opt && opt.dataset && opt.dataset.img;
+      if(url) setBoxImage(charBox, url, opt.textContent.trim());
+    });
+    console.log('✅ Character selector initialized');
+  }
+  
+  const trackSel = document.getElementById('trackSelect');
+  if(trackSel && audio){
+    trackSel.addEventListener('change', function(){
+      const opt = trackSel.options[trackSel.selectedIndex];
+      if(opt && opt.value) { 
+        audio.src = opt.value;
+        console.log('🎵 Audio track changed:', opt.textContent);
+      }
+    });
+    console.log('✅ Music selector initialized');
+  }
+});
+</script>
+
+<!-- Broadcast Button Handler -->
+<script type="module">
+import { broadcast } from './firebase-broadcast.js';
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🔥 Initializing broadcast functionality...');
+    
+    const broadcastBtn = document.getElementById('broadcastBtn');
+    
+    if (!broadcastBtn) {
+        console.warn('⚠️ Broadcast button not found - looking for element with id="broadcastBtn"');
+        return;
+    }
+    
+    broadcastBtn.addEventListener('click', async function() {
+        console.log('📡 Broadcast button clicked');
+        
+        // Get current selections
+        const locationSelect = document.getElementById('locationSelect');
+        const characterSelect = document.getElementById('characterSelect');
+        const trackSelect = document.getElementById('trackSelect');
+        
+        // Build payload with current selections
+        const payload = {
+            currentScene: {
+                name: 'No scene selected',
+                imageUrl: ''
+            },
+            currentMusic: {
+                name: 'No music playing',
+                url: ''
+            },
+            activeCharacter: {
+                name: 'No character',
+                imageUrl: ''
+            },
+            timestamp: Date.now()
+        };
+        
+        // Get scene info
+        if (locationSelect && locationSelect.selectedIndex > 0) {
+            const opt = locationSelect.options[locationSelect.selectedIndex];
+            payload.currentScene.name = opt.textContent.trim();
+            payload.currentScene.imageUrl = opt.dataset.img || '';
+            console.log('📍 Scene:', payload.currentScene.name);
+        }
+        
+        // Get music info
+        if (trackSelect && trackSelect.selectedIndex > 0) {
+            const opt = trackSelect.options[trackSelect.selectedIndex];
+            payload.currentMusic.name = opt.textContent.trim();
+            payload.currentMusic.url = opt.value || '';
+            console.log('🎵 Music:', payload.currentMusic.name);
+        }
+        
+        // Get character info
+        if (characterSelect && characterSelect.selectedIndex > 0) {
+            const opt = characterSelect.options[characterSelect.selectedIndex];
+            payload.activeCharacter.name = opt.textContent.trim();
+            payload.activeCharacter.imageUrl = opt.dataset.img || '';
+            console.log('👤 Character:', payload.activeCharacter.name);
+        }
+        
+        // Send broadcast
+        try {
+            console.log('🚀 Sending broadcast...');
+            await broadcast(payload);
+            console.log('✅ Broadcast successful!');
+            
+            // Visual feedback
+            const originalText = broadcastBtn.textContent;
+            broadcastBtn.textContent = '✅ Sent!';
+            broadcastBtn.style.background = '#4CAF50';
+            
+            setTimeout(() => {
+                broadcastBtn.textContent = originalText;
+                broadcastBtn.style.background = '';
+            }, 1500);
+            
+        } catch (error) {
+            console.error('❌ Broadcast failed:', error);
+            alert('Failed to broadcast: ' + error.message + '\n\nCheck Firebase database rules.');
+        }
+    });
+    
+    console.log('✅ Broadcast button initialized');
+});
+</script>
+
+</body>
+</html>  
 </body>
 </html>
 Fix Firebase module
