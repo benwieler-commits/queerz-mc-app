@@ -339,45 +339,67 @@
 <!-- Firebase (compat CDN to avoid ES module issues on GitHub Pages) -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script src="firebase-config.js"></script>
-<script src="firebase-broadcast.js"></script>
+<!-- Firebase Scripts with Module Support -->
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="firebase-broadcast.js"></script>
+
+<!-- Your Existing App Script (NO MODULE) -->
 <script src="app.js"></script>
-<script>
-// additive shim: prefer data-img URLs for scene/character without altering layout
-document.addEventListener('DOMContentLoaded', function(){
-  const locSel = document.getElementById('locationSelect');
-  const charSel = document.getElementById('characterSelect');
-  const sceneBox = document.getElementById('sceneDisplay');
-  const charBox  = document.getElementById('characterDisplay');
-  const audio = document.getElementById('audioPlayer');
 
-  function setBoxImage(box, url, alt){
-    if(!box) return;
-    if(!url){ box.innerHTML = ''; return; }
-    box.innerHTML = '<img src="'+url+'" alt="'+(alt||'')+'" class="fit-cover">';
-  }
+<!-- Broadcast Button Handler (NEW) -->
+<script type="module">
+import { broadcast } from './firebase-broadcast.js';
 
-  if(locSel){
-    locSel.addEventListener('change', function(){
-      const opt = locSel.options[locSel.selectedIndex];
-      const url = opt && opt.dataset && opt.dataset.img;
-      if(url) setBoxImage(sceneBox, url, opt.textContent.trim());
-    });
-  }
-  if(charSel){
-    charSel.addEventListener('change', function(){
-      const opt = charSel.options[charSel.selectedIndex];
-      const url = opt && opt.dataset && opt.dataset.img;
-      if(url) setBoxImage(charBox, url, opt.textContent.trim());
-    });
-  }
-  const trackSel = document.getElementById('trackSelect');
-  if(trackSel && audio){
-    trackSel.addEventListener('change', function(){
-      const opt = trackSel.options[trackSel.selectedIndex];
-      if(opt && opt.value) { audio.src = opt.value; }
-    });
-  }
+document.addEventListener('DOMContentLoaded', function() {
+    const broadcastBtn = document.getElementById('broadcastBtn');
+    
+    if (broadcastBtn) {
+        broadcastBtn.addEventListener('click', async function() {
+            console.log('🔥 Broadcasting to players...');
+            
+            const locationSelect = document.getElementById('locationSelect');
+            const characterSelect = document.getElementById('characterSelect');
+            const trackSelect = document.getElementById('trackSelect');
+            
+            const payload = {
+                currentScene: {
+                    name: locationSelect?.options[locationSelect.selectedIndex]?.textContent || 'No scene',
+                    imageUrl: locationSelect?.options[locationSelect.selectedIndex]?.dataset?.img || ''
+                },
+                currentMusic: {
+                    name: trackSelect?.options[trackSelect.selectedIndex]?.textContent || 'No music',
+                    url: trackSelect?.value || ''
+                },
+                activeCharacter: {
+                    name: characterSelect?.options[characterSelect.selectedIndex]?.textContent || 'No character',
+                    imageUrl: characterSelect?.options[characterSelect.selectedIndex]?.dataset?.img || ''
+                }
+            };
+            
+            console.log('📡 Scene:', payload.currentScene.name);
+            console.log('🎵 Music:', payload.currentMusic.name);
+            console.log('👤 Character:', payload.activeCharacter.name);
+            
+            try {
+                await broadcast(payload);
+                console.log('✅ Broadcast successful!');
+                broadcastBtn.textContent = '✅ Sent!';
+                setTimeout(() => { broadcastBtn.textContent = '📡 Broadcast'; }, 1000);
+            } catch (error) {
+                console.error('❌ Broadcast failed:', error);
+                alert('Broadcast failed: ' + error.message);
+            }
+        });
+        
+        console.log('✅ Broadcast button wired up');
+    } else {
+        console.warn('⚠️ Broadcast button not found');
+    }
 });
-</script></body>
+</script>
+
+</body>
 </html>
+</body>
+</html>
+Fix Firebase module
