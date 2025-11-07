@@ -2513,7 +2513,6 @@ function switchScriptTab(tabName) {
             btn.classList.remove('active');
         }
     });
-    
     // Get the content element
     const content = document.getElementById('scriptContent');
     
@@ -3574,50 +3573,53 @@ console.log('✅ QUEERZ! MC Companion script loaded successfully!');
 
 // ----- Broadcast Hook (non-destructive) -----
 (function(){
-  const btn = document.getElementById('broadcastBtn');
-  if (!btn) return;
-  btn.addEventListener('click', function() {
-    if (typeof window.broadcastToPlayers !== 'function') {
-      return alert('Broadcast not initialized.');
+document.getElementById('broadcast-button').addEventListener('click', async () => {
+    try {
+        const currentSceneTitle = document.getElementById('scene-title')?.textContent || 'Unknown Scene';
+        const currentLocationImage = document.querySelector('.location-image')?.src || '';
+        const currentCharacterPortrait = document.querySelector('.character-portrait')?.src || '';
+        const currentMusicTitle = document.querySelector('.music-title')?.textContent || '';
+        
+        // Import Firebase functions
+        const { ref, set } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js');
+        const { db } = await import('./firebase-config.js');
+        
+        // Broadcast scene update
+        if (currentSceneTitle || currentLocationImage) {
+            await set(ref(db, 'currentScene'), {
+                title: currentSceneTitle,
+                locationImage: currentLocationImage,
+                timestamp: Date.now()
+            });
+        }
+        
+        // Broadcast music update
+        if (currentMusicTitle) {
+            await set(ref(db, 'currentMusic'), {
+                title: currentMusicTitle,
+                timestamp: Date.now()
+            });
+        }
+        
+        // Broadcast character update
+        if (currentCharacterPortrait) {
+            await set(ref(db, 'currentCharacter'), {
+                portraitUrl: currentCharacterPortrait,
+                name: document.querySelector('.character-name')?.textContent || '',
+                timestamp: Date.now()
+            });
+        }
+        
+        alert('✓ Broadcast sent to players!');
+        console.log('Broadcast successful:', {
+            scene: currentSceneTitle,
+            location: currentLocationImage,
+            music: currentMusicTitle
+        });
+        
+    } catch (error) {
+        console.error('Broadcast error:', error);
+        alert('Broadcast failed: ' + error.message);
     }
-    // Try to read from known elements/variables in existing app.js without changing logic
-    var sceneImg = '';
-    var sceneName = '';
-    var musicUrl = '';
-    var charImg = '';
-
-    // Scene image from #sceneDisplay (first <img> if present)
-    try {
-      var sd = document.getElementById('sceneDisplay');
-      var si = sd && sd.querySelector('img');
-      sceneImg = si ? si.getAttribute('src') : '';
-      var locSel = document.getElementById('locationSelect');
-      sceneName = locSel && locSel.value ? locSel.options[locSel.selectedIndex].text : '';
-    } catch(e){}
-
-    // Character image from #characterDisplay (first <img> if present)
-    try {
-      var cd = document.getElementById('characterDisplay');
-      var ci = cd && cd.querySelector('img');
-      charImg = ci ? ci.getAttribute('src') : '';
-    } catch(e){}
-
-    // Music from audio element if present, else current selection
-    try {
-      var ap = document.getElementById('audioPlayer');
-      if (ap && ap.currentSrc) musicUrl = ap.currentSrc;
-      if (!musicUrl) {
-        var ts = document.getElementById('trackSelect');
-        musicUrl = ts && ts.value ? ts.value : '';
-      }
-    } catch(e){}
-
-    window.broadcastToPlayers({
-      sceneImage: sceneImg,
-      sceneName: sceneName,
-      characterImage: charImg,
-      musicUrl: musicUrl
-    });
-    alert('Broadcast sent to players.');
-  });
+});
 })();
