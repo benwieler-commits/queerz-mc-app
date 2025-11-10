@@ -1,6 +1,6 @@
 // ================================
 // QUEERZ! MC COMPANION APP
-// Firebase Configuration - WITH BROADCASTING SUPPORT
+// Firebase Configuration - COMPATIBLE WITH ALL FILES
 // ================================
 
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
@@ -20,10 +20,13 @@ const firebaseConfig = {
 // Initialize Firebase
 let app;
 let database;
+let db; // Alias for compatibility with firebase-broadcast.js
 
 try {
     app = initializeApp(firebaseConfig);
     database = getDatabase(app);
+    db = database; // Make db point to the same database
+    
     console.log('✅ Firebase initialized successfully - MC App connected to queerz-mc-live');
     
     // Make database available globally for app-MC.js
@@ -49,5 +52,7 @@ if (database) {
     console.log('✅ MC App ready to broadcast and receive player data');
 }
 
-// Export database and functions for use in other modules
-export { database, ref, set, onValue };
+// Export BOTH 'db' and 'database' for compatibility
+// firebase-broadcast.js expects 'db'
+// app-MC.js uses window.firebaseDatabase
+export { database, db, ref, set, onValue };
