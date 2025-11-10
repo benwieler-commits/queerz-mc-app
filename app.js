@@ -3,22 +3,23 @@
 // COMPLETE INTEGRATED VERSION WITH PLAYLIST BROADCASTING
 // ===================================
 
-// === FIREBASE IMPORTS ===
-import { getDatabase, ref, set } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
-
-// Get Firebase database (initialized in firebase-config.js)
+// === FIREBASE CONNECTION ===
+// Firebase is loaded by firebase-config.js and made available via window object
 let database = null;
-window.addEventListener('load', () => {
-    // Wait for firebase-config.js to initialize database
-    setTimeout(() => {
-        if (window.firebaseDatabase) {
-            database = window.firebaseDatabase;
-            console.log('✅ MC App connected to Firebase database');
-        } else {
-            console.warn('⚠️ Firebase database not found - broadcasting will not work');
-        }
-    }, 1000);
-});
+let firebaseRef = null;
+let firebaseSet = null;
+
+// Wait for Firebase to initialize
+setTimeout(() => {
+    if (window.firebaseDatabase && window.firebaseRef && window.firebaseSet) {
+        database = window.firebaseDatabase;
+        firebaseRef = window.firebaseRef;
+        firebaseSet = window.firebaseSet;
+        console.log('✅ MC App connected to Firebase - broadcasting ready');
+    } else {
+        console.warn('⚠️ Firebase not available - broadcasting will not work');
+    }
+}, 1500);
 
 // === GLOBAL STATE ===
 let players = [];
@@ -2309,27 +2310,21 @@ function playMusic() {
                 });
         }
     }
-    
-    // Broadcast the play state change
-    broadcastPlaylistState();
 }
+    broadcastPlaylistState();
 
 function pauseMusic() {
     audioPlayer.pause();
     nowPlaying.textContent = 'Paused';
-    
-    // Broadcast the pause state
-    broadcastPlaylistState();
 }
+    broadcastPlaylistState();
 
 function stopMusic() {
     audioPlayer.pause();
     audioPlayer.currentTime = 0;
     nowPlaying.textContent = 'No track playing';
-    
-    // Broadcast the stop state
-    broadcastPlaylistState();
 }
+    broadcastPlaylistState();
 
 function changeTrack() {
     const track = trackSelect.value;
@@ -3376,10 +3371,8 @@ function toggleLoop() {
         const trackName = trackSelect.options[trackSelect.selectedIndex].text;
         nowPlaying.textContent = `â™ª ${trackName}${isLooping ? ' ðŸ”' : ''}`;
     }
-    
-    // Broadcast the loop state change
-    broadcastPlaylistState();
 }
+    broadcastPlaylistState();
 
 function addToPlaylist() {
     const track = trackSelect.value;
@@ -3398,10 +3391,8 @@ function addToPlaylist() {
     playlist.push({ path: track, name: trackName });
     renderPlaylist();
     playlistElement.style.display = 'block';
-    
-    // Broadcast the updated playlist
-    broadcastPlaylistState();
 }
+    broadcastPlaylistState();
 
 function renderPlaylist() {
     if (playlist.length === 0) {
@@ -3441,11 +3432,9 @@ function playPlaylistTrack(index) {
     
     trackSelect.value = track.path;
     renderPlaylist();
-    
-    // Broadcast the track change
-    broadcastPlaylistState();
 }
 
+    broadcastPlaylistState();
 function removeFromPlaylist(index) {
     playlist.splice(index, 1);
     
@@ -3454,12 +3443,10 @@ function removeFromPlaylist(index) {
     }
     
     renderPlaylist();
-    
-    // Broadcast the updated playlist
-    broadcastPlaylistState();
 }
 
 function playNextInPlaylist() {
+    broadcastPlaylistState();
     if (playlist.length === 0) return;
     
     currentPlaylistIndex = (currentPlaylistIndex + 1) % playlist.length;
@@ -3470,8 +3457,8 @@ function playNextInPlaylist() {
 // BROADCAST PLAYLIST STATE TO PLAYERS
 // ===================================
 function broadcastPlaylistState() {
-    if (!database) {
-        console.log('⚠️ Firebase not initialized - cannot broadcast playlist');
+    if (!database || !firebaseRef || !firebaseSet) {
+        console.log('⚠️ Firebase not ready - cannot broadcast');
         return;
     }
     
@@ -3494,7 +3481,7 @@ function broadcastPlaylistState() {
     
     // Prepare broadcast data
     const broadcastData = {
-        playlist: playlist, // Full playlist array
+        playlist: playlist,
         currentTrackIndex: currentPlaylistIndex,
         isLooping: isLooping,
         isPlaying: musicIsPlaying,
@@ -3506,21 +3493,21 @@ function broadcastPlaylistState() {
         timestamp: Date.now()
     };
     
-    console.log('📡 Broadcasting playlist state:', {
+    console.log('📡 Broadcasting playlist:', {
         tracks: playlist.length,
-        currentIndex: currentPlaylistIndex + 1,
+        current: currentPlaylistIndex + 1,
         loop: isLooping,
         playing: musicIsPlaying
     });
     
     // Send to Firebase
-    const broadcastRef = ref(database, 'mcBroadcast');
-    set(broadcastRef, broadcastData)
+    const broadcastRef = firebaseRef(database, 'mcBroadcast');
+    firebaseSet(broadcastRef, broadcastData)
         .then(() => {
-            console.log('✅ Playlist broadcast successful');
+            console.log('✅ Broadcast successful');
         })
         .catch((error) => {
-            console.error('❌ Playlist broadcast failed:', error);
+            console.error('❌ Broadcast failed:', error);
         });
 }
 
