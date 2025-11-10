@@ -1,7 +1,24 @@
 // ===================================
 // QUEERZ! MC COMPANION APP - JAVASCRIPT
-// COMPLETE INTEGRATED VERSION
+// COMPLETE INTEGRATED VERSION WITH PLAYLIST BROADCASTING
 // ===================================
+
+// === FIREBASE IMPORTS ===
+import { getDatabase, ref, set } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+// Get Firebase database (initialized in firebase-config.js)
+let database = null;
+window.addEventListener('load', () => {
+    // Wait for firebase-config.js to initialize database
+    setTimeout(() => {
+        if (window.firebaseDatabase) {
+            database = window.firebaseDatabase;
+            console.log('✅ MC App connected to Firebase database');
+        } else {
+            console.warn('⚠️ Firebase database not found - broadcasting will not work');
+        }
+    }, 1000);
+});
 
 // === GLOBAL STATE ===
 let players = [];
@@ -88,7 +105,7 @@ const characterData = {
         image: 'https://drive.google.com/uc?export=view&id=1ajj4lmmoEpxtMvXO61W1956z1oTrVM0_',
         characterSheet: 'https://drive.google.com/uc?export=view&id=1ajj4lmmoEpxtMvXO61W1956z1oTrVM0_',
 
-        info: 'Founder of House Rainbow and owner of Café Greenwich. A wise mentor figure who guides the heroes.'
+        info: 'Founder of House Rainbow and owner of CafÃ© Greenwich. A wise mentor figure who guides the heroes.'
     },
     'danny-civilian': {
         name: 'Danny "Dice" Carbone',
@@ -131,10 +148,10 @@ const scriptData = {
         title: "Overview",
         content: `
           <div class="script-section">
-            <h2>🎭 Chapter Overview</h2>
+            <h2>ðŸŽ­ Chapter Overview</h2>
             <p>The Queerz investigate harassment in NYC's Theater District, discovering a washed-up comedian named Danny "The Jester" Carbone who leads the Tough Crowd - a gang of bitter performers targeting LGBTQ+ venues. The investigation leads to Moretti's Comedy Cellar and culminates in Danny's Inner Space apartment, where the team must help him confront the emotional wounds that turned laughter into a weapon.</p>
             
-            <h3>🎯 Key Story Features</h3>
+            <h3>ðŸŽ¯ Key Story Features</h3>
             <ul>
               <li><strong>Story Tags Integration:</strong> Over 100+ story tags available throughout the chapter</li>
               <li><strong>Investigation Phase:</strong> Multiple NPCs with clues and tag rewards</li>
@@ -143,7 +160,7 @@ const scriptData = {
               <li><strong>Scalable Encounters:</strong> Adjustable for 1-7+ players</li>
             </ul>
 
-            <h3>📊 Story Tag Categories</h3>
+            <h3>ðŸ“Š Story Tag Categories</h3>
             <div class="tag-categories">
               <div class="tag-category">
                 <h4>Investigation Phase (Scene 2)</h4>
@@ -172,16 +189,16 @@ const scriptData = {
               </div>
             </div>
 
-            <h3>🎬 Key Scenes</h3>
+            <h3>ðŸŽ¬ Key Scenes</h3>
             <ol>
-              <li><strong>Café Greenwich:</strong> Mama Jay introduces the threat</li>
+              <li><strong>CafÃ© Greenwich:</strong> Mama Jay introduces the threat</li>
               <li><strong>Theater District:</strong> Investigation and encounters</li>
               <li><strong>Moretti's Cellar:</strong> Discovery and confrontation</li>
               <li><strong>Inner Space:</strong> Danny's apartment and redemption</li>
             </ol>
 
             <div class="mc-tip">
-              <h4>💡 MC Tips for Story Tags</h4>
+              <h4>ðŸ’¡ MC Tips for Story Tags</h4>
               <ul>
                 <li>Remind players when they have relevant tags</li>
                 <li>Let tags stack with character tags for combos</li>
@@ -196,30 +213,30 @@ const scriptData = {
       },
       
       scene1: {
-        title: "Scene 1: Café Greenwich",
+        title: "Scene 1: CafÃ© Greenwich",
         content: `
           <div class="script-section">
-            <h2>☕ Scene 1: Café Greenwich - Morning</h2>
+            <h2>â˜• Scene 1: CafÃ© Greenwich - Morning</h2>
             
             <div class="scene-description">
               <h3>Environment</h3>
-              <p>The familiar warmth of Café Greenwich wraps around you like a well-worn leather jacket. Steam rises from mismatched mugs while indie music plays softly over conversations between artists, activists, and the beautifully ordinary people who make this neighborhood home. Mama Jay Rainbow moves between tables with practiced grace, her silver hair catching the morning light as she refills coffee cups and dispenses wisdom in equal measure.</p>
+              <p>The familiar warmth of CafÃ© Greenwich wraps around you like a well-worn leather jacket. Steam rises from mismatched mugs while indie music plays softly over conversations between artists, activists, and the beautifully ordinary people who make this neighborhood home. Mama Jay Rainbow moves between tables with practiced grace, her silver hair catching the morning light as she refills coffee cups and dispenses wisdom in equal measure.</p>
             </div>
 
             <div class="read-aloud">
-              <h3>📖 Read to Players</h3>
-              <p>"The morning news drones from the vintage TV mounted in the corner, but something makes Mama Jay reach for the remote with unusual urgency. The volume rises just as a reporter's voice cuts through the café's gentle hum:</p>
+              <h3>ðŸ“– Read to Players</h3>
+              <p>"The morning news drones from the vintage TV mounted in the corner, but something makes Mama Jay reach for the remote with unusual urgency. The volume rises just as a reporter's voice cuts through the cafÃ©'s gentle hum:</p>
               <p><em>'...third incident this week involving what witnesses describe as aggressive street performers in the Theater District. Business owners report customers being harassed by individuals making crude jokes and demanding audiences 'toughen up' or face consequences. Police are investigating what appears to be organized intimidation tactics targeting LGBTQ+ establishments and community centers...'</em>"</p>
             </div>
 
             <div class="npc-dialogue">
-              <h3>💬 Mama Jay's Response</h3>
+              <h3>ðŸ’¬ Mama Jay's Response</h3>
               <p>She turns to face you, her expression mixing concern with determination.</p>
               <p><strong>Mama Jay:</strong> "Well, sugar, sounds like someone's trying to turn humor into a weapon. The Theater District's been good to House Rainbow over the years - we've got friends there, venues that gave us stages when nobody else would. Time to return the favor."</p>
             </div>
 
             <div class="npc-box">
-              <h3>👤 MAMA JAY RAINBOW</h3>
+              <h3>ðŸ‘¤ MAMA JAY RAINBOW</h3>
               <ul>
                 <li><strong>Motivation:</strong> Protect the community spaces that support queer artists</li>
                 <li><strong>Information:</strong> Has contacts in the Theater District, knows the area's history</li>
@@ -229,7 +246,7 @@ const scriptData = {
             </div>
 
             <div class="mc-tip">
-              <h4>💡 MC Notes</h4>
+              <h4>ðŸ’¡ MC Notes</h4>
               <ul>
                 <li>Let players ask Mama Jay questions about the Theater District</li>
                 <li>She can provide background on past community support</li>
@@ -245,7 +262,7 @@ const scriptData = {
         title: "Scene 2: Theater District Investigation",
         content: `
           <div class="script-section">
-            <h2>🎭 Scene 2: The Theater District - Investigation</h2>
+            <h2>ðŸŽ­ Scene 2: The Theater District - Investigation</h2>
             
             <div class="scene-description">
               <h3>Environment</h3>
@@ -254,7 +271,7 @@ const scriptData = {
             </div>
 
             <div class="story-tags environmental">
-              <h3>🏷️ Available Environmental Story Tags</h3>
+              <h3>ðŸ·ï¸ Available Environmental Story Tags</h3>
               <ul>
                 <li><strong>"Creative Energy" (ongoing)</strong> - The district thrums with artistic passion</li>
                 <li><strong>"Nervous Tension"-2 (ongoing)</strong> - Everyone's on edge about recent incidents</li>
@@ -264,7 +281,7 @@ const scriptData = {
             </div>
 
             <div class="investigation-section">
-              <h3>🔍 Investigation Opportunities</h3>
+              <h3>ðŸ” Investigation Opportunities</h3>
               <p>Players can approach different NPCs to gather information. Each provides clues and story tags.</p>
 
               <div class="clue-source">
@@ -383,7 +400,7 @@ const scriptData = {
                 <p><strong>Trigger:</strong> Players seek out community organizers</p>
                 
                 <div class="npc-box">
-                  <h5>👤 JAMIE CHEN</h5>
+                  <h5>ðŸ‘¤ JAMIE CHEN</h5>
                   <p>Local organizer who's been tracking the harassment</p>
                   <p><strong>Information Provided:</strong></p>
                   <ul>
@@ -404,7 +421,7 @@ const scriptData = {
             </div>
 
             <div class="optional-encounter">
-              <h3>⚔️ Optional: Random Encounter with Tough Crowd</h3>
+              <h3>âš”ï¸ Optional: Random Encounter with Tough Crowd</h3>
               <p><strong>Trigger:</strong> Players linger or make themselves obvious</p>
               
               <div class="encounter-setup">
@@ -431,7 +448,7 @@ const scriptData = {
             </div>
 
             <div class="mc-tip">
-              <h4>💡 MC Notes</h4>
+              <h4>ðŸ’¡ MC Notes</h4>
               <ul>
                 <li>Let players choose which NPCs to approach</li>
                 <li>Not all clues are needed - players determine investigation depth</li>
@@ -448,7 +465,7 @@ const scriptData = {
         title: "Scene 3: Moretti's Comedy Cellar",
         content: `
           <div class="script-section">
-            <h2>🎪 Scene 3: Moretti's Comedy Cellar</h2>
+            <h2>ðŸŽª Scene 3: Moretti's Comedy Cellar</h2>
             
             <div class="scene-description">
               <h3>Finding the Entrance</h3>
@@ -457,13 +474,13 @@ const scriptData = {
             </div>
 
             <div class="read-aloud">
-              <h3>📖 Entering Moretti's</h3>
+              <h3>ðŸ“– Entering Moretti's</h3>
               <p>"As you descend, the world above fades away. The basement opens into a time capsule - a comedy club frozen in amber. Dim stage lights illuminate a small platform with a lone microphone stand. Tables circle the stage like supplicants at an altar. The walls are covered in signed photos from the club's glory days: smiling faces you might recognize from old TV specials, mixed with names you've never heard.</p>
               <p>But something's wrong. The whole place radiates wrongness - not danger exactly, but displacement. This space shouldn't exist anymore, but here it is, preserved by... what? Memory? Bitterness? Ignorance itself?"</p>
             </div>
 
             <div class="story-tags environmental">
-              <h3>🏷️ Environmental Story Tags</h3>
+              <h3>ðŸ·ï¸ Environmental Story Tags</h3>
               <ul>
                 <li><strong>"Frozen in Time"-2 (ongoing)</strong> - The 1970s aesthetic is oppressive</li>
                 <li><strong>"Sacred Ground to Danny" (ongoing)</strong> - This place means everything to him</li>
@@ -473,7 +490,7 @@ const scriptData = {
             </div>
 
             <div class="exploration">
-              <h3>🔍 Exploration Opportunities</h3>
+              <h3>ðŸ” Exploration Opportunities</h3>
               
               <div class="search-area">
                 <h4>1. THE STAGE</h4>
@@ -546,7 +563,7 @@ const scriptData = {
                   </div>
 
                   <div class="mc-tip">
-                    <h5>💡 Reading the Journal</h5>
+                    <h5>ðŸ’¡ Reading the Journal</h5>
                     <p>Let players decide how much to read. Each excerpt gives different tags. Reading the whole journal takes time but provides comprehensive understanding of Danny's fall.</p>
                   </div>
                 </div>
@@ -554,7 +571,7 @@ const scriptData = {
             </div>
 
             <div class="optional-encounter">
-              <h3>⚔️ Optional: Confrontation in the Cellar</h3>
+              <h3>âš”ï¸ Optional: Confrontation in the Cellar</h3>
               <p><strong>Trigger:</strong> If players make noise or linger too long</p>
               
               <div class="encounter-setup">
@@ -586,13 +603,13 @@ const scriptData = {
             </div>
 
             <div class="scene-transition">
-              <h3>🚪 Transition to Inner Space</h3>
+              <h3>ðŸšª Transition to Inner Space</h3>
               <p>Whether through combat, conversation, or investigation, the path eventually leads to Danny's Inner Space. The entry point is the stage itself - when Danny is pressed or defeated, he retreats into a door that appears in the darkness behind the stage lights.</p>
               <p>The door leads to his apartment, the space where his pain crystallized into Ignorance.</p>
             </div>
 
             <div class="mc-tip">
-              <h4>💡 MC Notes for This Scene</h4>
+              <h4>ðŸ’¡ MC Notes for This Scene</h4>
               <ul>
                 <li>This scene builds understanding before the emotional confrontation</li>
                 <li>The journal is crucial for context but not required</li>
@@ -610,7 +627,7 @@ const scriptData = {
         title: "Scene 4: Danny's Inner Space",
         content: `
           <div class="script-section">
-            <h2>💭 Scene 4: Danny's Inner Space - The Apartment</h2>
+            <h2>ðŸ’­ Scene 4: Danny's Inner Space - The Apartment</h2>
             
             <div class="scene-description">
               <h3>Entering the Inner Space</h3>
@@ -618,14 +635,14 @@ const scriptData = {
             </div>
 
             <div class="read-aloud">
-              <h3>📖 The Apartment</h3>
+              <h3>ðŸ“– The Apartment</h3>
               <p>"The apartment is frozen in the late 1990s - wood-paneled walls, a box TV on a milk crate, a futon that's seen better days. Posters of comedy legends watch from the walls like disappointed gods. A desk is buried under rejection letters, unopened bills, and notes for jokes that never quite landed.</p>
               <p>But the centerpiece is the answering machine on the desk - its red light blinking infinitely, demanding attention. You can hear a voice coming from it, tinny and distant: a man's voice, older, stern.</p>
               <p>This is where Danny lives - not his physical home, but the emotional prison he built brick by bitter brick."</p>
             </div>
 
             <div class="story-tags environmental">
-              <h3>🏷️ Environmental Story Tags</h3>
+              <h3>ðŸ·ï¸ Environmental Story Tags</h3>
               <ul>
                 <li><strong>"Frozen Failure"-3 (ongoing)</strong> - Time stopped at Danny's lowest point</li>
                 <li><strong>"Father's Voice"-2 (ongoing)</strong> - His judgment echoes everywhere</li>
@@ -635,7 +652,7 @@ const scriptData = {
             </div>
 
             <div class="npc-encounter">
-              <h3>👤 DANNY CARBONE - Inner Space Form</h3>
+              <h3>ðŸ‘¤ DANNY CARBONE - Inner Space Form</h3>
               <div class="npc-stats">
                 <p><strong>Appearance:</strong> Younger than in reality (late 30s), wearing the same leather jacket but clean, new. Hair darker. Eyes constantly checking the answering machine. The Star of Ignorance pulses on his chest - a shield and a prison both.</p>
                 <p><strong>Ignorance Limit:</strong> 5 (starts at 3, can increase to 5 if threatened)</p>
@@ -651,7 +668,7 @@ const scriptData = {
             </div>
 
             <div class="key-item">
-              <h3>📞 THE ANSWERING MACHINE MESSAGES</h3>
+              <h3>ðŸ“ž THE ANSWERING MACHINE MESSAGES</h3>
               
               <div class="message">
                 <h4>Message 1 (Early Days):</h4>
@@ -673,12 +690,12 @@ const scriptData = {
               </div>
 
               <div class="mc-tip">
-                <p><strong>💡 The Answering Machine:</strong> This is the core of Danny's Ignorance. His father's voice (and his own internalized version) drives his need to prove himself through cruelty.</p>
+                <p><strong>ðŸ’¡ The Answering Machine:</strong> This is the core of Danny's Ignorance. His father's voice (and his own internalized version) drives his need to prove himself through cruelty.</p>
               </div>
             </div>
 
             <div class="confrontation-options">
-              <h3>🎭 Confrontation Approaches</h3>
+              <h3>ðŸŽ­ Confrontation Approaches</h3>
               
               <div class="approach-option">
                 <h4>APPROACH 1: TALK IT OUT</h4>
@@ -754,9 +771,9 @@ const scriptData = {
                     <h6>Using the Environment</h6>
                     <p>Rejection letters, posters, and other apartment elements can be used creatively. Examples:</p>
                     <ul>
-                      <li>Tear down father's photos → "Rejected His Judgment"-2</li>
-                      <li>Rewrite rejection letters → "Changed the Narrative"-1</li>
-                      <li>Turn on different music → "Broke His Time Loop" (environmental)</li>
+                      <li>Tear down father's photos â†’ "Rejected His Judgment"-2</li>
+                      <li>Rewrite rejection letters â†’ "Changed the Narrative"-1</li>
+                      <li>Turn on different music â†’ "Broke His Time Loop" (environmental)</li>
                     </ul>
                   </div>
 
@@ -807,7 +824,7 @@ const scriptData = {
             </div>
 
             <div class="resolution">
-              <h3>🎬 Resolution Outcomes</h3>
+              <h3>ðŸŽ¬ Resolution Outcomes</h3>
               
               <div class="outcome success">
                 <h4>FULL SUCCESS: Danny is Redeemed</h4>
@@ -876,7 +893,7 @@ const scriptData = {
             </div>
 
             <div class="mc-tip">
-              <h4>💡 MC Notes for Inner Space</h4>
+              <h4>ðŸ’¡ MC Notes for Inner Space</h4>
               <ul>
                 <li>This is the emotional heart of the chapter</li>
                 <li>Players should feel Danny's pain even as they oppose him</li>
@@ -895,13 +912,13 @@ const scriptData = {
         title: "Aftermath & Connections",
         content: `
           <div class="script-section">
-            <h2>📜 Aftermath and Future Connections</h2>
+            <h2>ðŸ“œ Aftermath and Future Connections</h2>
 
             <div class="aftermath-scene redeemed">
-              <h3>✨ If Danny is Redeemed</h3>
+              <h3>âœ¨ If Danny is Redeemed</h3>
               
               <div class="scene-setup">
-                <h4>Scene: Three Days Later - Café Greenwich</h4>
+                <h4>Scene: Three Days Later - CafÃ© Greenwich</h4>
                 <p>Danny sits awkwardly at a corner table, still wearing his leather jacket but with the Star of Ignorance replaced by reading glasses as he flips through a notebook. Mama Jay refills his coffee with the same warmth she shows everyone, but her eyes stay watchful.</p>
               </div>
 
@@ -912,7 +929,7 @@ const scriptData = {
               </div>
 
               <div class="story-tags future">
-                <h4>🏷️ Story Tags Available for Future Chapters</h4>
+                <h4>ðŸ·ï¸ Story Tags Available for Future Chapters</h4>
                 <ul>
                   <li><strong>"Reformed Comedian Contact"-2 (ongoing)</strong> - Danny helps with future investigations</li>
                   <li><strong>"Understanding Fallen Icons" (ongoing)</strong> - Bonus to relating to other corrupted celebrities</li>
@@ -934,7 +951,7 @@ const scriptData = {
             </div>
 
             <div class="aftermath-scene partial">
-              <h3>⚖️ If Partial Success</h3>
+              <h3>âš–ï¸ If Partial Success</h3>
               
               <div class="scene-setup">
                 <h4>Scene: Reports from the Theater District</h4>
@@ -942,7 +959,7 @@ const scriptData = {
               </div>
 
               <div class="story-tags future">
-                <h4>🏷️ Story Tags Available for Future Chapters</h4>
+                <h4>ðŸ·ï¸ Story Tags Available for Future Chapters</h4>
                 <ul>
                   <li><strong>"Complicated History with Danny"-1 (ongoing)</strong> - Mixed reactions in future encounters</li>
                   <li><strong>"Reputation in Theater District" (ongoing)</strong> - Some progress made</li>
@@ -964,10 +981,10 @@ const scriptData = {
             </div>
 
             <div class="aftermath-scene failed">
-              <h3>❌ If Failed</h3>
+              <h3>âŒ If Failed</h3>
               
               <div class="scene-setup">
-                <h4>Scene: Emergency Meeting at Café Greenwich</h4>
+                <h4>Scene: Emergency Meeting at CafÃ© Greenwich</h4>
                 <p>Mama Jay's expression is grave as she shows you her phone - videos of Danny's "teachings" spreading online, other "cancelled" comedians starting to follow his lead.</p>
               </div>
 
@@ -976,7 +993,7 @@ const scriptData = {
               </div>
 
               <div class="story-tags future">
-                <h4>🏷️ Story Tags Available for Future Chapters</h4>
+                <h4>ðŸ·ï¸ Story Tags Available for Future Chapters</h4>
                 <ul>
                   <li><strong>"Danny's Vendetta"-2 (ongoing)</strong> - He specifically targets the PCs in future</li>
                   <li><strong>"Theater District Under Threat"-3 (ongoing)</strong> - Ongoing problem to resolve</li>
@@ -999,7 +1016,7 @@ const scriptData = {
             </div>
 
             <div class="ignorant-seven-intel">
-              <h3>🎭 The Ignorant Seven - What Danny Knows</h3>
+              <h3>ðŸŽ­ The Ignorant Seven - What Danny Knows</h3>
               <p><em>(Information available if Danny is redeemed)</em></p>
               
               <div class="seven-member">
@@ -1038,7 +1055,7 @@ const scriptData = {
             </div>
 
             <div class="mc-tip">
-              <h4>💡 MC Notes on Aftermath</h4>
+              <h4>ðŸ’¡ MC Notes on Aftermath</h4>
               <ul>
                 <li>The outcome here shapes the entire campaign</li>
                 <li>Even "failure" provides hooks for future redemption</li>
@@ -1056,7 +1073,7 @@ const scriptData = {
         title: "Scaling & MC Tips",
         content: `
           <div class="script-section">
-            <h2>⚖️ Scaling Notes for Different Group Sizes</h2>
+            <h2>âš–ï¸ Scaling Notes for Different Group Sizes</h2>
 
             <div class="scaling-option">
               <h3>1-2 Players: Intimate Investigation</h3>
@@ -1160,7 +1177,7 @@ const scriptData = {
             </div>
 
             <div class="mc-tips-section">
-              <h2>💡 MC Tips for Running This Chapter</h2>
+              <h2>ðŸ’¡ MC Tips for Running This Chapter</h2>
 
               <div class="tip-category">
                 <h3>Using Story Tags Effectively</h3>
@@ -1235,7 +1252,7 @@ const scriptData = {
             </div>
 
             <div class="summary-box">
-              <h2>📊 Chapter Summary by Numbers</h2>
+              <h2>ðŸ“Š Chapter Summary by Numbers</h2>
               
               <div class="stat-grid">
                 <div class="stat-item">
@@ -1266,7 +1283,7 @@ const scriptData = {
             </div>
 
             <div class="final-notes">
-              <h2>🎬 Final MC Notes</h2>
+              <h2>ðŸŽ¬ Final MC Notes</h2>
               <p><strong>This chapter sets the tone for the entire Ignorant Seven campaign.</strong> It demonstrates that:</p>
               <ul>
                 <li>Villains are people with pain, not monsters</li>
@@ -1298,24 +1315,24 @@ const scriptData = {
         title: "Overview",
         content: `
           <div class="script-section">
-            <h2>🎓 Chapter 2: The Professor's Prescription</h2>
+            <h2>ðŸŽ“ Chapter 2: The Professor's Prescription</h2>
             
             <div class="branching-notice" style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0;">
-              <h3>⚠️ BRANCHING NARRATIVE</h3>
+              <h3>âš ï¸ BRANCHING NARRATIVE</h3>
               <p><strong>This chapter has THREE different openings based on your Chapter 1 outcome!</strong></p>
-              <p>Check your Campaign Settings (⚙️ button) to see which outcome you selected:</p>
+              <p>Check your Campaign Settings (âš™ï¸ button) to see which outcome you selected:</p>
               <ul>
-                <li><strong>Danny Redeemed:</strong> Café Greenwich scene with Danny as ally</li>
+                <li><strong>Danny Redeemed:</strong> CafÃ© Greenwich scene with Danny as ally</li>
                 <li><strong>Danny Partially Reformed:</strong> Coffee cart scene with community concern</li>
                 <li><strong>Danny's Vendetta:</strong> House Rainbow emergency meeting</li>
               </ul>
               <p>The opening scene will automatically load in the "Opening" tab based on your selection!</p>
             </div>
 
-            <h3>📖 Chapter Summary</h3>
+            <h3>ðŸ“– Chapter Summary</h3>
             <p>The queer heroes discover Dr. Jeremiah Pierce, a psychology professor using "evidence-based identity counseling" to suppress LGBTQ+ students. Unlike Danny's emotional approach, Pierce wields institutional authority and academic credibility, making him far more dangerous and socially acceptable.</p>
             
-            <h3>🎯 Key Features</h3>
+            <h3>ðŸŽ¯ Key Features</h3>
             <ul>
               <li><strong>Academic Horror:</strong> Institutional power used to harm vulnerable people</li>
               <li><strong>Intellectual Villain:</strong> Pierce genuinely believes he's helping through "science"</li>
@@ -1325,7 +1342,7 @@ const scriptData = {
               <li><strong>Lost Boys:</strong> Well-meaning students converted to Pierce's ideology</li>
             </ul>
 
-            <h3>🏛️ Key Locations</h3>
+            <h3>ðŸ›ï¸ Key Locations</h3>
             <ul>
               <li><strong>Metropolitan University:</strong> Gothic and brutalist architecture, divided campus</li>
               <li><strong>Psychology Building:</strong> Pierce's "Cognitive Wellness Center" on 5th floor</li>
@@ -1333,7 +1350,7 @@ const scriptData = {
               <li><strong>Inner Space:</strong> Dr. Marcus Pierce's office from 1985</li>
             </ul>
 
-            <h3>👥 Key NPCs</h3>
+            <h3>ðŸ‘¥ Key NPCs</h3>
             <ul>
               <li><strong>Dr. Jeremiah Pierce:</strong> Psychology professor, Justice Knight, father issues</li>
               <li><strong>Professor Elena Vasquez:</strong> Pierce's colleague, documenting his flaws</li>
@@ -1343,7 +1360,7 @@ const scriptData = {
             </ul>
 
             <div class="mc-tip">
-              <h4>💡 MC Tips</h4>
+              <h4>ðŸ’¡ MC Tips</h4>
               <ul>
                 <li><strong>Clinical Horror:</strong> Pierce never loses his professional tone, even when cruel</li>
                 <li><strong>Genuine Belief:</strong> He really thinks he's helping people accept "reality"</li>
@@ -1353,7 +1370,7 @@ const scriptData = {
               </ul>
             </div>
 
-            <h3>🎬 Chapter Structure</h3>
+            <h3>ðŸŽ¬ Chapter Structure</h3>
             <ol>
               <li><strong>Opening Scene:</strong> Three variations based on Chapter 1 outcome</li>
               <li><strong>University Investigation:</strong> Clues, NPCs, and Lost Boys encounter</li>
@@ -1375,7 +1392,7 @@ const scriptData = {
         title: "Scene 2: University Investigation",
         content: `
           <div class="script-section">
-            <h2>🔍 Scene 2: The University Campus - Midday Investigation</h2>
+            <h2>ðŸ” Scene 2: The University Campus - Midday Investigation</h2>
             
             <div class="scene-description">
               <h3>Environment: Metropolitan University</h3>
@@ -1384,7 +1401,7 @@ const scriptData = {
             </div>
 
             <div class="story-tags">
-              <h3>🏷️ Environmental Tags</h3>
+              <h3>ðŸ·ï¸ Environmental Tags</h3>
               <ul>
                 <li><strong>"Academic Authority"-2</strong> (ongoing) - Institutional power and credibility</li>
                 <li><strong>"Divided Campus"</strong> (ongoing) - Some support Pierce, others are concerned</li>
@@ -1394,7 +1411,7 @@ const scriptData = {
             </div>
 
             <div class="investigation-section">
-              <h3>🔎 Investigation Opportunities (GET A CLUE)</h3>
+              <h3>ðŸ”Ž Investigation Opportunities (GET A CLUE)</h3>
               
               <div class="clue-source">
                 <h4>1. Concerned Students</h4>
@@ -1419,7 +1436,7 @@ const scriptData = {
             </div>
 
             <div class="npc-section">
-              <h3>👥 Key NPCs</h3>
+              <h3>ðŸ‘¥ Key NPCs</h3>
               
               <div class="npc-box">
                 <h4>PROFESSOR ELENA VASQUEZ</h4>
@@ -1435,7 +1452,7 @@ const scriptData = {
               <div class="npc-box">
                 <h4>RILEY CHEN</h4>
                 <ul>
-                  <li><strong>Role:</strong> Graduate Student, Former Pierce Protégé</li>
+                  <li><strong>Role:</strong> Graduate Student, Former Pierce ProtÃ©gÃ©</li>
                   <li><strong>Motivation:</strong> Expose what Pierce really does behind closed doors</li>
                   <li><strong>Information:</strong> Has recordings and documents from inside Pierce's program</li>
                   <li><strong>Personality:</strong> Nervous but determined, speaks quickly when passionate about something</li>
@@ -1456,7 +1473,7 @@ const scriptData = {
             </div>
 
             <div class="mc-tip">
-              <h4>💡 MC Tips</h4>
+              <h4>ðŸ’¡ MC Tips</h4>
               <ul>
                 <li>Let players choose how to investigate - social, stealthy, or direct</li>
                 <li>Each NPC provides different pieces of the puzzle</li>
@@ -1473,7 +1490,7 @@ const scriptData = {
         title: "Scene 3: Meeting Dr. Pierce",
         content: `
           <div class="script-section">
-            <h2>🏛️ Scene 3: The Psychology Building - Pierce's Domain</h2>
+            <h2>ðŸ›ï¸ Scene 3: The Psychology Building - Pierce's Domain</h2>
             
             <div class="scene-description">
               <h3>Environment: Cognitive Wellness Center (5th Floor)</h3>
@@ -1481,14 +1498,14 @@ const scriptData = {
             </div>
 
             <div class="read-aloud">
-              <h3>📖 Pierce's Introduction Speech</h3>
+              <h3>ðŸ“– Pierce's Introduction Speech</h3>
               <blockquote>
                 <p>"Ah, you must be the 'Queerz' I've been hearing about. Your intervention with Mr. Carbone was quite illuminating from a psychological perspective. I represent a more scientific approach - evidence-based, sustainable. I use proven psychological techniques to help people align their self-perception with biological and social realities."</p>
               </blockquote>
             </div>
 
             <div class="story-tags">
-              <h3>🏷️ Story Tags Available</h3>
+              <h3>ðŸ·ï¸ Story Tags Available</h3>
               <ul>
                 <li><strong>"Pierce's Clinical Detachment"-2</strong> (ongoing)</li>
                 <li><strong>"Scientific Credibility"-3</strong> (ongoing)</li>
@@ -1503,7 +1520,7 @@ const scriptData = {
         title: "Optional: Lost Boys",
         content: `
           <div class="script-section">
-            <h2>⚔️ Optional: The Lost Boys Intervention</h2>
+            <h2>âš”ï¸ Optional: The Lost Boys Intervention</h2>
             <p>Tyler Brett and other male students who were converted by Pierce's program attempt to "help" the PCs. They're true believers - not brainwashed, but genuinely think they're doing good.</p>
             
             <div class="combat-stats">
@@ -1516,7 +1533,7 @@ const scriptData = {
             </div>
 
             <div class="mc-tip">
-              <h4>💡 They're Victims Too</h4>
+              <h4>ðŸ’¡ They're Victims Too</h4>
               <p>Lost Boys are manipulated students. Non-violent solutions using TALK IT OUT and CARE are encouraged. Successfully deprogramming even one weakens Pierce's narrative.</p>
             </div>
           </div>
@@ -1527,12 +1544,12 @@ const scriptData = {
         title: "Scene 4: Research Files",
         content: `
           <div class="script-section">
-            <h2>📁 Scene 4: The Research Files</h2>
+            <h2>ðŸ“ Scene 4: The Research Files</h2>
             
             <p>Pierce's private laboratory reveals the truth: files on "Gender Identity Correction," "Sexual Orientation Modification," patient harm data, and his personal journal revealing father issues driving everything.</p>
             
             <div class="story-tags">
-              <h3>🏷️ Key Tags from Research</h3>
+              <h3>ðŸ·ï¸ Key Tags from Research</h3>
               <ul>
                 <li><strong>"Pierce's Father Issues"-3</strong> (ongoing)</li>
                 <li><strong>"Systematic Oppression Evidence"</strong> (ongoing)</li>
@@ -1548,7 +1565,7 @@ const scriptData = {
         title: "Scene 5: Lecture Hall Confrontation",
         content: `
           <div class="script-section">
-            <h2>🎓 Scene 5: Hamilton Lecture Hall - The Public Debate</h2>
+            <h2>ðŸŽ“ Scene 5: Hamilton Lecture Hall - The Public Debate</h2>
             
             <p>Pierce stages a "debate" about evidence-based approaches vs. emotional manipulation. The 300-seat hall is packed, media is present, and Pierce has home field advantage from his podium position.</p>
 
@@ -1569,7 +1586,7 @@ const scriptData = {
             </div>
 
             <div class="mc-tip">
-              <h4>💡 MC Tips</h4>
+              <h4>ðŸ’¡ MC Tips</h4>
               <p>Pierce never loses his clinical tone. He genuinely believes he's helping. When losing the debate, his professional facade cracks, revealing the angry, insecure man underneath.</p>
             </div>
           </div>
@@ -1580,7 +1597,7 @@ const scriptData = {
         title: "Scene 6: Inner Space",
         content: `
           <div class="script-section">
-            <h2>🚪 Scene 6: Inner Space - "Seeking Father's Approval"</h2>
+            <h2>ðŸšª Scene 6: Inner Space - "Seeking Father's Approval"</h2>
             
             <div class="scene-description">
               <h3>Dr. Marcus Pierce's Office, 1985</h3>
@@ -1588,7 +1605,7 @@ const scriptData = {
             </div>
 
             <div class="read-aloud">
-              <h3>📖 The Core Scene</h3>
+              <h3>ðŸ“– The Core Scene</h3>
               <p><strong>Young Jeremiah:</strong> "Dad, I got all A's again! My science teacher said my project was graduate-level work."</p>
               <p><strong>Dr. Marcus Pierce:</strong> "Good. That's what's expected. Your mother tells me you've been emotional lately. Crying about something the other boys said? You'll never succeed in this field if you let emotions cloud your judgment. Real psychologists don't cry about being different. They study difference, categorize it, and help people overcome it when it becomes pathological."</p>
             </div>
@@ -1611,7 +1628,7 @@ const scriptData = {
             </div>
 
             <div class="mc-tip">
-              <h4>💡 Core Theme</h4>
+              <h4>ðŸ’¡ Core Theme</h4>
               <p>Help young Jeremiah express genuine feelings without shame. Show that emotions enhance rather than compromise empathy. Pierce's entire professional identity was built on suppressing his humanity to earn dead father's approval.</p>
             </div>
           </div>
@@ -1622,15 +1639,15 @@ const scriptData = {
         title: "Aftermath (Branching)",
         content: `
           <div class="script-section">
-            <h2>🎬 Aftermath - One Week Later</h2>
+            <h2>ðŸŽ¬ Aftermath - One Week Later</h2>
             
             <div class="branching-notice" style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0;">
-              <h3>⚠️ THREE DIFFERENT AFTERMATHS</h3>
+              <h3>âš ï¸ THREE DIFFERENT AFTERMATHS</h3>
               <p>The epilogue varies based on whether Pierce was redeemed, partially reformed, or escaped.</p>
             </div>
 
             <div class="aftermath-option">
-              <h3>If Pierce Was Redeemed - Café Greenwich</h3>
+              <h3>If Pierce Was Redeemed - CafÃ© Greenwich</h3>
               <p>Pierce sits awkwardly with papers - retractions he's preparing. He shares information about Rex Morrison targeting children with "Hero Training."</p>
               <div class="story-tags">
                 <h4>Tags Gained:</h4>
@@ -1670,7 +1687,7 @@ const scriptData = {
             </div>
 
             <div class="campaign-connection">
-              <h3>🔗 Connection to Chapter 3</h3>
+              <h3>ðŸ”— Connection to Chapter 3</h3>
               <p>All roads lead to Rex Morrison - "The Champion" - who targets children specifically. Unlike Danny's emotion or Pierce's intellect, Rex offers heroism and belonging, making him even more dangerous.</p>
             </div>
           </div>
@@ -1681,7 +1698,7 @@ const scriptData = {
         title: "Scaling Guidelines",
         content: `
           <div class="script-section">
-            <h2>📊 Chapter 2 Scaling Guidelines</h2>
+            <h2>ðŸ“Š Chapter 2 Scaling Guidelines</h2>
             
             <div class="scaling-tier">
               <h3>1-2 Players</h3>
@@ -1724,7 +1741,7 @@ const scriptData = {
             </div>
 
             <div class="mc-tip">
-              <h4>💡 Brennan & Mercer Style Tips</h4>
+              <h4>ðŸ’¡ Brennan & Mercer Style Tips</h4>
               <ul>
                 <li><strong>Institutional Power:</strong> Show how authority harms vulnerable people</li>
                 <li><strong>Academic Language:</strong> Pierce's clinical terms make him more unsettling</li>
@@ -1873,7 +1890,7 @@ function renderPlayers() {
         
         const removeSpan = document.createElement('span');
         removeSpan.className = 'remove-player';
-        removeSpan.textContent = ' ✕';
+        removeSpan.textContent = ' âœ•';
         removeSpan.addEventListener('click', (e) => {
             e.stopPropagation();
             removePlayer(index);
@@ -1900,10 +1917,10 @@ function hidePlayerModal() {
 }
 
 function addPlayer() {
-    const charName = playerCharSelect.value;        // ✅ Get dropdown selection
-    const customName = playerNameInput.value.trim(); // ✅ Get text input
+    const charName = playerCharSelect.value;        // âœ… Get dropdown selection
+    const customName = playerNameInput.value.trim(); // âœ… Get text input
     
-    const playerName = charName || customName;      // ✅ Use whichever has a value
+    const playerName = charName || customName;      // âœ… Use whichever has a value
     
     if (!playerName) {
         alert('Please select a character or enter a name');
@@ -2021,20 +2038,20 @@ function showCharacterSheet(playerName) {
     console.log('Character found:', !!char);
     console.log('==============================');
     
-    characterPanelTitle.textContent = `🌟 ${playerName}'s Character Sheet`;
+    characterPanelTitle.textContent = `ðŸŒŸ ${playerName}'s Character Sheet`;
     characterDisplay.classList.add('hidden');
     characterInfo.classList.add('hidden');
     characterSheetDisplay.classList.remove('hidden');
     
     if (char) {
-        // ✨ NEW: Check if character has a sheet image - if so, display it!
+        // âœ¨ NEW: Check if character has a sheet image - if so, display it!
         if (char.characterSheet) {
             characterSheetDisplay.innerHTML = `
                 <div style="width: 100%; height: 100%; overflow-y: auto;">
                     <img src="${char.characterSheet}" 
                          alt="${char.name}'s Character Sheet" 
                          style="width: 100%; height: auto; display: block;"
-                         onerror="this.parentElement.innerHTML = '<p style=\'text-align: center; color: white; padding: 40px;\'>❌ Character sheet image not found:<br>${char.characterSheet}</p>';">
+                         onerror="this.parentElement.innerHTML = '<p style=\'text-align: center; color: white; padding: 40px;\'>âŒ Character sheet image not found:<br>${char.characterSheet}</p>';">
                 </div>
             `;
         } else {
@@ -2045,7 +2062,7 @@ function showCharacterSheet(playerName) {
         const allCharNames = [...Object.keys(characters), ...Object.keys(characterData)];
         characterSheetDisplay.innerHTML = `
             <div style="text-align: center; padding: 40px; color: white;">
-                <p style="font-size: 1.2em; margin-bottom: 20px;">❌ No character data found</p>
+                <p style="font-size: 1.2em; margin-bottom: 20px;">âŒ No character data found</p>
                 <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 15px;">
                     <strong>Searching for:</strong> "${playerName}"
                 </p>
@@ -2057,7 +2074,7 @@ function showCharacterSheet(playerName) {
                 </p>
                 <hr style="border: 1px solid rgba(255,255,255,0.2); margin: 20px 0;">
                 <p style="color: rgba(255, 255, 255, 0.7);">
-                    💡 Try: Press C → Character Management → Edit → Save
+                    ðŸ’¡ Try: Press C â†’ Character Management â†’ Edit â†’ Save
                 </p>
             </div>
         `;
@@ -2077,7 +2094,7 @@ function renderCharacterSheetContent(char) {
     // Basic Info
     html += `
         <div style="margin-bottom: 20px; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
-            <h3 style="margin: 0 0 10px 0; color: #ffd700;">📋 Basic Info</h3>
+            <h3 style="margin: 0 0 10px 0; color: #ffd700;">ðŸ“‹ Basic Info</h3>
             <p style="margin: 5px 0;"><strong>Name:</strong> ${char.name || 'Unknown'}</p>
             <p style="margin: 5px 0;"><strong>Pronouns:</strong> ${char.pronouns || 'Not specified'}</p>
             <p style="margin: 5px 0;"><strong>Playbook:</strong> ${char.playbook || 'Not specified'}</p>
@@ -2086,7 +2103,7 @@ function renderCharacterSheetContent(char) {
     
     // Rainbow Themes
     if (char.rainbowThemes && char.rainbowThemes.length > 0) {
-        html += '<div style="margin-bottom: 20px;"><h3 style="color: #ff64c8;">🌈 Rainbow Themes</h3>';
+        html += '<div style="margin-bottom: 20px;"><h3 style="color: #ff64c8;">ðŸŒˆ Rainbow Themes</h3>';
         char.rainbowThemes.forEach(function(theme, index) {
             const themeName = theme.name || 'Theme ' + (index + 1);
             const themeType = theme.type || 'Unknown';
@@ -2101,8 +2118,8 @@ function renderCharacterSheetContent(char) {
                     ${theme.runway ? '<p style="margin: 5px 0; font-style: italic;">"' + theme.runway + '"</p>' : ''}
                     <p style="margin: 8px 0;"><strong>Power Tags:</strong> ${powerTags}</p>
                     <p style="margin: 8px 0;"><strong>Weakness Tags:</strong> ${weaknessTags}</p>
-                    <p style="margin: 8px 0;"><strong>Growth:</strong> ${'█'.repeat(growth)}${'░'.repeat(5 - growth)} (${growth}/5)</p>
-                    <p style="margin: 8px 0;"><strong>Shade:</strong> ${'█'.repeat(shade)}${'░'.repeat(5 - shade)} (${shade}/5)</p>
+                    <p style="margin: 8px 0;"><strong>Growth:</strong> ${'â–ˆ'.repeat(growth)}${'â–‘'.repeat(5 - growth)} (${growth}/5)</p>
+                    <p style="margin: 8px 0;"><strong>Shade:</strong> ${'â–ˆ'.repeat(shade)}${'â–‘'.repeat(5 - shade)} (${shade}/5)</p>
                 </div>
             `;
         });
@@ -2111,7 +2128,7 @@ function renderCharacterSheetContent(char) {
     
     // Realness Themes
     if (char.realnessThemes && char.realnessThemes.length > 0) {
-        html += '<div style="margin-bottom: 20px;"><h3 style="color: #64c8ff;">💎 Realness Themes</h3>';
+        html += '<div style="margin-bottom: 20px;"><h3 style="color: #64c8ff;">ðŸ’Ž Realness Themes</h3>';
         char.realnessThemes.forEach(function(theme, index) {
             const themeName = theme.name || 'Theme ' + (index + 1);
             const themeType = theme.type || 'Unknown';
@@ -2126,8 +2143,8 @@ function renderCharacterSheetContent(char) {
                     ${theme.runway ? '<p style="margin: 5px 0; font-style: italic;">"' + theme.runway + '"</p>' : ''}
                     <p style="margin: 8px 0;"><strong>Power Tags:</strong> ${powerTags}</p>
                     <p style="margin: 8px 0;"><strong>Weakness Tags:</strong> ${weaknessTags}</p>
-                    <p style="margin: 8px 0;"><strong>Growth:</strong> ${'█'.repeat(growth)}${'░'.repeat(5 - growth)} (${growth}/5)</p>
-                    <p style="margin: 8px 0;"><strong>Crack:</strong> ${'█'.repeat(crack)}${'░'.repeat(5 - crack)} (${crack}/5)</p>
+                    <p style="margin: 8px 0;"><strong>Growth:</strong> ${'â–ˆ'.repeat(growth)}${'â–‘'.repeat(5 - growth)} (${growth}/5)</p>
+                    <p style="margin: 8px 0;"><strong>Crack:</strong> ${'â–ˆ'.repeat(crack)}${'â–‘'.repeat(5 - crack)} (${crack}/5)</p>
                 </div>
             `;
         });
@@ -2136,10 +2153,10 @@ function renderCharacterSheetContent(char) {
     
     // Current Statuses
     if (char.currentStatuses && char.currentStatuses.length > 0) {
-        html += '<div style="margin-bottom: 20px;"><h3 style="color: #ffd700;">✨ Current Statuses</h3>';
+        html += '<div style="margin-bottom: 20px;"><h3 style="color: #ffd700;">âœ¨ Current Statuses</h3>';
         char.currentStatuses.forEach(function(status) {
             const color = status.beneficial ? '#4ade80' : '#f87171';
-            const icon = status.beneficial ? '✅' : '❌';
+            const icon = status.beneficial ? 'âœ…' : 'âŒ';
             html += `
                 <div style="background: rgba(255, 255, 255, 0.1); padding: 12px; margin-bottom: 8px; border-radius: 6px; border-left: 3px solid ${color};">
                     <strong style="color: ${color};">${status.name}</strong>
@@ -2155,7 +2172,7 @@ function renderCharacterSheetContent(char) {
     if (char.burntTags && char.burntTags.length > 0) {
         html += `
             <div style="margin-bottom: 20px; background: rgba(255,100,100,0.1); padding: 15px; border-radius: 8px; border-left: 4px solid #ff6b6b;">
-                <h3 style="color: #ff6b6b; margin: 0 0 10px 0;">🔥 Burnt Tags</h3>
+                <h3 style="color: #ff6b6b; margin: 0 0 10px 0;">ðŸ”¥ Burnt Tags</h3>
                 <p style="color: rgba(255, 255, 255, 0.8);">${char.burntTags.join(', ')}</p>
             </div>
         `;
@@ -2292,17 +2309,26 @@ function playMusic() {
                 });
         }
     }
+    
+    // Broadcast the play state change
+    broadcastPlaylistState();
 }
 
 function pauseMusic() {
     audioPlayer.pause();
     nowPlaying.textContent = 'Paused';
+    
+    // Broadcast the pause state
+    broadcastPlaylistState();
 }
 
 function stopMusic() {
     audioPlayer.pause();
     audioPlayer.currentTime = 0;
     nowPlaying.textContent = 'No track playing';
+    
+    // Broadcast the stop state
+    broadcastPlaylistState();
 }
 
 function changeTrack() {
@@ -2324,7 +2350,7 @@ function changeTrack() {
 function updateVolume() {
     const volume = volumeSlider.value / 100;
     audioPlayer.volume = volume;
-    volumeLabel.textContent = `🔊 ${volumeSlider.value}%`;
+    volumeLabel.textContent = `ðŸ”Š ${volumeSlider.value}%`;
 }
 
 // ===================================
@@ -2345,13 +2371,13 @@ function rollDice() {
     let resultClass = '';
     
     if (total >= 10) {
-        resultText = '✅ SUCCESS! Full effect, no complications';
+        resultText = 'âœ… SUCCESS! Full effect, no complications';
         resultClass = 'result-success';
     } else if (total >= 7) {
-        resultText = '⚠️ PARTIAL SUCCESS - Success with complication or cost';
+        resultText = 'âš ï¸ PARTIAL SUCCESS - Success with complication or cost';
         resultClass = 'result-partial';
     } else {
-        resultText = '❌ FAILURE - Miss, MC makes a hard move';
+        resultText = 'âŒ FAILURE - Miss, MC makes a hard move';
         resultClass = 'result-fail';
     }
     
@@ -2389,21 +2415,21 @@ function getBranchingOpening() {
     
     if (outcome === 'redeemed') {
         return `
-            <h2>☕ Variation A: Danny Was Redeemed</h2>
-            <h3>Scene 1: Café Greenwich - One Week Later</h3>
+            <h2>â˜• Variation A: Danny Was Redeemed</h2>
+            <h3>Scene 1: CafÃ© Greenwich - One Week Later</h3>
             
             <div class="scene-description">
               <p>Danny sits more comfortably now at his corner table, though he still flinches slightly when new customers enter. His notebook lies open, filled with material that finds humor in shared struggles rather than individual failings. The morning light catches the reading glasses that replaced his Star of Ignorance, making him look more like a college professor than a hardened comedian.</p>
             </div>
 
             <div class="read-aloud">
-              <h3>📖 Read to Players</h3>
-              <p>"The morning routine at Café Greenwich has a new rhythm now. Danny's become an unlikely regular, workshopping gentler material with anyone willing to listen. But this morning, something's different. His phone buzzes insistently, and with each message, his expression grows more troubled.</p>
+              <h3>ðŸ“– Read to Players</h3>
+              <p>"The morning routine at CafÃ© Greenwich has a new rhythm now. Danny's become an unlikely regular, workshopping gentler material with anyone willing to listen. But this morning, something's different. His phone buzzes insistently, and with each message, his expression grows more troubled.</p>
               <p>Mama Jay notices first, the way she notices everything that matters. 'Sugar, you look like someone walked over your grave. What's got you spooked?'"</p>
             </div>
 
             <div class="npc-dialogue">
-              <h3>💬 Danny's Information</h3>
+              <h3>ðŸ’¬ Danny's Information</h3>
               <blockquote>
                 <p>"It's... it's messages from the Ignorant Seven. Well, what's left of them. This Dr. Pierce character - he's been reaching out to my old contacts, the other 'cancelled' folks they recruited. But his approach is different than theirs was with me.</p>
                 <p>He's not appealing to anger or nostalgia. He's offering 'evidence-based solutions to cultural degeneracy.' Making it sound scientific, respectable. And some of the people responding... they're not angry burnouts like I was. They're academics, professionals, people who think they're being logical."</p>
@@ -2411,7 +2437,7 @@ function getBranchingOpening() {
             </div>
 
             <div class="story-tags">
-              <h3>🏷️ Story Tags Gained</h3>
+              <h3>ðŸ·ï¸ Story Tags Gained</h3>
               <ul>
                 <li><strong>"Danny's Network"-2</strong> (ongoing) - Access to Pierce's recruitment targets</li>
                 <li><strong>"Understanding the Seven's Methods"</strong> (ongoing) - Insight into their varied approaches</li>
@@ -2421,7 +2447,7 @@ function getBranchingOpening() {
         `;
     } else if (outcome === 'partial') {
         return `
-            <h2>☕ Variation B: Danny Partially Reformed</h2>
+            <h2>â˜• Variation B: Danny Partially Reformed</h2>
             <h3>Scene 1: Theater District Coffee Cart - Morning</h3>
             
             <div class="scene-description">
@@ -2429,12 +2455,12 @@ function getBranchingOpening() {
             </div>
 
             <div class="read-aloud">
-              <h3>📖 Read to Players</h3>
+              <h3>ðŸ“– Read to Players</h3>
               <p>"Maria's coffee cart has developed an unusual morning crowd - not just the usual theater workers and tourists, but social workers, community organizers, and people who look like they're carrying clipboards with Important Purposes. The buzz of conversation has an academic edge today, peppered with terms like 'psychological intervention' and 'corrective therapy.'"</p>
             </div>
 
             <div class="npc-dialogue">
-              <h3>💬 Maria's Warning</h3>
+              <h3>ðŸ’¬ Maria's Warning</h3>
               <blockquote>
                 <p>"You know, those Queerz kids who helped with that comedian problem? They should know - there's been this professor type asking questions about 'what went wrong' with Danny's 'rehabilitation process.' Says he's writing a paper about 'failed intervention strategies in ideological correction.'</p>
                 <p>But between you and me? I think he's less interested in understanding what you did right and more interested in figuring out how to do it 'better.' Whatever that means."</p>
@@ -2442,7 +2468,7 @@ function getBranchingOpening() {
             </div>
 
             <div class="story-tags">
-              <h3>🏷️ Story Tags Gained</h3>
+              <h3>ðŸ·ï¸ Story Tags Gained</h3>
               <ul>
                 <li><strong>"Pierce's Research Interest"</strong> (ongoing) - You're on his radar as a case study</li>
                 <li><strong>"Community Concern"-1</strong> (ongoing) - People are worried about this new threat</li>
@@ -2452,7 +2478,7 @@ function getBranchingOpening() {
         `;
     } else if (outcome === 'vendetta') {
         return `
-            <h2>🚨 Variation C: Danny's Vendetta</h2>
+            <h2>ðŸš¨ Variation C: Danny's Vendetta</h2>
             <h3>Scene 1: House Rainbow Emergency Meeting - Evening</h3>
             
             <div class="scene-description">
@@ -2460,12 +2486,12 @@ function getBranchingOpening() {
             </div>
 
             <div class="read-aloud">
-              <h3>📖 Read to Players</h3>
+              <h3>ðŸ“– Read to Players</h3>
               <p>"Mama Jay stands before a map that looks like a disease spreading through the city. Red pins mark Danny's Tough Crowd incidents, but new blue pins are appearing faster than the red ones. Each blue pin represents what witnesses describe as 'educational interventions' - groups of well-dressed people with clipboards 'helping' community members understand their 'cognitive errors.'"</p>
             </div>
 
             <div class="npc-dialogue">
-              <h3>💬 Mama Jay's Briefing</h3>
+              <h3>ðŸ’¬ Mama Jay's Briefing</h3>
               <blockquote>
                 <p>"Danny's bad enough, sugar, but he's got himself a new best friend. Dr. Jeremiah Pierce - psychology professor at the university. And unlike Danny's emotional approach, this man's got a system. He's treating your failure to 'cure' Danny as a case study in how 'unqualified amateurs' make things worse.</p>
                 <p>He's positioning himself as the 'scientific solution' to what he calls 'ideological deviance.' And he's got credentials, publications, the whole nine yards. People listen to him in ways they never listened to Danny."</p>
@@ -2473,7 +2499,7 @@ function getBranchingOpening() {
             </div>
 
             <div class="story-tags">
-              <h3>🏷️ Story Tags Gained</h3>
+              <h3>ðŸ·ï¸ Story Tags Gained</h3>
               <ul>
                 <li><strong>"Danny's Alliance with Pierce"-2</strong> (ongoing) - Two threats working together</li>
                 <li><strong>"Scientific Credibility Gap"</strong> (ongoing) - Pierce has academic authority you lack</li>
@@ -2485,9 +2511,9 @@ function getBranchingOpening() {
         // Default/none - show all three options
         return `
             <div class="branching-notice" style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0;">
-              <h3>⚠️ NO CHAPTER 1 OUTCOME SELECTED</h3>
+              <h3>âš ï¸ NO CHAPTER 1 OUTCOME SELECTED</h3>
               <p><strong>You haven't selected a Chapter 1 outcome yet!</strong></p>
-              <p>Click the ⚙️ (Campaign Settings) button in the header to choose:</p>
+              <p>Click the âš™ï¸ (Campaign Settings) button in the header to choose:</p>
               <ul>
                 <li>Danny Redeemed (Success)</li>
                 <li>Danny Partially Reformed (Partial Success)</li>
@@ -2499,27 +2525,27 @@ function getBranchingOpening() {
             <h2>Preview: Three Possible Openings</h2>
             
             <div style="border: 2px solid #4CAF50; padding: 15px; margin: 20px 0;">
-              <h3>✅ If Danny Was Redeemed</h3>
-              <p><strong>Location:</strong> Café Greenwich</p>
+              <h3>âœ… If Danny Was Redeemed</h3>
+              <p><strong>Location:</strong> CafÃ© Greenwich</p>
               <p><strong>Ally:</strong> Danny provides information about Pierce's recruitment methods</p>
               <p><strong>Tone:</strong> Hopeful but concerned - a redeemed ally warns of new danger</p>
             </div>
 
             <div style="border: 2px solid #FF9800; padding: 15px; margin: 20px 0;">
-              <h3>📄 If Danny Was Partially Reformed</h3>
+              <h3>ðŸ“„ If Danny Was Partially Reformed</h3>
               <p><strong>Location:</strong> Theater District Coffee Cart</p>
               <p><strong>Info Source:</strong> Maria the vendor has overheard Pierce asking about your methods</p>
               <p><strong>Tone:</strong> Uncertain - Pierce is studying your partial success as a "failure"</p>
             </div>
 
             <div style="border: 2px solid #f44336; padding: 15px; margin: 20px 0;">
-              <h3>❌ If Danny's Vendetta Continues</h3>
+              <h3>âŒ If Danny's Vendetta Continues</h3>
               <p><strong>Location:</strong> House Rainbow Emergency Meeting</p>
               <p><strong>Threat Level:</strong> Danny and Pierce have formed an alliance</p>
               <p><strong>Tone:</strong> Urgent - Two threats are now working together systemically</p>
             </div>
 
-            <p style="margin-top: 20px;"><strong>→ Choose your outcome in Campaign Settings to see the full scene!</strong></p>
+            <p style="margin-top: 20px;"><strong>â†’ Choose your outcome in Campaign Settings to see the full scene!</strong></p>
         `;
     }
 }
@@ -2708,14 +2734,14 @@ function loadFromLocalStorage() {
         storyOutcomes = JSON.parse(storedOutcomes);
     }
     
-    console.log('✅ Loaded campaign data:', { 
+    console.log('âœ… Loaded campaign data:', { 
         players: players.length, 
         characters: Object.keys(characters).length,
         chapter: currentChapter 
     });
 }
 
-console.log('🌈 QUEERZ! MC Companion Loaded');
+console.log('ðŸŒˆ QUEERZ! MC Companion Loaded');
 console.log('Keyboard Shortcuts: S (Script) | M (MC Moves) | C (Characters) | R (Roll) | Space (Play/Pause) | Tab (Cycle Spotlight) | Esc (Close)');
 function openCharacterManagement() {
     charMgmtModal.classList.remove('hidden');
@@ -2858,7 +2884,7 @@ function renderCharacterEditForm() {
                     <label>Character Sheet Image Path (Optional)</label>
                     <input type="text" id="editCharSheetImage" class="text-input" placeholder="images/character-sheets/character-name.png" />
                     <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.9em; margin-top: 5px;">
-                        💡 Enter the path to your character sheet image file
+                        ðŸ’¡ Enter the path to your character sheet image file
                     </p>
                 </div>
             </div>
@@ -3315,13 +3341,13 @@ function rollDice() {
     let resultClass = '';
     
     if (total >= 10) {
-        resultText = '✅ SUCCESS! Full effect, no complications';
+        resultText = 'âœ… SUCCESS! Full effect, no complications';
         resultClass = 'result-success';
     } else if (total >= 7) {
-        resultText = '⚠️ PARTIAL SUCCESS - Success with complication or cost';
+        resultText = 'âš ï¸ PARTIAL SUCCESS - Success with complication or cost';
         resultClass = 'result-partial';
     } else {
-        resultText = '❌ FAILURE - Miss, MC makes a hard move';
+        resultText = 'âŒ FAILURE - Miss, MC makes a hard move';
         resultClass = 'result-fail';
     }
     
@@ -3339,17 +3365,20 @@ function toggleLoop() {
     if (isLooping) {
         loopBtn.style.background = 'rgba(76, 175, 80, 0.5)';
         loopBtn.style.borderColor = '#4caf50';
-        loopBtn.textContent = '🔁 Loop ON';
+        loopBtn.textContent = 'ðŸ” Loop ON';
     } else {
         loopBtn.style.background = '';
         loopBtn.style.borderColor = '';
-        loopBtn.textContent = '🔁 Loop';
+        loopBtn.textContent = 'ðŸ” Loop';
     }
     
     if (audioPlayer.src) {
         const trackName = trackSelect.options[trackSelect.selectedIndex].text;
-        nowPlaying.textContent = `♪ ${trackName}${isLooping ? ' 🔁' : ''}`;
+        nowPlaying.textContent = `â™ª ${trackName}${isLooping ? ' ðŸ”' : ''}`;
     }
+    
+    // Broadcast the loop state change
+    broadcastPlaylistState();
 }
 
 function addToPlaylist() {
@@ -3369,6 +3398,9 @@ function addToPlaylist() {
     playlist.push({ path: track, name: trackName });
     renderPlaylist();
     playlistElement.style.display = 'block';
+    
+    // Broadcast the updated playlist
+    broadcastPlaylistState();
 }
 
 function renderPlaylist() {
@@ -3388,9 +3420,9 @@ function renderPlaylist() {
         }
         
         trackDiv.innerHTML = `
-            <span style="flex: 1;">${isCurrentTrack ? '▶ ' : ''}${index + 1}. ${track.name}</span>
+            <span style="flex: 1;">${isCurrentTrack ? 'â–¶ ' : ''}${index + 1}. ${track.name}</span>
             <button onclick="playPlaylistTrack(${index})" style="padding: 2px 8px; margin-right: 5px; background: rgba(33, 150, 243, 0.5); border: 1px solid #2196F3; color: white; border-radius: 3px; cursor: pointer;">Play</button>
-            <button onclick="removeFromPlaylist(${index})" style="padding: 2px 8px; background: rgba(244, 67, 54, 0.5); border: 1px solid #f44336; color: white; border-radius: 3px; cursor: pointer;">✕</button>
+            <button onclick="removeFromPlaylist(${index})" style="padding: 2px 8px; background: rgba(244, 67, 54, 0.5); border: 1px solid #f44336; color: white; border-radius: 3px; cursor: pointer;">âœ•</button>
         `;
         
         playlistTracks.appendChild(trackDiv);
@@ -3409,6 +3441,9 @@ function playPlaylistTrack(index) {
     
     trackSelect.value = track.path;
     renderPlaylist();
+    
+    // Broadcast the track change
+    broadcastPlaylistState();
 }
 
 function removeFromPlaylist(index) {
@@ -3419,6 +3454,9 @@ function removeFromPlaylist(index) {
     }
     
     renderPlaylist();
+    
+    // Broadcast the updated playlist
+    broadcastPlaylistState();
 }
 
 function playNextInPlaylist() {
@@ -3426,6 +3464,64 @@ function playNextInPlaylist() {
     
     currentPlaylistIndex = (currentPlaylistIndex + 1) % playlist.length;
     playPlaylistTrack(currentPlaylistIndex);
+}
+
+// ===================================
+// BROADCAST PLAYLIST STATE TO PLAYERS
+// ===================================
+function broadcastPlaylistState() {
+    if (!database) {
+        console.log('⚠️ Firebase not initialized - cannot broadcast playlist');
+        return;
+    }
+    
+    // Get current track info
+    let currentTrackName = 'No track playing';
+    let currentTrackPath = '';
+    
+    if (playlist.length > 0 && currentPlaylistIndex >= 0 && currentPlaylistIndex < playlist.length) {
+        const currentTrack = playlist[currentPlaylistIndex];
+        currentTrackName = currentTrack.name;
+        currentTrackPath = currentTrack.path;
+    } else if (audioPlayer.src && trackSelect.value) {
+        // Single track playing (not from playlist)
+        currentTrackName = trackSelect.options[trackSelect.selectedIndex].text;
+        currentTrackPath = trackSelect.value;
+    }
+    
+    // Determine if music is playing
+    const musicIsPlaying = !audioPlayer.paused && audioPlayer.src;
+    
+    // Prepare broadcast data
+    const broadcastData = {
+        playlist: playlist, // Full playlist array
+        currentTrackIndex: currentPlaylistIndex,
+        isLooping: isLooping,
+        isPlaying: musicIsPlaying,
+        currentMusic: {
+            name: currentTrackName,
+            path: currentTrackPath,
+            url: currentTrackPath
+        },
+        timestamp: Date.now()
+    };
+    
+    console.log('📡 Broadcasting playlist state:', {
+        tracks: playlist.length,
+        currentIndex: currentPlaylistIndex + 1,
+        loop: isLooping,
+        playing: musicIsPlaying
+    });
+    
+    // Send to Firebase
+    const broadcastRef = ref(database, 'mcBroadcast');
+    set(broadcastRef, broadcastData)
+        .then(() => {
+            console.log('✅ Playlist broadcast successful');
+        })
+        .catch((error) => {
+            console.error('❌ Playlist broadcast failed:', error);
+        });
 }
 
 // Handle track ending
@@ -3441,7 +3537,7 @@ audioPlayer.addEventListener('ended', function() {
 
 function changeChapter(chapterNum) {
     currentChapter = chapterNum;
-    console.log(`📖 Switched to Chapter ${chapterNum}`);
+    console.log(`ðŸ“– Switched to Chapter ${chapterNum}`);
     
     // Update UI to show current chapter
     const chapterDisplay = document.getElementById('currentChapterDisplay');
@@ -3538,7 +3634,7 @@ function exportPlayerData(playerName) {
     link.click();
     
     URL.revokeObjectURL(url);
-    console.log(`✅ Exported character data for ${playerName}`);
+    console.log(`âœ… Exported character data for ${playerName}`);
 }
 
 
@@ -3560,7 +3656,7 @@ function exportPlayerData(playerName) {
         const { ref, onValue } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js');
         const { db } = await import('./firebase-config.js');
         
-        console.log('🔗 Setting up player character sync from Player App...');
+        console.log('ðŸ”— Setting up player character sync from Player App...');
         
         // Listen for player characters
         const playerCharsRef = ref(db, 'playerCharacters');
@@ -3568,7 +3664,7 @@ function exportPlayerData(playerName) {
             const playerChars = snapshot.val();
             
             if (playerChars) {
-                console.log('📥 Received player characters:', Object.keys(playerChars));
+                console.log('ðŸ“¥ Received player characters:', Object.keys(playerChars));
                 
                 // Add each player character to characterData
                 Object.values(playerChars).forEach(char => {
@@ -3582,7 +3678,7 @@ function exportPlayerData(playerName) {
                             info: `${char.pronouns || ''}<br>${char.look || ''}`
                         };
                         
-                        console.log(`✅ Added player character: ${char.name}`);
+                        console.log(`âœ… Added player character: ${char.name}`);
                         
                         // Add to dropdown if not already present
                         const existingOption = Array.from(characterSelect.options).find(
@@ -3595,18 +3691,18 @@ function exportPlayerData(playerName) {
                             option.textContent = `${char.name} (Player)`;
                             option.dataset.img = char.portrait || '';
                             characterSelect.appendChild(option);
-                            console.log(`📋 Added ${char.name} to dropdown`);
+                            console.log(`ðŸ“‹ Added ${char.name} to dropdown`);
                         }
                     }
                 });
             }
         });
         
-        console.log('✅ Player character sync active - will receive characters from Player App');
+        console.log('âœ… Player character sync active - will receive characters from Player App');
         
     } catch (error) {
-        console.warn('⚠️ Player character sync not available:', error.message);
+        console.warn('âš ï¸ Player character sync not available:', error.message);
     }
 })();
 
-console.log('✅ QUEERZ! MC Companion script loaded successfully!');
+console.log('âœ… QUEERZ! MC Companion script loaded successfully!');
