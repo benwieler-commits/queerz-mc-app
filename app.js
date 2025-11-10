@@ -2271,13 +2271,26 @@ function displayCharacterSheet(character) {
 }
 
 // ===================================
-// AUDIO PLAYER
+// AUDIO PLAYER - FIXED
 // ===================================
 function playMusic() {
     if (audioPlayer.src) {
-        audioPlayer.play();
-        const trackName = trackSelect.options[trackSelect.selectedIndex].text;
-        nowPlaying.textContent = `Now Playing: ${trackName}`;
+        const playPromise = audioPlayer.play();
+        
+        // Handle play promise to avoid AbortError
+        if (playPromise !== undefined) {
+            playPromise
+                .then(() => {
+                    const trackName = trackSelect.options[trackSelect.selectedIndex].text;
+                    nowPlaying.textContent = `Now Playing: ${trackName}`;
+                })
+                .catch(error => {
+                    // Handle AbortError gracefully (happens when load() interrupts play())
+                    if (error.name !== 'AbortError') {
+                        console.error('Audio playback error:', error);
+                    }
+                });
+        }
     }
 }
 
@@ -2296,8 +2309,15 @@ function changeTrack() {
     const track = trackSelect.value;
     if (track) {
         audioPlayer.src = track;
+        
+        // Wait for load to complete before playing
+        audioPlayer.addEventListener('canplay', function playWhenReady() {
+            playMusic();
+            // Remove listener after first use
+            audioPlayer.removeEventListener('canplay', playWhenReady);
+        });
+        
         audioPlayer.load();
-        playMusic();
     }
 }
 
@@ -3276,43 +3296,6 @@ function updateCharacter() {
     }
 }
 
-// ===================================
-// AUDIO PLAYER
-// ===================================
-function playMusic() {
-    if (audioPlayer.src) {
-        audioPlayer.play();
-        const trackName = trackSelect.options[trackSelect.selectedIndex].text;
-        nowPlaying.textContent = `♪ ${trackName}`;
-    } else {
-        alert('Please select a track first');
-    }
-}
-
-function pauseMusic() {
-    audioPlayer.pause();
-}
-
-function stopMusic() {
-    audioPlayer.pause();
-    audioPlayer.currentTime = 0;
-    nowPlaying.textContent = 'No track playing';
-}
-
-function changeTrack() {
-    const track = trackSelect.value;
-    if (track) {
-        audioPlayer.src = track;
-        audioPlayer.load();
-        playMusic();
-    }
-}
-
-function updateVolume() {
-    const volume = volumeSlider.value / 100;
-    audioPlayer.volume = volume;
-    volumeLabel.textContent = `${volumeSlider.value}%`;
-}
 
 // ===================================
 // DICE ROLLER
@@ -3566,5 +3549,64 @@ function exportPlayerData(playerName) {
 // All event listeners are initialized in initializeEventListeners() function
 // which is called on DOMContentLoaded event (see around line 1282).
 // This prevents duplicate event listener registration and ensures proper initialization order.
+
+// ===================================
+// FIREBASE PLAYER CHARACTER SYNC
+// ===================================
+// Listen for player characters uploaded from Player App
+(async function setupPlayerCharacterSync() {
+    try {
+        // Import Firebase functions
+        const { ref, onValue } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js');
+        const { db } = await import('./firebase-config.js');
+        
+        console.log('🔗 Setting up player character sync from Player App...');
+        
+        // Listen for player characters
+        const playerCharsRef = ref(db, 'playerCharacters');
+        onValue(playerCharsRef, (snapshot) => {
+            const playerChars = snapshot.val();
+            
+            if (playerChars) {
+                console.log('📥 Received player characters:', Object.keys(playerChars));
+                
+                // Add each player character to characterData
+                Object.values(playerChars).forEach(char => {
+                    if (char.name) {
+                        // Create character entry
+                        const charKey = char.name.toLowerCase().replace(/\s+/g, '_');
+                        
+                        characterData[charKey] = {
+                            name: char.name,
+                            image: char.portrait || 'assets/characters/default-portrait.png',
+                            info: `${char.pronouns || ''}<br>${char.look || ''}`
+                        };
+                        
+                        console.log(`✅ Added player character: ${char.name}`);
+                        
+                        // Add to dropdown if not already present
+                        const existingOption = Array.from(characterSelect.options).find(
+                            opt => opt.value === charKey
+                        );
+                        
+                        if (!existingOption) {
+                            const option = document.createElement('option');
+                            option.value = charKey;
+                            option.textContent = `${char.name} (Player)`;
+                            option.dataset.img = char.portrait || '';
+                            characterSelect.appendChild(option);
+                            console.log(`📋 Added ${char.name} to dropdown`);
+                        }
+                    }
+                });
+            }
+        });
+        
+        console.log('✅ Player character sync active - will receive characters from Player App');
+        
+    } catch (error) {
+        console.warn('⚠️ Player character sync not available:', error.message);
+    }
+})();
 
 console.log('✅ QUEERZ! MC Companion script loaded successfully!');
