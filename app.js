@@ -1,6 +1,6 @@
 // ===================================
 // QUEERZ! MC COMPANION APP - JAVASCRIPT
-// FIXED VERSION - INTEGRATED WITH PLAYER APP (Full Parts 1-3)
+// FIXED VERSION - INTEGRATED WITH PLAYER APP (v1.2)
 // ===================================
 
 // === FIREBASE CONNECTION ===
@@ -110,10 +110,4 @@ const chapterSelect = document.getElementById('chapterSelect');
 const characterData = {
     'mama-jay': {
         name: 'Mama Jay Rainbow',
-        image: 'https://drive.google.com/uc?export=view&id=1ajj4lmmoEpxtMvXO61W1956z1oTrVM0_',
-        characterSheet: 'https://drive.google.com/uc?export=view&id=1ajj4lmmoEpxtMvXO61W1956z1oTrVM0_',
-        info: 'Founder of House Rainbow and owner of Café Greenwich. A wise mentor figure who guides the heroes.'
-    },
-    'danny-civilian': {
-        name: 'Danny "Dice" Carbone',
-        image: 'https://drive.google.com/uc?export=view&id=1tQHUwn0ajdLIZeo07C6wGk
+        image: 'https://drive.google.com/uc?export=view&id=1ajj4lmmoEpxtMvXO61W195
