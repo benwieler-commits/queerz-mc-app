@@ -25,7 +25,7 @@
 <option value="4">Chapter 4: The Mogul's Empire</option>
 <option value="5">Chapter 5: The Titan's Domain</option>
 </select>
-<button class="header-btn" id="campaignManagerBtn" title="Campaign Manager">🎬 Campaigns</button> <button class="header-btn" id="campaignSettingsBtn" title="Campaign Settings">⚙️</button> <button class="header-btn" id="sessionMgmtBtn" title="Session Management">💾 Sessions</button> <button class="header-btn" id="playerOverviewBtn" title="Player Overview">👥 Players</button> <button class="header-btn" id="broadcastBtn" title="Broadcast to Players">📡 Broadcast</button>
+<button class="header-btn" id="campaignManagerBtn" title="Create & Edit Campaigns">➕ Create Campaign</button> <button class="header-btn" id="campaignSettingsBtn" title="Campaign Settings">⚙️</button> <button class="header-btn" id="sessionMgmtBtn" title="Session Management">💾 Sessions</button> <button class="header-btn" id="playerOverviewBtn" title="Player Overview">👥 Players</button> <button class="header-btn" id="broadcastBtn" title="Broadcast to Players">📡 Broadcast</button>
 </div>
 <div class="header-controls">
 <button class="header-btn" id="toggleScriptBtn" title="Toggle Script Panel (S)">Script</button>
@@ -371,10 +371,16 @@
 <div class="modal hidden" id="campaignManagerModal">
 <div class="modal-content large-modal">
 <div class="modal-header">
-<h2>Campaign Manager</h2>
+<h2>Create & Edit Campaigns</h2>
 <button class="close-modal-btn" id="closeCampaignManagerBtn">X</button>
 </div>
 <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+<!-- Info Box -->
+<div style="background: rgba(102, 126, 234, 0.2); border: 1px solid rgba(102, 126, 234, 0.4); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+<p style="margin: 0; color: rgba(255,255,255,0.9);">
+💡 <strong>View your campaigns:</strong> All campaigns appear in the main <strong>Campaign dropdown</strong> at the top. Use this manager to create new campaigns and edit existing ones.
+</p>
+</div>
 <!-- Campaign Selection/Creation -->
 <div class="campaign-selector-section">
 <h3>Active Campaign</h3>
@@ -586,8 +592,8 @@
 <!-- Campaign Manager Module -->
 <script type="module" src="campaign-manager-mc.js"></script>
 
-<!-- Your Existing App Script (NO MODULE) -->
-<script src="app.js?v=3.0"></script>
+<!-- Your Existing App Script (NOW ES6 MODULE) -->
+<script type="module" src="app.js?v=4.0"></script>
 
 <!-- Broadcast Button Handler (NEW) -->
 <script type="module">
@@ -887,8 +893,13 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('campaignCreatedDisplay').style.display = 'block';
         document.getElementById('createdCampaignIdInput').value = campaignId;
 
-        // Reload campaigns list
+        // Reload campaigns list in modal
         await loadMyCampaignsList();
+
+        // Reload campaigns in main dropdown (from app.js)
+        if (window.loadFirebaseCampaigns) {
+          await window.loadFirebaseCampaigns();
+        }
 
         console.log('✅ Campaign created:', campaignId);
       }
@@ -962,6 +973,12 @@ document.addEventListener('DOMContentLoaded', function() {
       if (success) {
         editCampaignModal.classList.add('hidden');
         await loadActiveCampaign(activeCampaignId);
+
+        // Reload campaigns in main dropdown
+        if (window.loadFirebaseCampaigns) {
+          await window.loadFirebaseCampaigns();
+        }
+
         alert('Campaign updated successfully!');
       }
     });
@@ -981,6 +998,12 @@ document.addEventListener('DOMContentLoaded', function() {
           document.getElementById('campaignInfoDisplay').style.display = 'none';
           document.getElementById('activeCampaignSelect').value = '';
           await loadMyCampaignsList();
+
+          // Reload campaigns in main dropdown
+          if (window.loadFirebaseCampaigns) {
+            await window.loadFirebaseCampaigns();
+          }
+
           alert('Campaign deleted successfully!');
         }
       }
