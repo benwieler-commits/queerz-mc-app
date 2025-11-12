@@ -12,6 +12,11 @@
 <header class="app-header">
 <h1>QUEERZ! MC Companion</h1>
 <div class="campaign-info">
+<label for="campaignSelect">Campaign:</label>
+<select class="styled-select" id="campaignSelect" style="margin-right: 15px;">
+<option value="queerz-chapter1">QUEERZ! Chapter 1</option>
+<option value="queerz-chapters-2-5">QUEERZ! Chapters 2-5 (Coming Soon)</option>
+</select>
 <label for="chapterSelect">Chapter:</label>
 <select class="styled-select" id="chapterSelect">
 <option value="1">Chapter 1: The Jester's Last Laugh</option>
@@ -369,7 +374,7 @@
 <script type="module" src="firebase-broadcast.js"></script>
 
 <!-- Your Existing App Script (NO MODULE) -->
-<script src="app.js?v=2.0"></script>
+<script src="app.js?v=3.0"></script>
 
 <!-- Broadcast Button Handler (NEW) -->
 <script type="module">

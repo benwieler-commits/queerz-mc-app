@@ -50,8 +50,10 @@ let currentPlaylistIndex = 0;
 // Session State
 let currentSession = {
     name: 'Default Session',
+    sessionId: null, // Firebase session ID for player app sync
     players: [],
     campaign: {
+        id: 'queerz-chapter1', // Current campaign ID
         chapter: 1,
         outcomes: {}
     },
@@ -59,6 +61,10 @@ let currentSession = {
 };
 
 let savedSessions = [];
+
+// Campaign Management
+let currentCampaignId = 'queerz-chapter1';
+let availableCampaigns = {}; // Will be populated with campaign data
 
 // === DOM ELEMENTS ===
 const spotlightPlayersContainer = document.getElementById('spotlightPlayers');
@@ -127,6 +133,7 @@ const closePlayerOverviewBtn = document.getElementById('closePlayerOverviewBtn')
 const playerOverviewContent = document.getElementById('playerOverviewContent');
 
 // Selectors
+const campaignSelect = document.getElementById('campaignSelect');
 const chapterSelect = document.getElementById('chapterSelect');
 
 // === CHARACTER DATA (NPCs) ===
@@ -184,10 +191,451 @@ const statusTagsDatabase = {
     ]
 };
 
+// === CAMPAIGNS DATABASE ===
+const campaignsDatabase = {
+    'queerz-chapter1': {
+        id: 'queerz-chapter1',
+        name: 'QUEERZ! - Chapter 1: The Jester\'s Last Laugh',
+        description: 'A washed-up comedian spreads hate through nostalgia. Can the team save him from himself?',
+        chapters: [
+            {number: 1, name: 'The Jester\'s Last Laugh', available: true}
+        ],
+        scriptData: {
+            chapter1: {
+                title: "Chapter 1: The Jester's Last Laugh",
+                tabs: {
+                    overview: {
+                        title: "Overview",
+                        content: `
+                            <h2>🎭 Chapter Overview</h2>
+                            <p>The Queerz investigate harassment in NYC's Theater District, discovering a washed-up comedian named Danny "The Jester" Carbone who leads the Tough Crowd - a gang of bitter performers targeting LGBTQ+ venues.</p>
+
+                            <h3>🎯 Key Themes</h3>
+                            <ul>
+                                <li><strong>Nostalgia as Ignorance:</strong> Danny weaponizes "the good old days" to justify exclusion</li>
+                                <li><strong>Comedy vs Cruelty:</strong> Exploring where humor ends and harm begins</li>
+                                <li><strong>Redemption:</strong> Can someone trapped in bitterness find their way back?</li>
+                            </ul>
+
+                            <h3>📊 Story Tag Categories</h3>
+                            <div class="tag-categories">
+                                <div class="tag-category">
+                                    <h4>Investigation Phase (Scene 2)</h4>
+                                    <ul>
+                                        <li>15+ NPC conversation tags</li>
+                                        <li>6+ environmental tags</li>
+                                        <li>8+ optional encounter tags</li>
+                                    </ul>
+                                </div>
+                                <div class="tag-category">
+                                    <h4>Inner Space (Scene 4)</h4>
+                                    <ul>
+                                        <li>18+ TALK IT OUT tags</li>
+                                        <li>12+ SLAY tags</li>
+                                        <li>9+ CARE tags</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        `
+                    },
+                    scene1: {
+                        title: "Scene 1: Café Greenwich",
+                        content: `
+                            <h2>☕ Scene 1: The Call to Action</h2>
+                            <p><strong>Location:</strong> Café Greenwich (House Rainbow HQ)</p>
+                            <p><strong>Music:</strong> Café Greenwich 1 or 2</p>
+
+                            <h3>Opening</h3>
+                            <p>Mama Jay gathers the team at Café Greenwich, looking more serious than usual. She's received reports of escalating harassment in the Theater District - LGBTQ+ performers being heckled, shows disrupted, venues vandalized.</p>
+
+                            <blockquote>
+                            "My dears, something's happening in the Theater District. It's not random hate - there's organization behind it. Someone calling themselves 'The Jester' is leading a group called the Tough Crowd. They're targeting our community's venues, saying comedy's gotten too 'soft' and 'woke.' We need you to investigate before this escalates further."
+                            </blockquote>
+
+                            <h3>Key Information</h3>
+                            <ul>
+                                <li>The Jester leads a group called "Tough Crowd"</li>
+                                <li>They target LGBTQ+ friendly venues and performers</li>
+                                <li>Claims about "real comedy" and "the good old days"</li>
+                                <li>Started 2 weeks ago, getting worse</li>
+                                <li>Mama Jay heard the name "Danny Carbone" mentioned</li>
+                            </ul>
+
+                            <h3>MC Moves</h3>
+                            <ul>
+                                <li>Let players ask questions and plan their approach</li>
+                                <li>Mama Jay can provide basic info about the Theater District</li>
+                                <li>Offer opportunity: "There's an open mic tonight at The Laugh Track - might be a good place to start"</li>
+                            </ul>
+                        `
+                    },
+                    scene2: {
+                        title: "Scene 2: Theater District Investigation",
+                        content: `
+                            <h2>🎭 Scene 2: Streets of Memory</h2>
+                            <p><strong>Location:</strong> Theater District</p>
+                            <p><strong>Music:</strong> Theater District Investigation 1 or 2</p>
+
+                            <h3>The Scene</h3>
+                            <p>The Theater District is a mix of old and new - historic theaters alongside modern comedy clubs. Posters advertise shows with diverse performers, but some have been defaced with spraypaint: "MAKE COMEDY FUNNY AGAIN"</p>
+
+                            <h3>Investigation Options</h3>
+
+                            <h4>1. Talk to Performers (GET A CLUE)</h4>
+                            <p>Various performers can share:</p>
+                            <ul>
+                                <li>"The Tough Crowd shows up at queer-friendly venues"</li>
+                                <li>"Their leader, The Jester, used to perform here years ago"</li>
+                                <li>"Danny Carbone - he had a show at The Comedy Cellar back in the 90s"</li>
+                                <li>"He got bitter when the scene changed, when we started actually caring about punching up instead of down"</li>
+                            </ul>
+                            <p><strong>Tags Available:</strong> "Performer Testimony", "Pattern Recognized", "Lead: Danny Carbone"</p>
+
+                            <h4>2. Check Vandalized Venues (GET A CLUE)</h4>
+                            <p>Examining defaced posters and graffiti reveals:</p>
+                            <ul>
+                                <li>Consistent imagery: jester's cap, playing cards, dice</li>
+                                <li>References to "Moretti's" - an old comedy cellar</li>
+                                <li>Recent activity - some paint is still wet</li>
+                            </ul>
+                            <p><strong>Tags Available:</strong> "Evidence Gathered", "Connection: Moretti's", "Fresh Lead"</p>
+
+                            <h4>3. Optional Encounter: Tough Crowd Members</h4>
+                            <p>1-3 Tough Crowd Pawns might appear, heckling a street performer:</p>
+                            <ul>
+                                <li><strong>If players engage diplomatically (TALK IT OUT):</strong> Pawns reveal they're "bringing back real comedy" and mention meeting at "the old place"</li>
+                                <li><strong>If players use force (SLAY/RESIST):</strong> Combat with Pawns (Ignorance Limit: 2-3 each)</li>
+                                <li><strong>If players CARE:</strong> Might reach one Pawn who admits feeling left behind by changing times</li>
+                            </ul>
+                            <p><strong>Tags Available:</strong> "Pawn Encounter", "Moretti's Location", "Understanding: Left Behind"</p>
+
+                            <h3>Scene Conclusion</h3>
+                            <p>Investigation leads to <strong>Moretti's Comedy Cellar</strong> - an abandoned venue that was Danny's old home stage.</p>
+                        `
+                    },
+                    scene3: {
+                        title: "Scene 3: Moretti's Comedy Cellar",
+                        content: `
+                            <h2>🎤 Scene 3: The Abandoned Stage</h2>
+                            <p><strong>Location:</strong> Moretti's Comedy Cellar</p>
+                            <p><strong>Music:</strong> Theater District Investigation 2, then shift to Danny Battle 1 if combat occurs</p>
+
+                            <h3>The Scene</h3>
+                            <p>Moretti's Comedy Cellar is a time capsule - closed for 15 years but recently active. Old posters line the walls, including many featuring a younger Danny Carbone. The stage has been used recently - fresh microphone setup, scattered beer bottles.</p>
+
+                            <h3>Investigation</h3>
+
+                            <h4>Exploring the Space (GET A CLUE)</h4>
+                            <ul>
+                                <li><strong>Old Posters:</strong> Danny's career peak was mid-90s - "King of New York Comedy"</li>
+                                <li><strong>Reviews:</strong> Old newspaper clippings show mixed reception - praised for edgy humor, criticized for "punching down"</li>
+                                <li><strong>Recent Activity:</strong> Tough Crowd has been meeting here - planning harassment campaigns</li>
+                                <li><strong>Danny's Journal:</strong> Bitter entries about "comedy getting soft", "can't say anything anymore", "they don't understand what we lost"</li>
+                            </ul>
+                            <p><strong>Tags Available:</strong> "Danny's History", "Motivation: Bitterness", "Tough Crowd Plans", "Journal Evidence"</p>
+
+                            <h3>The Confrontation</h3>
+                            <p>Danny "The Jester" Carbone arrives with 2-4 Tough Crowd Pawns (scale to party size).</p>
+
+                            <h4>Danny's Opening</h4>
+                            <blockquote>
+                            "Well well, House Rainbow sends its diversity squad. Let me guess - you're here to tell me I'm a bigot? That I need to 'evolve'? I had this whole city laughing once. REAL laughs. Before everyone got so sensitive they can't take a joke anymore. The Jester's bringing REAL comedy back - the kind that doesn't apologize."
+                            </blockquote>
+
+                            <h4>Options</h4>
+
+                            <h5>Combat Approach</h5>
+                            <ul>
+                                <li><strong>Danny (Justice Knight - The Jester):</strong> Ignorance Limit 5, uses construct moves based on "Exclusionary Humor"</li>
+                                <li><strong>Tough Crowd Pawns:</strong> 2-4 Pawns (Ignorance Limit 2-3 each)</li>
+                                <li><strong>Victory Condition:</strong> Reduce Danny to 0 Ignorance OR convince him to enter Inner Space</li>
+                            </ul>
+
+                            <h5>Diplomatic Approach (TALK IT OUT)</h5>
+                            <p>Players can try to reach Danny before fighting:</p>
+                            <ul>
+                                <li>"What happened to make you this bitter?"</li>
+                                <li>"Comedy evolves - you could too"</li>
+                                <li>"You're hurting people who are already marginalized"</li>
+                                <li>"When did you stop punching up and start punching down?"</li>
+                            </ul>
+                            <p>On 10+, Danny hesitates. His Justice Knight form flickers. "Maybe... maybe we can talk. But not here. Not in front of them."</p>
+
+                            <h3>Scene Conclusion</h3>
+                            <p>However the confrontation resolves, Danny either:</p>
+                            <ul>
+                                <li><strong>If defeated in combat:</strong> Brought to 0 Ignorance, transported to Inner Space</li>
+                                <li><strong>If convinced diplomatically:</strong> Agrees to face his inner demons, opens portal to Inner Space</li>
+                                <li><strong>If players fail:</strong> Danny escapes, Tough Crowd escalates (delay to prepare for final confrontation)</li>
+                            </ul>
+                        `
+                    },
+                    innerSpace: {
+                        title: "Scene 4: Inner Space",
+                        content: `
+                            <h2>💭 Scene 4: Danny's Inner Space</h2>
+                            <p><strong>Location:</strong> Danny's Apartment (Inner Space)</p>
+                            <p><strong>Music:</strong> Inner Space Theme 1 or 2</p>
+
+                            <h3>The Space</h3>
+                            <p>Danny's Inner Space is a shabby NYC apartment, frozen in the late 90s. Walls covered with comedy posters from his glory days. A CRT TV plays his old sets on loop. Empty bottles everywhere. The laughter from the TV sounds hollow, echoing.</p>
+
+                            <p>Civilian Danny sits on a worn couch, no longer in his Jester costume. He looks older, tired, human.</p>
+
+                            <h3>The Core Wounds</h3>
+                            <p>Players must help Danny confront his pain through TALK IT OUT, CARE, or SLAY moves:</p>
+
+                            <h4>1. The Industry Changed</h4>
+                            <blockquote>
+                            "I had the city in my hand. Then suddenly, overnight, I was the bad guy. All I did was tell the same jokes that made everyone laugh for years. But now? Now those jokes make you a monster. They just... left me behind."
+                            </blockquote>
+                            <ul>
+                                <li><strong>TALK IT OUT:</strong> "The jokes didn't change - we learned who they hurt"</li>
+                                <li><strong>CARE:</strong> "Being left behind hurts. But you're hurting others now"</li>
+                                <li><strong>SLAY:</strong> "You weren't left behind - you refused to grow"</li>
+                            </ul>
+                            <p><strong>Tags Available:</strong> "Understanding: Industry Change", "Core Wound: Abandonment"</p>
+
+                            <h4>2. The Glory Days</h4>
+                            <p>Manifestations of Danny's past success appear - newspaper clippings, award statues, audience laughter. But they're all FROM the 90s.</p>
+                            <blockquote>
+                            "This was real comedy. This was when people could take a joke. Why can't we go back to this?"
+                            </blockquote>
+                            <ul>
+                                <li><strong>TALK IT OUT:</strong> "You can't go back - but you can move forward"</li>
+                                <li><strong>CARE:</strong> "You're trying to freeze time because you're afraid"</li>
+                                <li><strong>SLAY:</strong> "That version of you caused real harm"</li>
+                            </ul>
+                            <p><strong>Tags Available:</strong> "Core Wound: Glory Lost", "Understanding: Fear of Irrelevance"</p>
+
+                            <h4>3. The Real Fear</h4>
+                            <p>The apartment's walls close in. The TV shows Danny's last few gigs - smaller venues, smaller crowds, eventually just online rants.</p>
+                            <blockquote>
+                            "I'm not a bigot. I never hated anyone. I just... I don't know how to be funny in this new world. And if I can't be funny... who am I? Comedy is all I had."
+                            </blockquote>
+                            <ul>
+                                <li><strong>TALK IT OUT:</strong> "You can learn new ways to be funny - ways that don't hurt"</li>
+                                <li><strong>CARE:</strong> "You're more than your comedy. You're a person who can grow"</li>
+                                <li><strong>SLAY:</strong> "Then find a new way. The world doesn't owe you an audience"</li>
+                            </ul>
+                            <p><strong>Tags Available:</strong> "Core Wound: Identity Crisis", "Understanding: Fear of Obsolescence", "Path to Redemption"</p>
+
+                            <h3>Resolution Options</h3>
+
+                            <h4>Full Success (10+ on final move)</h4>
+                            <p>Danny breaks down crying. The apartment slowly updates - photos from recent years appear, showing LGBTQ+ comedians he could have learned from, supported, grown with.</p>
+                            <blockquote>
+                            "I was so angry about losing my spotlight, I didn't see I was becoming the villain. I can't take back the hurt I caused... but maybe I can do better going forward?"
+                            </blockquote>
+                            <p><strong>Outcome:</strong> Danny is redeemed. Agrees to make amends, attend restorative justice sessions, use his platform to support marginalized comedians.</p>
+
+                            <h4>Partial Success (7-9)</h4>
+                            <p>Danny understands he was wrong but isn't ready to fully change.</p>
+                            <blockquote>
+                            "I hear you. I do. But this is hard. I need time to figure out who I am if I'm not THAT Danny anymore."
+                            </blockquote>
+                            <p><strong>Outcome:</strong> Danny steps back from Tough Crowd but isn't actively helping. A seed is planted.</p>
+
+                            <h4>Failure (6-)</h4>
+                            <p>Danny rejects the team's help, doubling down on his nostalgia.</p>
+                            <blockquote>
+                            "You don't get it. None of you do. The world left ME behind. I'm just fighting back."
+                            </blockquote>
+                            <p><strong>Outcome:</strong> Danny must be defeated through other means. Tough Crowd continues under new leadership (potentially ties to Chapter 2's villain, Professor Pierce).</p>
+
+                            <h3>Return to Reality</h3>
+                            <p>Based on the outcome, Danny either:</p>
+                            <ul>
+                                <li><strong>Redeemed:</strong> Returns to reality ready to change, Tough Crowd dissolves</li>
+                                <li><strong>Partial:</strong> Returns uncertain, Tough Crowd fractures but doesn't fully stop</li>
+                                <li><strong>Failed:</strong> Remains as enemy, must be defeated by other means</li>
+                            </ul>
+                        `
+                    },
+                    aftermath: {
+                        title: "Aftermath & Consequences",
+                        content: `
+                            <h2>🎬 Aftermath: The Ripples</h2>
+
+                            <h3>Based on Danny's Resolution</h3>
+
+                            <h4>Danny Redeemed (Best Outcome)</h4>
+                            <ul>
+                                <li>Danny publicly apologizes for his actions and rhetoric</li>
+                                <li>Begins attending restorative justice circles at House Rainbow</li>
+                                <li>Uses his remaining platform to amplify marginalized voices</li>
+                                <li>Tough Crowd dissolves - some members seek help, others scatter</li>
+                                <li><strong>Chapter 2 Impact:</strong> Danny may offer information about Professor Pierce, who he met at a "concerned citizens" meeting</li>
+                            </ul>
+
+                            <h4>Danny Partial Reform (Mixed Outcome)</h4>
+                            <ul>
+                                <li>Danny quietly retires from public view</li>
+                                <li>Tough Crowd fractures - most members stop, but hardcore believers continue</li>
+                                <li>The movement loses steam but doesn't fully end</li>
+                                <li><strong>Chapter 2 Impact:</strong> Some Tough Crowd members become new recruits for Pierce's movement</li>
+                            </ul>
+
+                            <h4>Danny's Vendetta Continues (Worst Outcome)</h4>
+                            <ul>
+                                <li>Danny allies with Professor Pierce (Chapter 2 villain)</li>
+                                <li>Tough Crowd becomes more organized and dangerous</li>
+                                <li>Harassment escalates throughout the campaign</li>
+                                <li><strong>Chapter 2 Impact:</strong> Danny actively supports Pierce's "traditional values" movement, making Chapter 2 harder</li>
+                            </ul>
+
+                            <h3>Community Response</h3>
+                            <ul>
+                                <li>Theater District LGBTQ+ venues hold solidarity events</li>
+                                <li>House Rainbow gains reputation and resources</li>
+                                <li>Young performers cite the team as inspirations</li>
+                                <li>Media coverage (depending on how public the confrontation was)</li>
+                            </ul>
+
+                            <h3>Character Growth</h3>
+                            <p>Each PC should reflect on:</p>
+                            <ul>
+                                <li>What did you learn about fighting ignorance vs. fighting people?</li>
+                                <li>Did you see any of yourself in Danny's fear of change?</li>
+                                <li>How do you balance accountability with compassion?</li>
+                                <li>What does "redemption" mean to you?</li>
+                            </ul>
+
+                            <h3>Teaser for Chapter 2</h3>
+                            <p>Mama Jay receives word of something new: Professor Vivian Pierce, a prominent academic, is gaining followers with rhetoric about "biological truth" and "protecting children." Her movement seems more organized, better funded than Danny's Tough Crowd ever was...</p>
+
+                            <blockquote>
+                            "My dears, I'm afraid Danny was just the beginning. Someone's organizing these movements, giving them structure and legitimacy. And this Professor Pierce - she's far more dangerous than a bitter comedian could ever be."
+                            </blockquote>
+                        `
+                    },
+                    scaling: {
+                        title: "Scaling & Pacing",
+                        content: `
+                            <h2>⚖️ Scaling for Different Party Sizes</h2>
+
+                            <h3>Combat Encounters</h3>
+
+                            <h4>Scene 2: Optional Tough Crowd Encounter</h4>
+                            <ul>
+                                <li><strong>1-2 Players:</strong> 1 Tough Crowd Pawn</li>
+                                <li><strong>3-4 Players:</strong> 2 Tough Crowd Pawns</li>
+                                <li><strong>5+ Players:</strong> 3 Tough Crowd Pawns</li>
+                            </ul>
+                            <p><strong>Pawn Stats:</strong> Ignorance Limit 2-3, basic attacks, easily swayed by CARE moves</p>
+
+                            <h4>Scene 3: Moretti's Confrontation</h4>
+                            <ul>
+                                <li><strong>1-2 Players:</strong> Danny + 1 Pawn</li>
+                                <li><strong>3-4 Players:</strong> Danny + 2 Pawns</li>
+                                <li><strong>5+ Players:</strong> Danny + 3-4 Pawns</li>
+                            </ul>
+                            <p><strong>Danny Stats:</strong> Ignorance Limit 5, Justice Knight construct moves, can summon hurtful "punchlines" as attacks</p>
+
+                            <h3>Pacing Guidance</h3>
+
+                            <h4>Session 1 (3-4 hours)</h4>
+                            <ul>
+                                <li>Scene 1: Café Greenwich (30-45 min)</li>
+                                <li>Scene 2: Investigation (90-120 min)</li>
+                                <li>End on discovering Moretti's location</li>
+                            </ul>
+
+                            <h4>Session 2 (3-4 hours)</h4>
+                            <ul>
+                                <li>Scene 3: Moretti's Confrontation (60-90 min)</li>
+                                <li>Scene 4: Inner Space (90-120 min)</li>
+                                <li>Aftermath (30-45 min)</li>
+                            </ul>
+
+                            <h4>One-Shot Version (4-5 hours)</h4>
+                            <ul>
+                                <li>Streamline Scene 1 (15-20 min)</li>
+                                <li>Scene 2: Focus investigation, skip optional encounter (45-60 min)</li>
+                                <li>Scene 3: Quick combat if needed (30-45 min)</li>
+                                <li>Scene 4: Core Inner Space moments only (60-90 min)</li>
+                                <li>Brief aftermath (15-20 min)</li>
+                            </ul>
+
+                            <h3>Difficulty Adjustments</h3>
+
+                            <h4>Easier (New Players or Shorter Session)</h4>
+                            <ul>
+                                <li>Lower Danny's Ignorance Limit to 3-4</li>
+                                <li>Give players more Story Tags from investigation</li>
+                                <li>Make Danny more receptive to diplomatic approaches</li>
+                                <li>Reduce number of Pawns in each encounter</li>
+                            </ul>
+
+                            <h4>Harder (Experienced Players or Epic Campaign)</h4>
+                            <ul>
+                                <li>Increase Danny's Ignorance Limit to 6-7</li>
+                                <li>Add a second Justice Knight (veteran Tough Crowd member)</li>
+                                <li>Danny has more complex Inner Space wounds to address</li>
+                                <li>Partial success on Inner Space still leaves Danny partially hostile</li>
+                            </ul>
+
+                            <h3>Time-Saving Tips</h3>
+                            <ul>
+                                <li><strong>Pre-gen Characters:</strong> Have characters ready with relevant backgrounds (comedian, activist, former victim of harassment)</li>
+                                <li><strong>Start In Media Res:</strong> Begin at Scene 2 with players already investigating</li>
+                                <li><strong>Montage Investigation:</strong> Each player describes one clue they find, combine for full picture</li>
+                                <li><strong>Fast-Track to Inner Space:</strong> Skip Moretti's combat, go straight to Inner Space after investigation</li>
+                            </ul>
+                        `
+                    }
+                }
+            }
+        }
+    },
+    'queerz-chapters-2-5': {
+        id: 'queerz-chapters-2-5',
+        name: 'QUEERZ! - Chapters 2-5 (Coming Soon)',
+        description: 'Continue the fight against Ignorance through New York City',
+        chapters: [
+            {number: 2, name: 'The Professor\'s Prescription', available: false},
+            {number: 3, name: 'The Champion\'s Last Stand', available: false},
+            {number: 4, name: 'The Mogul\'s Empire', available: false},
+            {number: 5, name: 'The Titan\'s Domain', available: false}
+        ],
+        scriptData: {
+            placeholder: {
+                title: "Coming Soon",
+                tabs: {
+                    overview: {
+                        title: "Chapters 2-5 Overview",
+                        content: `
+                            <h2>📚 Future Chapters</h2>
+                            <p>The story continues with four more chapters:</p>
+
+                            <h3>Chapter 2: The Professor's Prescription</h3>
+                            <p>Professor Vivian Pierce uses academic credibility to spread "biological truths" and "protect children" from LGBTQ+ acceptance. More organized and funded than Danny ever was.</p>
+
+                            <h3>Chapter 3: The Champion's Last Stand</h3>
+                            <p>Rex "The Titan" Branson, a washed-up athlete, weaponizes masculinity and "traditional strength" to recruit young men into his movement.</p>
+
+                            <h3>Chapter 4: The Mogul's Empire</h3>
+                            <p>Victoria Sterling, a media mogul, controls the narrative and manufactures the "moral panic" that fuels all previous villains.</p>
+
+                            <h3>Chapter 5: The Titan's Domain</h3>
+                            <p>Marcus Creed, the true Titan of Ignorance, reveals himself as the puppetmaster behind all the Justice Knights.</p>
+
+                            <p><em>Script content for these chapters will be added in future updates.</em></p>
+                        `
+                    }
+                }
+            }
+        }
+    }
+};
+
 // ===================================
 // INITIALIZATION
 // ===================================
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize campaigns
+    availableCampaigns = campaignsDatabase;
+
     loadFromLocalStorage();
     initializeEventListeners();
     renderPlayers();
@@ -201,11 +649,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize dice display
     initializeDiceDisplay();
 
-    // Load correct chapter tabs
+    // Load correct chapter tabs and content
     loadChapterTabs();
+    loadScriptContent('overview'); // Load default tab
     const scriptPanelTitle = document.getElementById('scriptPanelTitle');
     if (scriptPanelTitle) {
-        scriptPanelTitle.textContent = `Campaign Script - Chapter ${currentChapter}`;
+        const campaign = availableCampaigns[currentCampaignId];
+        scriptPanelTitle.textContent = campaign ? campaign.name : `Campaign Script - Chapter ${currentChapter}`;
     }
 
     console.log('✅ MC App initialized successfully');
@@ -291,15 +741,48 @@ function initializeEventListeners() {
         });
     }
 
+    // Campaign Selection
+    if (campaignSelect) {
+        campaignSelect.addEventListener('change', (e) => {
+            currentCampaignId = e.target.value;
+            currentSession.campaign.id = currentCampaignId;
+
+            // Reset to chapter 1 when changing campaigns
+            currentChapter = 1;
+            if (chapterSelect) {
+                chapterSelect.value = 1;
+            }
+
+            loadChapterTabs();
+            loadScriptContent('overview');
+            saveToLocalStorage();
+            broadcastSessionToPlayers();
+
+            const scriptPanelTitle = document.getElementById('scriptPanelTitle');
+            if (scriptPanelTitle) {
+                const campaign = availableCampaigns[currentCampaignId];
+                scriptPanelTitle.textContent = campaign ? campaign.name : 'Campaign Script';
+            }
+
+            console.log(`📚 Switched to campaign: ${currentCampaignId}`);
+        });
+    }
+
     // Chapter Selection
     if (chapterSelect) {
         chapterSelect.addEventListener('change', (e) => {
             currentChapter = parseInt(e.target.value);
             loadChapterTabs();
+            loadScriptContent('overview');
             saveToLocalStorage();
+            broadcastSessionToPlayers();
+
             const scriptPanelTitle = document.getElementById('scriptPanelTitle');
             if (scriptPanelTitle) {
-                scriptPanelTitle.textContent = `Campaign Script - Chapter ${currentChapter}`;
+                const campaign = availableCampaigns[currentCampaignId];
+                const chapterKey = `chapter${currentChapter}`;
+                const chapterData = campaign?.scriptData[chapterKey] || campaign?.scriptData.placeholder;
+                scriptPanelTitle.textContent = chapterData?.title || `Campaign Script - Chapter ${currentChapter}`;
             }
         });
     }
@@ -437,6 +920,12 @@ function initializeEventListeners() {
         rollDiceBtn.addEventListener('click', rollDice);
     }
 
+    // Script Search
+    const scriptSearchInput = document.getElementById('scriptSearch');
+    if (scriptSearchInput) {
+        scriptSearchInput.addEventListener('input', searchScriptContent);
+    }
+
     // Keyboard Shortcuts
     document.addEventListener('keydown', (e) => {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
@@ -508,6 +997,7 @@ function addPlayer() {
     playerModal.classList.add('hidden');
     renderPlayers();
     saveToLocalStorage();
+    broadcastSessionToPlayers(); // Broadcast updated player list
 }
 
 function removePlayer(index) {
@@ -521,6 +1011,7 @@ function removePlayer(index) {
         currentSession.players = players;
         renderPlayers();
         saveToLocalStorage();
+        broadcastSessionToPlayers(); // Broadcast updated player list
     }
 }
 
@@ -736,10 +1227,180 @@ function rollDice() {
 // ===================================
 
 function loadChapterTabs() {
-    // This would load different script content based on currentChapter
-    // For now, just log the chapter change
-    console.log(`📖 Loading Chapter ${currentChapter} script`);
+    // Load script tabs based on current campaign and chapter
+    const campaign = availableCampaigns[currentCampaignId];
+    if (!campaign) {
+        console.warn(`⚠️ Campaign ${currentCampaignId} not found`);
+        return;
+    }
+
+    const chapterKey = `chapter${currentChapter}`;
+    const chapterData = campaign.scriptData[chapterKey] || campaign.scriptData.placeholder;
+
+    if (!chapterData) {
+        console.warn(`⚠️ No script data for ${chapterKey} in ${currentCampaignId}`);
+        return;
+    }
+
+    // Update panel title
+    const scriptPanelTitle = document.getElementById('scriptPanelTitle');
+    if (scriptPanelTitle) {
+        scriptPanelTitle.textContent = chapterData.title || campaign.name;
+    }
+
+    // Update tabs
+    const panelTabs = document.querySelector('.panel-tabs');
+    if (panelTabs && chapterData.tabs) {
+        panelTabs.innerHTML = '';
+        let isFirst = true;
+
+        Object.keys(chapterData.tabs).forEach(tabKey => {
+            const tabData = chapterData.tabs[tabKey];
+            const tabBtn = document.createElement('button');
+            tabBtn.className = `tab-btn${isFirst ? ' active' : ''}`;
+            tabBtn.dataset.tab = tabKey;
+            tabBtn.textContent = tabData.title;
+
+            tabBtn.addEventListener('click', () => {
+                // Remove active class from all tabs
+                panelTabs.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+
+                // Add active class to clicked tab
+                tabBtn.classList.add('active');
+
+                // Load content for this tab
+                loadScriptContent(tabKey);
+            });
+
+            panelTabs.appendChild(tabBtn);
+            isFirst = false;
+        });
+    }
+
+    console.log(`📖 Loaded ${chapterKey} tabs for ${campaign.name}`);
 }
+
+function loadScriptContent(tabKey) {
+    const scriptContent = document.getElementById('scriptContent');
+    if (!scriptContent) return;
+
+    const campaign = availableCampaigns[currentCampaignId];
+    if (!campaign) return;
+
+    const chapterKey = `chapter${currentChapter}`;
+    const chapterData = campaign.scriptData[chapterKey] || campaign.scriptData.placeholder;
+
+    if (!chapterData || !chapterData.tabs || !chapterData.tabs[tabKey]) {
+        scriptContent.innerHTML = '<p style="padding: 20px; color: rgba(255,255,255,0.7);">No content available for this tab.</p>';
+        return;
+    }
+
+    // Load and display content
+    scriptContent.innerHTML = chapterData.tabs[tabKey].content;
+
+    // Add search functionality
+    const searchInput = document.getElementById('scriptSearch');
+    if (searchInput) {
+        searchInput.value = ''; // Clear search on tab change
+    }
+}
+
+function searchScriptContent() {
+    const searchInput = document.getElementById('scriptSearch');
+    const scriptContent = document.getElementById('scriptContent');
+
+    if (!searchInput || !scriptContent) return;
+
+    const searchTerm = searchInput.value.toLowerCase();
+    const allElements = scriptContent.querySelectorAll('h2, h3, h4, p, li, blockquote');
+
+    allElements.forEach(elem => {
+        const text = elem.textContent.toLowerCase();
+        if (searchTerm === '' || text.includes(searchTerm)) {
+            elem.style.display = '';
+        } else {
+            elem.style.display = 'none';
+        }
+    });
+}
+
+// ===================================
+// FIREBASE SESSION BROADCASTING
+// ===================================
+
+function broadcastSessionToPlayers() {
+    if (!firebaseReady || !database || !firebaseRef || !firebaseSet) {
+        console.warn('⚠️ Firebase not ready for session broadcast');
+        return;
+    }
+
+    // Create session data for player app
+    const sessionData = {
+        sessionId: currentSession.sessionId || `session_${Date.now()}`,
+        name: currentSession.name,
+        campaign: {
+            id: currentCampaignId,
+            name: availableCampaigns[currentCampaignId]?.name || 'Unknown Campaign',
+            chapter: currentChapter
+        },
+        players: players.map(p => ({
+            name: p.name,
+            characterId: p.characterId || null,
+            tags: p.tags || {story: [], status: []}
+        })),
+        timestamp: Date.now(),
+        mcOnline: true
+    };
+
+    // Update session ID if needed
+    if (!currentSession.sessionId) {
+        currentSession.sessionId = sessionData.sessionId;
+        saveToLocalStorage();
+    }
+
+    // Broadcast to Firebase
+    const sessionRef = firebaseRef(database, 'activeSession');
+    firebaseSet(sessionRef, sessionData)
+        .then(() => {
+            console.log('✅ Session broadcast to players:', sessionData.sessionId);
+        })
+        .catch(error => {
+            console.error('❌ Session broadcast failed:', error);
+        });
+}
+
+function stopSessionBroadcast() {
+    if (!firebaseReady || !database || !firebaseRef || !firebaseSet) {
+        return;
+    }
+
+    const sessionRef = firebaseRef(database, 'activeSession');
+    firebaseSet(sessionRef, {mcOnline: false, timestamp: Date.now()})
+        .then(() => {
+            console.log('✅ Session broadcast stopped');
+        })
+        .catch(error => {
+            console.error('❌ Failed to stop session broadcast:', error);
+        });
+}
+
+// Broadcast session when page becomes visible
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && players.length > 0) {
+        broadcastSessionToPlayers();
+    } else if (document.hidden) {
+        stopSessionBroadcast();
+    }
+});
+
+// Broadcast session periodically (every 30 seconds)
+setInterval(() => {
+    if (!document.hidden && players.length > 0) {
+        broadcastSessionToPlayers();
+    }
+}, 30000);
 
 // ===================================
 // SESSION MANAGEMENT
@@ -1116,5 +1777,9 @@ window.getPlayerTags = getPlayerTags;
 window.showAddTagDialog = showAddTagDialog;
 window.closeAddTagDialog = closeAddTagDialog;
 window.addCustomTag = addCustomTag;
+window.broadcastSessionToPlayers = broadcastSessionToPlayers;
+window.stopSessionBroadcast = stopSessionBroadcast;
+window.loadScriptContent = loadScriptContent;
+window.searchScriptContent = searchScriptContent;
 
-console.log('🌈 QUEERZ! MC Companion - Fully Loaded!');
+console.log('🌈 QUEERZ! MC Companion - Fully Loaded with Campaign Support!');
