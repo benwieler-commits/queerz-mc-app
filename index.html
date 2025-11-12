@@ -383,23 +383,36 @@
 </select>
 <button class="header-btn" id="createNewCampaignBtn" style="margin-bottom: 20px;">+ Create New Campaign</button>
 <div id="campaignInfoDisplay" style="display: none; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 20px;">
+<div style="display: flex; justify-content: space-between; align-items: flex-start;">
+<div style="flex: 1;">
 <h4 id="selectedCampaignName">Campaign Name</h4>
 <p id="selectedCampaignDesc" style="color: rgba(255,255,255,0.7); margin: 10px 0;"></p>
-<div style="display: flex; gap: 15px; margin-top: 10px;">
-<span>ID: <code id="selectedCampaignId" style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px;"></code></span>
+<div style="display: flex; gap: 15px; margin-top: 10px; flex-wrap: wrap;">
+<span>ID: <code id="selectedCampaignId" style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-size: 0.85em;"></code></span>
 <span>Chapter: <strong id="selectedCampaignChapter">-</strong></span>
+<span>Arc: <strong id="selectedCampaignArc">-</strong></span>
 <span>Players: <strong id="selectedCampaignPlayers">0</strong></span>
+<span>Scenes: <strong id="selectedCampaignScenes">0</strong></span>
+<span>Chapters: <strong id="selectedCampaignChaptersCount">0</strong></span>
+</div>
+</div>
+<div style="display: flex; gap: 8px;">
+<button class="header-btn" id="editCampaignMetadataBtn" style="padding: 8px 12px; background: rgba(165, 94, 234, 0.4);" title="Edit campaign details">✏️ Edit</button>
+<button class="header-btn" id="deleteCampaignBtn" style="padding: 8px 12px; background: rgba(255, 0, 0, 0.3);" title="Delete campaign">🗑️</button>
+</div>
 </div>
 </div>
 </div>
 
 <!-- Scene Broadcaster -->
 <div class="scene-broadcaster-section">
-<h3>🎬 Scene Broadcaster</h3>
+<h3>🎬 Scene Library & Broadcaster</h3>
 <div style="display: flex; gap: 10px; margin-bottom: 15px;">
 <select class="styled-select" id="sceneBroadcastSelect" style="flex: 1;">
 <option value="">Select Scene...</option>
 </select>
+<button class="header-btn" id="editSceneBtn" style="padding: 8px 12px; background: rgba(165, 94, 234, 0.4);" title="Edit selected scene">✏️</button>
+<button class="header-btn" id="deleteSceneBtn" style="padding: 8px 12px; background: rgba(255, 0, 0, 0.3);" title="Delete selected scene">🗑️</button>
 <button class="header-btn" id="broadcastSceneBtn" style="background: #4CAF50;">Broadcast</button>
 </div>
 <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
@@ -417,7 +430,12 @@
 
 <!-- Chapter Management -->
 <div class="chapter-management-section" style="margin-top: 20px;">
-<h3>📖 Chapter Management</h3>
+<h3>📖 Chapter Library</h3>
+<div id="chaptersListDisplay" style="margin-bottom: 15px; max-height: 200px; overflow-y: auto;">
+<!-- Chapters will be listed here -->
+</div>
+<div style="border-top: 2px solid rgba(255, 215, 0, 0.3); padding-top: 15px; margin-top: 15px;">
+<h4 style="color: #a55eea; margin-bottom: 10px;">Add New Chapter</h4>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 15px;">
 <div>
 <label style="display: block; margin-bottom: 5px;">Chapter #</label>
@@ -433,6 +451,7 @@
 <textarea id="newChapterScript" class="text-input" placeholder="Enter chapter script..." rows="6"></textarea>
 </div>
 <button class="header-btn" id="addCampaignChapterBtn">+ Add Chapter to Campaign</button>
+</div>
 </div>
 
 <!-- Branch Point Creator -->
@@ -490,6 +509,70 @@
 <input type="text" id="createdCampaignIdInput" class="text-input" readonly style="text-align: center; font-family: monospace; background: rgba(255,255,255,0.1);">
 <button class="header-btn" id="copyCampaignIdBtn" style="margin-top: 10px; background: #2196F3;">Copy ID</button>
 </div>
+</div>
+</div>
+</div>
+
+<!-- EDIT CAMPAIGN MODAL -->
+<div class="modal hidden" id="editCampaignModal">
+<div class="modal-content">
+<div class="modal-header">
+<h2>Edit Campaign</h2>
+<button class="close-modal-btn" id="closeEditCampaignBtn">X</button>
+</div>
+<div class="modal-body">
+<form id="editCampaignForm">
+<div style="margin-bottom: 15px;">
+<label style="display: block; margin-bottom: 5px;">Campaign Name</label>
+<input type="text" id="editCampaignNameInput" class="text-input" required>
+</div>
+<div style="margin-bottom: 15px;">
+<label style="display: block; margin-bottom: 5px;">Description</label>
+<textarea id="editCampaignDescInput" class="text-input" rows="3"></textarea>
+</div>
+<div style="margin-bottom: 15px;">
+<label style="display: block; margin-bottom: 5px;">Current Arc</label>
+<input type="text" id="editCampaignArcInput" class="text-input">
+</div>
+<div style="margin-bottom: 15px;">
+<label style="display: block; margin-bottom: 5px;">Current Chapter</label>
+<input type="number" id="editCampaignChapterInput" class="text-input" min="1">
+</div>
+<button type="submit" class="btn-primary">Save Changes</button>
+</form>
+</div>
+</div>
+</div>
+
+<!-- EDIT SCENE MODAL -->
+<div class="modal hidden" id="editSceneModal">
+<div class="modal-content">
+<div class="modal-header">
+<h2>Edit Scene</h2>
+<button class="close-modal-btn" id="closeEditSceneBtn">X</button>
+</div>
+<div class="modal-body">
+<form id="editSceneForm">
+<div style="margin-bottom: 15px;">
+<label style="display: block; margin-bottom: 5px;">Scene Name</label>
+<input type="text" id="editSceneName" class="text-input" required>
+</div>
+<div style="margin-bottom: 15px;">
+<label style="display: block; margin-bottom: 5px;">Description</label>
+<textarea id="editSceneDesc" class="text-input" rows="3"></textarea>
+</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+<div>
+<label style="display: block; margin-bottom: 5px;">Chapter #</label>
+<input type="number" id="editSceneChapter" class="text-input" min="1">
+</div>
+<div>
+<label style="display: block; margin-bottom: 5px;">Order</label>
+<input type="number" id="editSceneOrder" class="text-input" min="1">
+</div>
+</div>
+<button type="submit" class="btn-primary">Save Changes</button>
+</form>
 </div>
 </div>
 </div>
@@ -716,8 +799,11 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<!-- Campaign Manager Integration -->
+<\!-- Campaign Manager Integration -->
 <script type="module">
+// Campaign Manager Integration Script
+// To be inserted into index.html
+
 import {
   createCampaign,
   addScene,
@@ -726,12 +812,17 @@ import {
   getMyCampaigns,
   loadCampaign,
   listenToCampaign,
-  createBranchPoint
+  createBranchPoint,
+  updateCampaignMetadata,
+  deleteCampaign,
+  updateScene,
+  deleteScene
 } from './campaign-manager-mc.js';
 
 // Global state for campaign management
 let activeCampaignData = null;
 let activeCampaignId = null;
+let currentEditingSceneId = null;
 
 // Make functions globally available
 window.campaignManager = {
@@ -825,6 +916,156 @@ document.addEventListener('DOMContentLoaded', function() {
       const campaignId = e.target.value;
       if (campaignId) {
         await loadActiveCampaign(campaignId);
+      }
+    });
+  }
+
+  // Edit Campaign Metadata
+  const editCampaignMetadataBtn = document.getElementById('editCampaignMetadataBtn');
+  const editCampaignModal = document.getElementById('editCampaignModal');
+  const closeEditCampaignBtn = document.getElementById('closeEditCampaignBtn');
+
+  if (editCampaignMetadataBtn) {
+    editCampaignMetadataBtn.addEventListener('click', function() {
+      if (!activeCampaignData) return;
+
+      // Populate form with current values
+      document.getElementById('editCampaignNameInput').value = activeCampaignData.metadata.name;
+      document.getElementById('editCampaignDescInput').value = activeCampaignData.metadata.description || '';
+      document.getElementById('editCampaignArcInput').value = activeCampaignData.metadata.currentArc || 'arc-1';
+      document.getElementById('editCampaignChapterInput').value = activeCampaignData.metadata.currentChapter || 1;
+
+      editCampaignModal.classList.remove('hidden');
+    });
+  }
+
+  if (closeEditCampaignBtn) {
+    closeEditCampaignBtn.addEventListener('click', function() {
+      editCampaignModal.classList.add('hidden');
+    });
+  }
+
+  const editCampaignForm = document.getElementById('editCampaignForm');
+  if (editCampaignForm) {
+    editCampaignForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const updates = {
+        name: document.getElementById('editCampaignNameInput').value,
+        description: document.getElementById('editCampaignDescInput').value,
+        currentArc: document.getElementById('editCampaignArcInput').value,
+        currentChapter: parseInt(document.getElementById('editCampaignChapterInput').value)
+      };
+
+      const success = await updateCampaignMetadata(activeCampaignId, updates);
+
+      if (success) {
+        editCampaignModal.classList.add('hidden');
+        await loadActiveCampaign(activeCampaignId);
+        alert('Campaign updated successfully!');
+      }
+    });
+  }
+
+  // Delete Campaign
+  const deleteCampaignBtn = document.getElementById('deleteCampaignBtn');
+  if (deleteCampaignBtn) {
+    deleteCampaignBtn.addEventListener('click', async function() {
+      if (!activeCampaignId) return;
+
+      if (confirm('Are you sure you want to delete this campaign? This cannot be undone.')) {
+        const success = await deleteCampaign(activeCampaignId);
+        if (success) {
+          activeCampaignId = null;
+          activeCampaignData = null;
+          document.getElementById('campaignInfoDisplay').style.display = 'none';
+          document.getElementById('activeCampaignSelect').value = '';
+          await loadMyCampaignsList();
+          alert('Campaign deleted successfully!');
+        }
+      }
+    });
+  }
+
+  // Edit Scene
+  const editSceneBtn = document.getElementById('editSceneBtn');
+  const editSceneModal = document.getElementById('editSceneModal');
+  const closeEditSceneBtn = document.getElementById('closeEditSceneBtn');
+
+  if (editSceneBtn) {
+    editSceneBtn.addEventListener('click', function() {
+      const sceneSelect = document.getElementById('sceneBroadcastSelect');
+      currentEditingSceneId = sceneSelect.value;
+
+      if (!currentEditingSceneId || !activeCampaignData) {
+        alert('Please select a scene to edit');
+        return;
+      }
+
+      const scene = activeCampaignData.scenes[currentEditingSceneId];
+      if (!scene) return;
+
+      // Populate form
+      document.getElementById('editSceneName').value = scene.name;
+      document.getElementById('editSceneDesc').value = scene.description || '';
+      document.getElementById('editSceneChapter').value = scene.chapterId || 1;
+      document.getElementById('editSceneOrder').value = scene.order || 1;
+
+      editSceneModal.classList.remove('hidden');
+    });
+  }
+
+  if (closeEditSceneBtn) {
+    closeEditSceneBtn.addEventListener('click', function() {
+      editSceneModal.classList.add('hidden');
+      currentEditingSceneId = null;
+    });
+  }
+
+  const editSceneForm = document.getElementById('editSceneForm');
+  if (editSceneForm) {
+    editSceneForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      if (!currentEditingSceneId) return;
+
+      const updates = {
+        name: document.getElementById('editSceneName').value,
+        description: document.getElementById('editSceneDesc').value,
+        chapterId: parseInt(document.getElementById('editSceneChapter').value),
+        order: parseInt(document.getElementById('editSceneOrder').value)
+      };
+
+      const success = await updateScene(activeCampaignId, currentEditingSceneId, updates);
+
+      if (success) {
+        editSceneModal.classList.add('hidden');
+        currentEditingSceneId = null;
+        await loadActiveCampaign(activeCampaignId);
+        alert('Scene updated successfully!');
+      }
+    });
+  }
+
+  // Delete Scene
+  const deleteSceneBtn = document.getElementById('deleteSceneBtn');
+  if (deleteSceneBtn) {
+    deleteSceneBtn.addEventListener('click', async function() {
+      const sceneSelect = document.getElementById('sceneBroadcastSelect');
+      const sceneId = sceneSelect.value;
+
+      if (!sceneId || !activeCampaignData) {
+        alert('Please select a scene to delete');
+        return;
+      }
+
+      const scene = activeCampaignData.scenes[sceneId];
+      if (confirm(`Are you sure you want to delete scene "${scene.name}"?`)) {
+        const success = await deleteScene(activeCampaignId, sceneId);
+        if (success) {
+          await loadActiveCampaign(activeCampaignId);
+          alert('Scene deleted successfully!');
+        }
       }
     });
   }
@@ -1021,7 +1262,10 @@ async function loadActiveCampaign(campaignId) {
   document.getElementById('selectedCampaignDesc').textContent = activeCampaignData.metadata.description || '';
   document.getElementById('selectedCampaignId').textContent = campaignId;
   document.getElementById('selectedCampaignChapter').textContent = activeCampaignData.metadata.currentChapter || 1;
+  document.getElementById('selectedCampaignArc').textContent = activeCampaignData.metadata.currentArc || '-';
   document.getElementById('selectedCampaignPlayers').textContent = activeCampaignData.players ? Object.keys(activeCampaignData.players).length : 0;
+  document.getElementById('selectedCampaignScenes').textContent = activeCampaignData.scenes ? Object.keys(activeCampaignData.scenes).length : 0;
+  document.getElementById('selectedCampaignChaptersCount').textContent = activeCampaignData.chapters ? Object.keys(activeCampaignData.chapters).length : 0;
 
   // Load scenes into selector
   const sceneSelect = document.getElementById('sceneBroadcastSelect');
@@ -1036,6 +1280,9 @@ async function loadActiveCampaign(campaignId) {
     });
   }
 
+  // Display chapters list
+  displayChapters();
+
   console.log('✅ Active campaign loaded:', activeCampaignData.metadata.name);
 
   // Setup real-time listener
@@ -1044,7 +1291,33 @@ async function loadActiveCampaign(campaignId) {
     window.campaignManager.activeCampaignData = updatedCampaign;
     document.getElementById('selectedCampaignChapter').textContent = updatedCampaign.metadata.currentChapter || 1;
     document.getElementById('selectedCampaignPlayers').textContent = updatedCampaign.players ? Object.keys(updatedCampaign.players).length : 0;
+    document.getElementById('selectedCampaignScenes').textContent = updatedCampaign.scenes ? Object.keys(updatedCampaign.scenes).length : 0;
+    document.getElementById('selectedCampaignChaptersCount').textContent = updatedCampaign.chapters ? Object.keys(updatedCampaign.chapters).length : 0;
+    displayChapters();
   });
+}
+
+function displayChapters() {
+  const container = document.getElementById('chaptersListDisplay');
+
+  if (!activeCampaignData || !activeCampaignData.chapters || Object.keys(activeCampaignData.chapters).length === 0) {
+    container.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 20px;">No chapters yet. Add one below!</p>';
+    return;
+  }
+
+  const chapters = Object.entries(activeCampaignData.chapters).sort((a, b) => a[1].number - b[1].number);
+
+  container.innerHTML = chapters.map(([id, chapter]) => `
+    <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid ${chapter.number === activeCampaignData.metadata.currentChapter ? '#ffd700' : 'rgba(102, 126, 234, 0.4)'};">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <strong style="color: #ffd700;">Chapter ${chapter.number}</strong>: ${chapter.name}
+          ${chapter.number === activeCampaignData.metadata.currentChapter ? '<span style="background: rgba(255,215,0,0.3); padding: 2px 8px; border-radius: 4px; font-size: 0.8em; margin-left: 8px;">Current</span>' : ''}
+        </div>
+        <span style="color: rgba(255,255,255,0.5); font-size: 0.9em;">${chapter.scenes?.length || 0} scenes</span>
+      </div>
+    </div>
+  `).join('');
 }
 </script>
 

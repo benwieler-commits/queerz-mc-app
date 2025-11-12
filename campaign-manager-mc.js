@@ -408,6 +408,74 @@ export async function loadCampaign(campaignId) {
   }
 }
 
+export async function updateCampaignMetadata(campaignId, updates) {
+  if (!campaignId) return false;
+
+  try {
+    const metadataRef = ref(database, `campaigns/${campaignId}/metadata`);
+    const snapshot = await get(metadataRef);
+
+    if (!snapshot.exists()) return false;
+
+    const currentMetadata = snapshot.val();
+    const updatedMetadata = { ...currentMetadata, ...updates };
+
+    await set(metadataRef, updatedMetadata);
+    console.log("✅ Campaign metadata updated");
+    return true;
+  } catch (error) {
+    console.error("❌ Failed to update campaign:", error);
+    return false;
+  }
+}
+
+export async function deleteCampaign(campaignId) {
+  if (!campaignId) return false;
+
+  try {
+    await set(ref(database, `campaigns/${campaignId}`), null);
+    console.log("✅ Campaign deleted:", campaignId);
+    return true;
+  } catch (error) {
+    console.error("❌ Failed to delete campaign:", error);
+    return false;
+  }
+}
+
+export async function updateScene(campaignId, sceneId, updates) {
+  if (!campaignId || !sceneId) return false;
+
+  try {
+    const sceneRef = ref(database, `campaigns/${campaignId}/scenes/${sceneId}`);
+    const snapshot = await get(sceneRef);
+
+    if (!snapshot.exists()) return false;
+
+    const currentScene = snapshot.val();
+    const updatedScene = { ...currentScene, ...updates };
+
+    await set(sceneRef, updatedScene);
+    console.log("✅ Scene updated:", sceneId);
+    return true;
+  } catch (error) {
+    console.error("❌ Failed to update scene:", error);
+    return false;
+  }
+}
+
+export async function deleteScene(campaignId, sceneId) {
+  if (!campaignId || !sceneId) return false;
+
+  try {
+    await set(ref(database, `campaigns/${campaignId}/scenes/${sceneId}`), null);
+    console.log("✅ Scene deleted:", sceneId);
+    return true;
+  } catch (error) {
+    console.error("❌ Failed to delete scene:", error);
+    return false;
+  }
+}
+
 export async function getMyCampaigns() {
   if (!window.currentUserId) return [];
 
