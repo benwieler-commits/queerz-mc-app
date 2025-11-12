@@ -25,7 +25,7 @@
 <option value="4">Chapter 4: The Mogul's Empire</option>
 <option value="5">Chapter 5: The Titan's Domain</option>
 </select>
-<button class="header-btn" id="campaignSettingsBtn" title="Campaign Settings">⚙️</button> <button class="header-btn" id="sessionMgmtBtn" title="Session Management">💾 Sessions</button> <button class="header-btn" id="playerOverviewBtn" title="Player Overview">👥 Players</button> <button class="header-btn" id="broadcastBtn" title="Broadcast to Players">📡 Broadcast</button>
+<button class="header-btn" id="campaignManagerBtn" title="Campaign Manager">🎬 Campaigns</button> <button class="header-btn" id="campaignSettingsBtn" title="Campaign Settings">⚙️</button> <button class="header-btn" id="sessionMgmtBtn" title="Session Management">💾 Sessions</button> <button class="header-btn" id="playerOverviewBtn" title="Player Overview">👥 Players</button> <button class="header-btn" id="broadcastBtn" title="Broadcast to Players">📡 Broadcast</button>
 </div>
 <div class="header-controls">
 <button class="header-btn" id="toggleScriptBtn" title="Toggle Script Panel (S)">Script</button>
@@ -366,12 +366,142 @@
 </div>
 </div>
 </div>
+
+<!-- CAMPAIGN MANAGER MODAL -->
+<div class="modal hidden" id="campaignManagerModal">
+<div class="modal-content large-modal">
+<div class="modal-header">
+<h2>Campaign Manager</h2>
+<button class="close-modal-btn" id="closeCampaignManagerBtn">X</button>
+</div>
+<div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+<!-- Campaign Selection/Creation -->
+<div class="campaign-selector-section">
+<h3>Active Campaign</h3>
+<select class="styled-select" id="activeCampaignSelect" style="width: 100%; margin-bottom: 15px;">
+<option value="">Select Campaign...</option>
+</select>
+<button class="header-btn" id="createNewCampaignBtn" style="margin-bottom: 20px;">+ Create New Campaign</button>
+<div id="campaignInfoDisplay" style="display: none; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 20px;">
+<h4 id="selectedCampaignName">Campaign Name</h4>
+<p id="selectedCampaignDesc" style="color: rgba(255,255,255,0.7); margin: 10px 0;"></p>
+<div style="display: flex; gap: 15px; margin-top: 10px;">
+<span>ID: <code id="selectedCampaignId" style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px;"></code></span>
+<span>Chapter: <strong id="selectedCampaignChapter">-</strong></span>
+<span>Players: <strong id="selectedCampaignPlayers">0</strong></span>
+</div>
+</div>
+</div>
+
+<!-- Scene Broadcaster -->
+<div class="scene-broadcaster-section">
+<h3>🎬 Scene Broadcaster</h3>
+<div style="display: flex; gap: 10px; margin-bottom: 15px;">
+<select class="styled-select" id="sceneBroadcastSelect" style="flex: 1;">
+<option value="">Select Scene...</option>
+</select>
+<button class="header-btn" id="broadcastSceneBtn" style="background: #4CAF50;">Broadcast</button>
+</div>
+<div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+<h4>Current Scene</h4>
+<p id="currentBroadcastScene">None</p>
+<p id="currentSceneDescription" style="color: rgba(255,255,255,0.7); font-size: 0.9em; margin-top: 5px;"></p>
+</div>
+<div class="quick-add-scene">
+<h4>Quick Add Scene</h4>
+<input type="text" id="quickSceneName" class="text-input" placeholder="Scene name" style="margin-bottom: 10px;">
+<textarea id="quickSceneDesc" class="text-input" placeholder="Scene description" rows="2" style="margin-bottom: 10px;"></textarea>
+<button class="header-btn" id="quickAddSceneBtn">+ Add Scene to Campaign</button>
+</div>
+</div>
+
+<!-- Chapter Management -->
+<div class="chapter-management-section" style="margin-top: 20px;">
+<h3>📖 Chapter Management</h3>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 15px;">
+<div>
+<label style="display: block; margin-bottom: 5px;">Chapter #</label>
+<input type="number" id="newChapterNumber" class="text-input" placeholder="1" min="1">
+</div>
+<div>
+<label style="display: block; margin-bottom: 5px;">Chapter Name</label>
+<input type="text" id="newChapterName" class="text-input" placeholder="Chapter Title">
+</div>
+</div>
+<div style="margin-bottom: 15px;">
+<label style="display: block; margin-bottom: 5px;">Chapter Script</label>
+<textarea id="newChapterScript" class="text-input" placeholder="Enter chapter script..." rows="6"></textarea>
+</div>
+<button class="header-btn" id="addCampaignChapterBtn">+ Add Chapter to Campaign</button>
+</div>
+
+<!-- Branch Point Creator -->
+<div class="branch-creator-section" style="margin-top: 20px;">
+<h3>🔀 Create Branch Point</h3>
+<div style="margin-bottom: 15px;">
+<label style="display: block; margin-bottom: 5px;">Choice Question</label>
+<input type="text" id="branchQuestion" class="text-input" placeholder="What do the players decide?">
+</div>
+<div id="branchOptionsContainer" style="margin-bottom: 15px;">
+<div class="branch-option-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
+<input type="text" class="text-input branch-option-text" placeholder="Option 1 text" style="flex: 1;">
+<input type="text" class="text-input branch-option-consequences" placeholder="Tags (comma-separated)" style="flex: 1;">
+</div>
+<div class="branch-option-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
+<input type="text" class="text-input branch-option-text" placeholder="Option 2 text" style="flex: 1;">
+<input type="text" class="text-input branch-option-consequences" placeholder="Tags (comma-separated)" style="flex: 1;">
+</div>
+</div>
+<div style="display: flex; gap: 10px;">
+<button class="header-btn" id="addBranchOptionBtn" style="background: rgba(102, 126, 234, 0.4);">+ Add Option</button>
+<button class="header-btn" id="createBranchPointBtn" style="background: #4CAF50;">Create Branch Point</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- CREATE CAMPAIGN MODAL -->
+<div class="modal hidden" id="createCampaignModal">
+<div class="modal-content">
+<div class="modal-header">
+<h2>Create New Campaign</h2>
+<button class="close-modal-btn" id="closeCreateCampaignBtn">X</button>
+</div>
+<div class="modal-body">
+<form id="createCampaignForm">
+<div style="margin-bottom: 15px;">
+<label style="display: block; margin-bottom: 5px;">Campaign Name</label>
+<input type="text" id="newCampaignNameInput" class="text-input" placeholder="My Campaign" required>
+</div>
+<div style="margin-bottom: 15px;">
+<label style="display: block; margin-bottom: 5px;">Description</label>
+<textarea id="newCampaignDescInput" class="text-input" placeholder="Campaign description..." rows="3"></textarea>
+</div>
+<div style="margin-bottom: 15px;">
+<label style="display: block; margin-bottom: 5px;">Starting Arc</label>
+<input type="text" id="newCampaignArcInput" class="text-input" placeholder="arc-1" value="arc-1">
+</div>
+<button type="submit" class="btn-primary">Create Campaign</button>
+</form>
+<div id="campaignCreatedDisplay" style="display: none; text-align: center; margin-top: 20px;">
+<h3 style="color: #4CAF50;">Campaign Created! 🎉</h3>
+<p>Campaign ID (share with players):</p>
+<input type="text" id="createdCampaignIdInput" class="text-input" readonly style="text-align: center; font-family: monospace; background: rgba(255,255,255,0.1);">
+<button class="header-btn" id="copyCampaignIdBtn" style="margin-top: 10px; background: #2196F3;">Copy ID</button>
+</div>
+</div>
+</div>
+</div>
 <!-- Firebase (compat CDN to avoid ES module issues on GitHub Pages) -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <!-- Firebase Scripts with Module Support -->
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-broadcast.js"></script>
+
+<!-- Campaign Manager Module -->
+<script type="module" src="campaign-manager-mc.js"></script>
 
 <!-- Your Existing App Script (NO MODULE) -->
 <script src="app.js?v=3.0"></script>
@@ -584,6 +714,338 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('✅ Broadcast button initialized');
 });
+</script>
+
+<!-- Campaign Manager Integration -->
+<script type="module">
+import {
+  createCampaign,
+  addScene,
+  setCurrentScene,
+  addChapter,
+  getMyCampaigns,
+  loadCampaign,
+  listenToCampaign,
+  createBranchPoint
+} from './campaign-manager-mc.js';
+
+// Global state for campaign management
+let activeCampaignData = null;
+let activeCampaignId = null;
+
+// Make functions globally available
+window.campaignManager = {
+  activeCampaignId: null,
+  activeCampaignData: null
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Campaign Manager Button
+  const campaignManagerBtn = document.getElementById('campaignManagerBtn');
+  const campaignManagerModal = document.getElementById('campaignManagerModal');
+  const closeCampaignManagerBtn = document.getElementById('closeCampaignManagerBtn');
+
+  if (campaignManagerBtn) {
+    campaignManagerBtn.addEventListener('click', async function() {
+      campaignManagerModal.classList.remove('hidden');
+      await loadMyCampaignsList();
+    });
+  }
+
+  if (closeCampaignManagerBtn) {
+    closeCampaignManagerBtn.addEventListener('click', function() {
+      campaignManagerModal.classList.add('hidden');
+    });
+  }
+
+  // Create Campaign Button
+  const createNewCampaignBtn = document.getElementById('createNewCampaignBtn');
+  const createCampaignModal = document.getElementById('createCampaignModal');
+  const closeCreateCampaignBtn = document.getElementById('closeCreateCampaignBtn');
+
+  if (createNewCampaignBtn) {
+    createNewCampaignBtn.addEventListener('click', function() {
+      createCampaignModal.classList.remove('hidden');
+    });
+  }
+
+  if (closeCreateCampaignBtn) {
+    closeCreateCampaignBtn.addEventListener('click', function() {
+      createCampaignModal.classList.add('hidden');
+      document.getElementById('createCampaignForm').reset();
+      document.getElementById('createCampaignForm').style.display = 'block';
+      document.getElementById('campaignCreatedDisplay').style.display = 'none';
+    });
+  }
+
+  // Create Campaign Form Submit
+  const createCampaignForm = document.getElementById('createCampaignForm');
+  if (createCampaignForm) {
+    createCampaignForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('newCampaignNameInput').value;
+      const description = document.getElementById('newCampaignDescInput').value;
+      const startingArc = document.getElementById('newCampaignArcInput').value;
+
+      const campaignId = await createCampaign({ name, description, startingArc });
+
+      if (campaignId) {
+        // Show success message
+        document.getElementById('createCampaignForm').style.display = 'none';
+        document.getElementById('campaignCreatedDisplay').style.display = 'block';
+        document.getElementById('createdCampaignIdInput').value = campaignId;
+
+        // Reload campaigns list
+        await loadMyCampaignsList();
+
+        console.log('✅ Campaign created:', campaignId);
+      }
+    });
+  }
+
+  // Copy Campaign ID
+  const copyCampaignIdBtn = document.getElementById('copyCampaignIdBtn');
+  if (copyCampaignIdBtn) {
+    copyCampaignIdBtn.addEventListener('click', function() {
+      const input = document.getElementById('createdCampaignIdInput');
+      input.select();
+      document.execCommand('copy');
+      copyCampaignIdBtn.textContent = '✅ Copied!';
+      setTimeout(() => {
+        copyCampaignIdBtn.textContent = 'Copy ID';
+      }, 2000);
+    });
+  }
+
+  // Active Campaign Selection
+  const activeCampaignSelect = document.getElementById('activeCampaignSelect');
+  if (activeCampaignSelect) {
+    activeCampaignSelect.addEventListener('change', async function(e) {
+      const campaignId = e.target.value;
+      if (campaignId) {
+        await loadActiveCampaign(campaignId);
+      }
+    });
+  }
+
+  // Quick Add Scene
+  const quickAddSceneBtn = document.getElementById('quickAddSceneBtn');
+  if (quickAddSceneBtn) {
+    quickAddSceneBtn.addEventListener('click', async function() {
+      const name = document.getElementById('quickSceneName').value;
+      const description = document.getElementById('quickSceneDesc').value;
+
+      if (!name || !activeCampaignId) {
+        alert('Please select a campaign and enter a scene name');
+        return;
+      }
+
+      const sceneId = await addScene(activeCampaignId, {
+        name: name,
+        description: description,
+        chapterId: activeCampaignData?.metadata?.currentChapter || 1,
+        arcId: activeCampaignData?.metadata?.currentArc || 'arc-1'
+      });
+
+      if (sceneId) {
+        document.getElementById('quickSceneName').value = '';
+        document.getElementById('quickSceneDesc').value = '';
+        await loadActiveCampaign(activeCampaignId);
+        alert('Scene added successfully!');
+      }
+    });
+  }
+
+  // Broadcast Scene
+  const broadcastSceneBtn = document.getElementById('broadcastSceneBtn');
+  if (broadcastSceneBtn) {
+    broadcastSceneBtn.addEventListener('click', async function() {
+      const sceneId = document.getElementById('sceneBroadcastSelect').value;
+      if (!sceneId || !activeCampaignId) {
+        alert('Please select a scene');
+        return;
+      }
+
+      const success = await setCurrentScene(activeCampaignId, sceneId);
+      if (success && activeCampaignData.scenes[sceneId]) {
+        const scene = activeCampaignData.scenes[sceneId];
+        document.getElementById('currentBroadcastScene').textContent = scene.name;
+        document.getElementById('currentSceneDescription').textContent = scene.description || '';
+        console.log('✅ Scene broadcast:', scene.name);
+      }
+    });
+  }
+
+  // Add Chapter
+  const addCampaignChapterBtn = document.getElementById('addCampaignChapterBtn');
+  if (addCampaignChapterBtn) {
+    addCampaignChapterBtn.addEventListener('click', async function() {
+      const number = parseInt(document.getElementById('newChapterNumber').value);
+      const name = document.getElementById('newChapterName').value;
+      const script = document.getElementById('newChapterScript').value;
+
+      if (!number || !name || !activeCampaignId) {
+        alert('Please fill in chapter number and name');
+        return;
+      }
+
+      const chapterId = await addChapter(activeCampaignId, { number, name, script });
+
+      if (chapterId) {
+        document.getElementById('newChapterNumber').value = '';
+        document.getElementById('newChapterName').value = '';
+        document.getElementById('newChapterScript').value = '';
+        await loadActiveCampaign(activeCampaignId);
+        alert(`Chapter ${number} added successfully!`);
+      }
+    });
+  }
+
+  // Add Branch Option
+  const addBranchOptionBtn = document.getElementById('addBranchOptionBtn');
+  if (addBranchOptionBtn) {
+    addBranchOptionBtn.addEventListener('click', function() {
+      const container = document.getElementById('branchOptionsContainer');
+      const optionRow = document.createElement('div');
+      optionRow.className = 'branch-option-row';
+      optionRow.style.cssText = 'display: flex; gap: 10px; margin-bottom: 10px;';
+      optionRow.innerHTML = `
+        <input type="text" class="text-input branch-option-text" placeholder="Option text" style="flex: 1;">
+        <input type="text" class="text-input branch-option-consequences" placeholder="Tags (comma-separated)" style="flex: 1;">
+        <button class="header-btn remove-option-btn" style="padding: 8px 12px; background: rgba(255,0,0,0.3);">×</button>
+      `;
+      container.appendChild(optionRow);
+
+      // Add remove handler
+      optionRow.querySelector('.remove-option-btn').addEventListener('click', function() {
+        optionRow.remove();
+      });
+    });
+  }
+
+  // Create Branch Point
+  const createBranchPointBtn = document.getElementById('createBranchPointBtn');
+  if (createBranchPointBtn) {
+    createBranchPointBtn.addEventListener('click', async function() {
+      const question = document.getElementById('branchQuestion').value;
+      const sceneSelect = document.getElementById('sceneBroadcastSelect');
+      const sceneId = sceneSelect.value;
+
+      if (!question || !sceneId || !activeCampaignId) {
+        alert('Please enter a question and select a scene');
+        return;
+      }
+
+      // Collect options
+      const optionRows = document.querySelectorAll('.branch-option-row');
+      const options = [];
+
+      optionRows.forEach((row, index) => {
+        const text = row.querySelector('.branch-option-text').value;
+        const consequencesText = row.querySelector('.branch-option-consequences').value;
+
+        if (text) {
+          options.push({
+            id: `option-${index + 1}`,
+            text: text,
+            consequences: consequencesText ? consequencesText.split(',').map(c => c.trim()) : []
+          });
+        }
+      });
+
+      if (options.length < 2) {
+        alert('Please add at least 2 options');
+        return;
+      }
+
+      const branchId = await createBranchPoint(activeCampaignId, sceneId, {
+        question: question,
+        options: options,
+        votingEnabled: true
+      });
+
+      if (branchId) {
+        document.getElementById('branchQuestion').value = '';
+        // Reset to just 2 option rows
+        document.getElementById('branchOptionsContainer').innerHTML = `
+          <div class="branch-option-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <input type="text" class="text-input branch-option-text" placeholder="Option 1 text" style="flex: 1;">
+            <input type="text" class="text-input branch-option-consequences" placeholder="Tags (comma-separated)" style="flex: 1;">
+          </div>
+          <div class="branch-option-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <input type="text" class="text-input branch-option-text" placeholder="Option 2 text" style="flex: 1;">
+            <input type="text" class="text-input branch-option-consequences" placeholder="Tags (comma-separated)" style="flex: 1;">
+          </div>
+        `;
+        alert('Branch point created successfully!');
+      }
+    });
+  }
+
+  console.log('✅ Campaign Manager integration loaded');
+});
+
+// Helper Functions
+async function loadMyCampaignsList() {
+  const campaigns = await getMyCampaigns();
+  const select = document.getElementById('activeCampaignSelect');
+
+  select.innerHTML = '<option value="">Select Campaign...</option>';
+
+  campaigns.forEach(campaign => {
+    const option = document.createElement('option');
+    option.value = campaign.id;
+    option.textContent = `${campaign.name} (Ch.${campaign.currentChapter})`;
+    select.appendChild(option);
+  });
+
+  console.log(`✅ Loaded ${campaigns.length} campaigns`);
+}
+
+async function loadActiveCampaign(campaignId) {
+  activeCampaignId = campaignId;
+  activeCampaignData = await loadCampaign(campaignId);
+
+  window.campaignManager.activeCampaignId = campaignId;
+  window.campaignManager.activeCampaignData = activeCampaignData;
+
+  if (!activeCampaignData) {
+    alert('Failed to load campaign');
+    return;
+  }
+
+  // Update campaign info display
+  document.getElementById('campaignInfoDisplay').style.display = 'block';
+  document.getElementById('selectedCampaignName').textContent = activeCampaignData.metadata.name;
+  document.getElementById('selectedCampaignDesc').textContent = activeCampaignData.metadata.description || '';
+  document.getElementById('selectedCampaignId').textContent = campaignId;
+  document.getElementById('selectedCampaignChapter').textContent = activeCampaignData.metadata.currentChapter || 1;
+  document.getElementById('selectedCampaignPlayers').textContent = activeCampaignData.players ? Object.keys(activeCampaignData.players).length : 0;
+
+  // Load scenes into selector
+  const sceneSelect = document.getElementById('sceneBroadcastSelect');
+  sceneSelect.innerHTML = '<option value="">Select Scene...</option>';
+
+  if (activeCampaignData.scenes) {
+    Object.entries(activeCampaignData.scenes).forEach(([id, scene]) => {
+      const option = document.createElement('option');
+      option.value = id;
+      option.textContent = `${scene.name} (Ch.${scene.chapterId || '?'})`;
+      sceneSelect.appendChild(option);
+    });
+  }
+
+  console.log('✅ Active campaign loaded:', activeCampaignData.metadata.name);
+
+  // Setup real-time listener
+  listenToCampaign(campaignId, (updatedCampaign) => {
+    activeCampaignData = updatedCampaign;
+    window.campaignManager.activeCampaignData = updatedCampaign;
+    document.getElementById('selectedCampaignChapter').textContent = updatedCampaign.metadata.currentChapter || 1;
+    document.getElementById('selectedCampaignPlayers').textContent = updatedCampaign.players ? Object.keys(updatedCampaign.players).length : 0;
+  });
+}
 </script>
 
 </body>

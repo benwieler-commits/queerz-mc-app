@@ -956,3 +956,94 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
+
+/* ===================================
+   CAMPAIGN MANAGER STYLES
+   Enhanced styles for campaign management UI
+   =================================== */
+
+.campaign-selector-section h3,
+.scene-broadcaster-section h3,
+.chapter-management-section h3,
+.branch-creator-section h3 {
+    color: #ffd700;
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.campaign-selector-section,
+.scene-broadcaster-section,
+.chapter-management-section,
+.branch-creator-section {
+    margin-bottom: 25px;
+}
+
+.quick-add-scene {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.quick-add-scene h4 {
+    color: #a55eea;
+    margin-bottom: 10px;
+}
+
+.branch-option-row {
+    position: relative;
+}
+
+.remove-option-btn:hover {
+    background: rgba(255, 0, 0, 0.5) !important;
+    transform: scale(1.1);
+}
+
+/* Scene broadcaster specific styles */
+.scene-broadcaster-section .header-btn {
+    transition: all 0.3s ease;
+}
+
+.scene-broadcaster-section .header-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+/* Chapter management grid */
+.chapter-management-section input[type="number"],
+.chapter-management-section input[type="text"],
+.chapter-management-section textarea {
+    transition: border-color 0.3s ease;
+}
+
+.chapter-management-section input[type="number"]:focus,
+.chapter-management-section input[type="text"]:focus,
+.chapter-management-section textarea:focus {
+    border-color: #667eea;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+}
+
+/* Branch creator styles */
+.branch-option-row input:focus {
+    border-color: #a55eea;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(165, 94, 234, 0.2);
+}
+
+/* Campaign info display */
+#campaignInfoDisplay {
+    border-left: 3px solid #ffd700;
+}
+
+#campaignInfoDisplay h4 {
+    color: #ffd700;
+    margin-bottom: 10px;
+}
+
+#campaignInfoDisplay code {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+}
