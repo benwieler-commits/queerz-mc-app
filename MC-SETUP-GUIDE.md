@@ -107,7 +107,7 @@ console.log(campaign);
 
 ### Opening the Overlay
 
-Click **"📜 Show Script"** in the header.
+Click the **"Script"** button in the header (keyboard shortcut: S).
 
 ### What You See
 

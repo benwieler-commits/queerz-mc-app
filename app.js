@@ -3,6 +3,30 @@
 // COMPLETE VERSION WITH SESSION MANAGEMENT
 // ===================================
 
+// === IMPORT CAMPAIGN MANAGER FUNCTIONS ===
+import {
+    createCampaign,
+    addScene,
+    setCurrentScene,
+    addChapter,
+    setCurrentChapter,
+    progressToNextChapter,
+    createBranchPoint,
+    resolveBranchPoint,
+    startSession,
+    endSession,
+    addPlayerToCampaign,
+    removePlayerFromCampaign,
+    loadCampaign,
+    updateCampaignMetadata,
+    deleteCampaign,
+    updateScene,
+    deleteScene,
+    getMyCampaigns,
+    listenToCampaign,
+    listenToPlayers
+} from './campaign-manager-mc.js';
+
 // === FIREBASE CONNECTION ===
 let database = null;
 let firebaseRef = null;
@@ -65,6 +89,8 @@ let savedSessions = [];
 // Campaign Management
 let currentCampaignId = 'queerz-chapter1';
 let availableCampaigns = {}; // Will be populated with campaign data
+let firebaseCampaigns = {}; // Firebase campaigns from campaign-manager-mc.js
+let activeFirebaseCampaign = null; // Currently loaded Firebase campaign data
 
 // === DOM ELEMENTS ===
 const spotlightPlayersContainer = document.getElementById('spotlightPlayers');
@@ -632,7 +658,7 @@ const campaignsDatabase = {
 // ===================================
 // INITIALIZATION
 // ===================================
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // Initialize campaigns
     availableCampaigns = campaignsDatabase;
 
@@ -649,6 +675,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize dice display
     initializeDiceDisplay();
 
+    // Load Firebase campaigns and populate dropdown
+    await loadFirebaseCampaigns();
+
     // Load correct chapter tabs and content
     loadChapterTabs();
     loadScriptContent('overview'); // Load default tab
@@ -664,6 +693,166 @@ document.addEventListener('DOMContentLoaded', () => {
 // ===================================
 // CORE FUNCTIONS
 // ===================================
+
+// ===================================
+// FIREBASE CAMPAIGN INTEGRATION
+// ===================================
+
+async function loadFirebaseCampaigns() {
+    try {
+        const campaigns = await getMyCampaigns();
+
+        if (campaigns && campaigns.length > 0) {
+            // Store Firebase campaigns with 'firebase-' prefix to distinguish them
+            campaigns.forEach(campaign => {
+                const fbId = `firebase-${campaign.id}`;
+                firebaseCampaigns[fbId] = campaign;
+            });
+
+            console.log(`✅ Loaded ${campaigns.length} Firebase campaigns`);
+        }
+
+        // Populate campaign dropdown with both hardcoded and Firebase campaigns
+        populateCampaignDropdown();
+
+    } catch (error) {
+        console.error('❌ Failed to load Firebase campaigns:', error);
+        // Still populate dropdown with hardcoded campaigns
+        populateCampaignDropdown();
+    }
+}
+
+function populateCampaignDropdown() {
+    if (!campaignSelect) return;
+
+    // Clear existing options except for hardcoded ones (keep them)
+    campaignSelect.innerHTML = '';
+
+    // Add hardcoded campaigns
+    const hardcodedOption1 = document.createElement('option');
+    hardcodedOption1.value = 'queerz-chapter1';
+    hardcodedOption1.textContent = 'QUEERZ! Chapter 1';
+    campaignSelect.appendChild(hardcodedOption1);
+
+    const hardcodedOption2 = document.createElement('option');
+    hardcodedOption2.value = 'queerz-chapters-2-5';
+    hardcodedOption2.textContent = 'QUEERZ! Chapters 2-5 (Coming Soon)';
+    campaignSelect.appendChild(hardcodedOption2);
+
+    // Add divider if there are Firebase campaigns
+    if (Object.keys(firebaseCampaigns).length > 0) {
+        const divider = document.createElement('option');
+        divider.disabled = true;
+        divider.textContent = '─────── My Campaigns ───────';
+        campaignSelect.appendChild(divider);
+
+        // Add Firebase campaigns
+        Object.entries(firebaseCampaigns).forEach(([fbId, campaign]) => {
+            const option = document.createElement('option');
+            option.value = fbId;
+            option.textContent = `📚 ${campaign.name}`;
+            campaignSelect.appendChild(option);
+        });
+    }
+
+    // Set current selection
+    if (currentCampaignId) {
+        campaignSelect.value = currentCampaignId;
+    }
+
+    console.log(`✅ Campaign dropdown populated with ${Object.keys(firebaseCampaigns).length} Firebase campaigns`);
+}
+
+async function loadFirebaseCampaignData(campaignId) {
+    try {
+        // Extract the real Firebase ID (remove 'firebase-' prefix)
+        const realId = campaignId.replace('firebase-', '');
+        const campaignData = await loadCampaign(realId);
+
+        if (campaignData) {
+            activeFirebaseCampaign = {
+                id: realId,
+                data: campaignData
+            };
+
+            // Update chapter dropdown with Firebase campaign chapters
+            updateChapterDropdownForFirebase(campaignData);
+
+            console.log(`✅ Loaded Firebase campaign: ${campaignData.metadata.name}`);
+            return true;
+        }
+
+        return false;
+    } catch (error) {
+        console.error('❌ Failed to load Firebase campaign data:', error);
+        return false;
+    }
+}
+
+function updateChapterDropdownForFirebase(campaignData) {
+    if (!chapterSelect) return;
+
+    // Clear existing options
+    chapterSelect.innerHTML = '';
+
+    // Check if campaign has chapters
+    if (campaignData.chapters && Object.keys(campaignData.chapters).length > 0) {
+        Object.entries(campaignData.chapters).forEach(([chapterNum, chapterData]) => {
+            const option = document.createElement('option');
+            option.value = chapterNum;
+            option.textContent = chapterData.name || `Chapter ${chapterNum}`;
+            chapterSelect.appendChild(option);
+        });
+    } else {
+        // No chapters yet, show placeholder
+        const option = document.createElement('option');
+        option.value = '1';
+        option.textContent = 'No chapters yet - Add via Campaign Manager';
+        chapterSelect.appendChild(option);
+    }
+
+    // Set current chapter
+    if (campaignData.metadata.currentChapter) {
+        chapterSelect.value = campaignData.metadata.currentChapter;
+        currentChapter = campaignData.metadata.currentChapter;
+    }
+}
+
+function loadFirebaseCampaignScript() {
+    const scriptContent = document.getElementById('scriptContent');
+    if (!scriptContent || !activeFirebaseCampaign) return;
+
+    const campaignData = activeFirebaseCampaign.data;
+    const chapterData = campaignData.chapters ? campaignData.chapters[currentChapter] : null;
+
+    if (chapterData && chapterData.script) {
+        // Display chapter script
+        scriptContent.innerHTML = `
+            <div style="padding: 20px;">
+                <h2>${chapterData.name || `Chapter ${currentChapter}`}</h2>
+                <div style="white-space: pre-wrap; font-family: inherit; line-height: 1.6;">
+                    ${chapterData.script}
+                </div>
+            </div>
+        `;
+    } else {
+        // No script yet
+        scriptContent.innerHTML = `
+            <div style="padding: 20px; text-align: center;">
+                <h3 style="color: rgba(255,255,255,0.7);">No script for this chapter yet</h3>
+                <p style="color: rgba(255,255,255,0.5);">Add script content via the Campaign Manager</p>
+            </div>
+        `;
+    }
+
+    // Clear tabs for Firebase campaigns (they don't use tabbed interface like hardcoded campaigns)
+    const panelTabs = document.querySelector('.panel-tabs');
+    if (panelTabs) {
+        panelTabs.innerHTML = '';
+    }
+
+    console.log(`✅ Loaded script for Firebase campaign chapter ${currentChapter}`);
+}
 
 function loadFromLocalStorage() {
     try {
@@ -743,26 +932,49 @@ function initializeEventListeners() {
 
     // Campaign Selection
     if (campaignSelect) {
-        campaignSelect.addEventListener('change', (e) => {
+        campaignSelect.addEventListener('change', async (e) => {
             currentCampaignId = e.target.value;
             currentSession.campaign.id = currentCampaignId;
 
-            // Reset to chapter 1 when changing campaigns
-            currentChapter = 1;
-            if (chapterSelect) {
-                chapterSelect.value = 1;
+            // Check if this is a Firebase campaign
+            if (currentCampaignId.startsWith('firebase-')) {
+                // Load Firebase campaign data
+                const success = await loadFirebaseCampaignData(currentCampaignId);
+
+                if (success && activeFirebaseCampaign) {
+                    // Firebase campaign loaded successfully
+                    currentChapter = activeFirebaseCampaign.data.metadata.currentChapter || 1;
+
+                    // Load Firebase campaign script content
+                    loadFirebaseCampaignScript();
+
+                    const scriptPanelTitle = document.getElementById('scriptPanelTitle');
+                    if (scriptPanelTitle) {
+                        scriptPanelTitle.textContent = activeFirebaseCampaign.data.metadata.name;
+                    }
+                }
+            } else {
+                // Hardcoded campaign - use existing logic
+                activeFirebaseCampaign = null;
+
+                // Reset to chapter 1 when changing campaigns
+                currentChapter = 1;
+                if (chapterSelect) {
+                    chapterSelect.value = 1;
+                }
+
+                loadChapterTabs();
+                loadScriptContent('overview');
+
+                const scriptPanelTitle = document.getElementById('scriptPanelTitle');
+                if (scriptPanelTitle) {
+                    const campaign = availableCampaigns[currentCampaignId];
+                    scriptPanelTitle.textContent = campaign ? campaign.name : 'Campaign Script';
+                }
             }
 
-            loadChapterTabs();
-            loadScriptContent('overview');
             saveToLocalStorage();
             broadcastSessionToPlayers();
-
-            const scriptPanelTitle = document.getElementById('scriptPanelTitle');
-            if (scriptPanelTitle) {
-                const campaign = availableCampaigns[currentCampaignId];
-                scriptPanelTitle.textContent = campaign ? campaign.name : 'Campaign Script';
-            }
 
             console.log(`📚 Switched to campaign: ${currentCampaignId}`);
         });
@@ -772,18 +984,35 @@ function initializeEventListeners() {
     if (chapterSelect) {
         chapterSelect.addEventListener('change', (e) => {
             currentChapter = parseInt(e.target.value);
-            loadChapterTabs();
-            loadScriptContent('overview');
+
+            // Check if we're in a Firebase campaign
+            if (activeFirebaseCampaign) {
+                // Update Firebase campaign current chapter
+                setCurrentChapter(activeFirebaseCampaign.id, currentChapter);
+
+                // Reload Firebase script for new chapter
+                loadFirebaseCampaignScript();
+
+                const scriptPanelTitle = document.getElementById('scriptPanelTitle');
+                if (scriptPanelTitle && activeFirebaseCampaign.data.chapters[currentChapter]) {
+                    scriptPanelTitle.textContent = activeFirebaseCampaign.data.chapters[currentChapter].name;
+                }
+            } else {
+                // Hardcoded campaign
+                loadChapterTabs();
+                loadScriptContent('overview');
+
+                const scriptPanelTitle = document.getElementById('scriptPanelTitle');
+                if (scriptPanelTitle) {
+                    const campaign = availableCampaigns[currentCampaignId];
+                    const chapterKey = `chapter${currentChapter}`;
+                    const chapterData = campaign?.scriptData[chapterKey] || campaign?.scriptData.placeholder;
+                    scriptPanelTitle.textContent = chapterData?.title || `Campaign Script - Chapter ${currentChapter}`;
+                }
+            }
+
             saveToLocalStorage();
             broadcastSessionToPlayers();
-
-            const scriptPanelTitle = document.getElementById('scriptPanelTitle');
-            if (scriptPanelTitle) {
-                const campaign = availableCampaigns[currentCampaignId];
-                const chapterKey = `chapter${currentChapter}`;
-                const chapterData = campaign?.scriptData[chapterKey] || campaign?.scriptData.placeholder;
-                scriptPanelTitle.textContent = chapterData?.title || `Campaign Script - Chapter ${currentChapter}`;
-            }
         });
     }
 
@@ -1781,5 +2010,7 @@ window.broadcastSessionToPlayers = broadcastSessionToPlayers;
 window.stopSessionBroadcast = stopSessionBroadcast;
 window.loadScriptContent = loadScriptContent;
 window.searchScriptContent = searchScriptContent;
+window.loadFirebaseCampaigns = loadFirebaseCampaigns;
+window.populateCampaignDropdown = populateCampaignDropdown;
 
 console.log('🌈 QUEERZ! MC Companion - Fully Loaded with Campaign Support!');
