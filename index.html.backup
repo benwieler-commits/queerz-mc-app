@@ -799,11 +799,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<\!-- Campaign Manager Integration -->
+<!-- Campaign Manager Integration -->
 <script type="module">
-// Campaign Manager Integration Script
-// To be inserted into index.html
-
 import {
   createCampaign,
   addScene,
@@ -812,17 +809,12 @@ import {
   getMyCampaigns,
   loadCampaign,
   listenToCampaign,
-  createBranchPoint,
-  updateCampaignMetadata,
-  deleteCampaign,
-  updateScene,
-  deleteScene
+  createBranchPoint
 } from './campaign-manager-mc.js';
 
 // Global state for campaign management
 let activeCampaignData = null;
 let activeCampaignId = null;
-let currentEditingSceneId = null;
 
 // Make functions globally available
 window.campaignManager = {
@@ -916,156 +908,6 @@ document.addEventListener('DOMContentLoaded', function() {
       const campaignId = e.target.value;
       if (campaignId) {
         await loadActiveCampaign(campaignId);
-      }
-    });
-  }
-
-  // Edit Campaign Metadata
-  const editCampaignMetadataBtn = document.getElementById('editCampaignMetadataBtn');
-  const editCampaignModal = document.getElementById('editCampaignModal');
-  const closeEditCampaignBtn = document.getElementById('closeEditCampaignBtn');
-
-  if (editCampaignMetadataBtn) {
-    editCampaignMetadataBtn.addEventListener('click', function() {
-      if (!activeCampaignData) return;
-
-      // Populate form with current values
-      document.getElementById('editCampaignNameInput').value = activeCampaignData.metadata.name;
-      document.getElementById('editCampaignDescInput').value = activeCampaignData.metadata.description || '';
-      document.getElementById('editCampaignArcInput').value = activeCampaignData.metadata.currentArc || 'arc-1';
-      document.getElementById('editCampaignChapterInput').value = activeCampaignData.metadata.currentChapter || 1;
-
-      editCampaignModal.classList.remove('hidden');
-    });
-  }
-
-  if (closeEditCampaignBtn) {
-    closeEditCampaignBtn.addEventListener('click', function() {
-      editCampaignModal.classList.add('hidden');
-    });
-  }
-
-  const editCampaignForm = document.getElementById('editCampaignForm');
-  if (editCampaignForm) {
-    editCampaignForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
-
-      const updates = {
-        name: document.getElementById('editCampaignNameInput').value,
-        description: document.getElementById('editCampaignDescInput').value,
-        currentArc: document.getElementById('editCampaignArcInput').value,
-        currentChapter: parseInt(document.getElementById('editCampaignChapterInput').value)
-      };
-
-      const success = await updateCampaignMetadata(activeCampaignId, updates);
-
-      if (success) {
-        editCampaignModal.classList.add('hidden');
-        await loadActiveCampaign(activeCampaignId);
-        alert('Campaign updated successfully!');
-      }
-    });
-  }
-
-  // Delete Campaign
-  const deleteCampaignBtn = document.getElementById('deleteCampaignBtn');
-  if (deleteCampaignBtn) {
-    deleteCampaignBtn.addEventListener('click', async function() {
-      if (!activeCampaignId) return;
-
-      if (confirm('Are you sure you want to delete this campaign? This cannot be undone.')) {
-        const success = await deleteCampaign(activeCampaignId);
-        if (success) {
-          activeCampaignId = null;
-          activeCampaignData = null;
-          document.getElementById('campaignInfoDisplay').style.display = 'none';
-          document.getElementById('activeCampaignSelect').value = '';
-          await loadMyCampaignsList();
-          alert('Campaign deleted successfully!');
-        }
-      }
-    });
-  }
-
-  // Edit Scene
-  const editSceneBtn = document.getElementById('editSceneBtn');
-  const editSceneModal = document.getElementById('editSceneModal');
-  const closeEditSceneBtn = document.getElementById('closeEditSceneBtn');
-
-  if (editSceneBtn) {
-    editSceneBtn.addEventListener('click', function() {
-      const sceneSelect = document.getElementById('sceneBroadcastSelect');
-      currentEditingSceneId = sceneSelect.value;
-
-      if (!currentEditingSceneId || !activeCampaignData) {
-        alert('Please select a scene to edit');
-        return;
-      }
-
-      const scene = activeCampaignData.scenes[currentEditingSceneId];
-      if (!scene) return;
-
-      // Populate form
-      document.getElementById('editSceneName').value = scene.name;
-      document.getElementById('editSceneDesc').value = scene.description || '';
-      document.getElementById('editSceneChapter').value = scene.chapterId || 1;
-      document.getElementById('editSceneOrder').value = scene.order || 1;
-
-      editSceneModal.classList.remove('hidden');
-    });
-  }
-
-  if (closeEditSceneBtn) {
-    closeEditSceneBtn.addEventListener('click', function() {
-      editSceneModal.classList.add('hidden');
-      currentEditingSceneId = null;
-    });
-  }
-
-  const editSceneForm = document.getElementById('editSceneForm');
-  if (editSceneForm) {
-    editSceneForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
-
-      if (!currentEditingSceneId) return;
-
-      const updates = {
-        name: document.getElementById('editSceneName').value,
-        description: document.getElementById('editSceneDesc').value,
-        chapterId: parseInt(document.getElementById('editSceneChapter').value),
-        order: parseInt(document.getElementById('editSceneOrder').value)
-      };
-
-      const success = await updateScene(activeCampaignId, currentEditingSceneId, updates);
-
-      if (success) {
-        editSceneModal.classList.add('hidden');
-        currentEditingSceneId = null;
-        await loadActiveCampaign(activeCampaignId);
-        alert('Scene updated successfully!');
-      }
-    });
-  }
-
-  // Delete Scene
-  const deleteSceneBtn = document.getElementById('deleteSceneBtn');
-  if (deleteSceneBtn) {
-    deleteSceneBtn.addEventListener('click', async function() {
-      const sceneSelect = document.getElementById('sceneBroadcastSelect');
-      const sceneId = sceneSelect.value;
-
-      if (!sceneId || !activeCampaignData) {
-        alert('Please select a scene to delete');
-        return;
-      }
-
-      const scene = activeCampaignData.scenes[sceneId];
-      if (confirm(`Are you sure you want to delete scene "${scene.name}"?`)) {
-        const success = await deleteScene(activeCampaignId, sceneId);
-        if (success) {
-          await loadActiveCampaign(activeCampaignId);
-          alert('Scene deleted successfully!');
-        }
       }
     });
   }
@@ -1262,10 +1104,7 @@ async function loadActiveCampaign(campaignId) {
   document.getElementById('selectedCampaignDesc').textContent = activeCampaignData.metadata.description || '';
   document.getElementById('selectedCampaignId').textContent = campaignId;
   document.getElementById('selectedCampaignChapter').textContent = activeCampaignData.metadata.currentChapter || 1;
-  document.getElementById('selectedCampaignArc').textContent = activeCampaignData.metadata.currentArc || '-';
   document.getElementById('selectedCampaignPlayers').textContent = activeCampaignData.players ? Object.keys(activeCampaignData.players).length : 0;
-  document.getElementById('selectedCampaignScenes').textContent = activeCampaignData.scenes ? Object.keys(activeCampaignData.scenes).length : 0;
-  document.getElementById('selectedCampaignChaptersCount').textContent = activeCampaignData.chapters ? Object.keys(activeCampaignData.chapters).length : 0;
 
   // Load scenes into selector
   const sceneSelect = document.getElementById('sceneBroadcastSelect');
@@ -1280,9 +1119,6 @@ async function loadActiveCampaign(campaignId) {
     });
   }
 
-  // Display chapters list
-  displayChapters();
-
   console.log('✅ Active campaign loaded:', activeCampaignData.metadata.name);
 
   // Setup real-time listener
@@ -1291,33 +1127,7 @@ async function loadActiveCampaign(campaignId) {
     window.campaignManager.activeCampaignData = updatedCampaign;
     document.getElementById('selectedCampaignChapter').textContent = updatedCampaign.metadata.currentChapter || 1;
     document.getElementById('selectedCampaignPlayers').textContent = updatedCampaign.players ? Object.keys(updatedCampaign.players).length : 0;
-    document.getElementById('selectedCampaignScenes').textContent = updatedCampaign.scenes ? Object.keys(updatedCampaign.scenes).length : 0;
-    document.getElementById('selectedCampaignChaptersCount').textContent = updatedCampaign.chapters ? Object.keys(updatedCampaign.chapters).length : 0;
-    displayChapters();
   });
-}
-
-function displayChapters() {
-  const container = document.getElementById('chaptersListDisplay');
-
-  if (!activeCampaignData || !activeCampaignData.chapters || Object.keys(activeCampaignData.chapters).length === 0) {
-    container.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 20px;">No chapters yet. Add one below!</p>';
-    return;
-  }
-
-  const chapters = Object.entries(activeCampaignData.chapters).sort((a, b) => a[1].number - b[1].number);
-
-  container.innerHTML = chapters.map(([id, chapter]) => `
-    <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid ${chapter.number === activeCampaignData.metadata.currentChapter ? '#ffd700' : 'rgba(102, 126, 234, 0.4)'};">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <strong style="color: #ffd700;">Chapter ${chapter.number}</strong>: ${chapter.name}
-          ${chapter.number === activeCampaignData.metadata.currentChapter ? '<span style="background: rgba(255,215,0,0.3); padding: 2px 8px; border-radius: 4px; font-size: 0.8em; margin-left: 8px;">Current</span>' : ''}
-        </div>
-        <span style="color: rgba(255,255,255,0.5); font-size: 0.9em;">${chapter.scenes?.length || 0} scenes</span>
-      </div>
-    </div>
-  `).join('');
 }
 </script>
 
