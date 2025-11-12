@@ -68,22 +68,35 @@ export async function addScene(campaignId, sceneData) {
   const sceneRef = push(ref(database, `campaigns/${campaignId}/scenes`));
   const sceneId = sceneRef.key;
 
+  const chapterId = sceneData.chapterId || 1;
+
   const newScene = {
     name: sceneData.name || "Untitled Scene",
     description: sceneData.description || "",
     arcId: sceneData.arcId || "arc-1",
-    chapterId: sceneData.chapterId || 1,
+    chapterId: chapterId,
     order: sceneData.order || 1,
     imageUrl: sceneData.imageUrl || "",
     musicUrl: sceneData.musicUrl || "",
-    script: sceneData.script || "",
     timestamp: Date.now(),
     branchPoints: []
+    // Note: Removed script field - scripts belong at chapter level, not scene level
   };
 
   try {
     await set(sceneRef, newScene);
-    console.log("✅ Scene added:", sceneId);
+
+    // Also add scene ID to chapter's scenes array so it shows up correctly
+    const chapterScenesRef = ref(database, `campaigns/${campaignId}/chapters/${chapterId}/scenes`);
+    const chapterSnapshot = await get(chapterScenesRef);
+    const scenesArray = chapterSnapshot.exists() ? chapterSnapshot.val() : [];
+
+    if (!scenesArray.includes(sceneId)) {
+      scenesArray.push(sceneId);
+      await set(chapterScenesRef, scenesArray);
+    }
+
+    console.log(`✅ Scene added: ${sceneId} to chapter ${chapterId}`);
     return sceneId;
   } catch (error) {
     console.error("❌ Failed to add scene:", error);
@@ -467,9 +480,34 @@ export async function deleteScene(campaignId, sceneId) {
   if (!campaignId || !sceneId) return false;
 
   try {
-    await set(ref(database, `campaigns/${campaignId}/scenes/${sceneId}`), null);
-    console.log("✅ Scene deleted:", sceneId);
-    return true;
+    // First get the scene data to know which chapter it belongs to
+    const sceneRef = ref(database, `campaigns/${campaignId}/scenes/${sceneId}`);
+    const sceneSnapshot = await get(sceneRef);
+
+    if (sceneSnapshot.exists()) {
+      const sceneData = sceneSnapshot.val();
+      const chapterId = sceneData.chapterId;
+
+      // Delete the scene
+      await set(sceneRef, null);
+
+      // Remove scene ID from chapter's scenes array
+      if (chapterId) {
+        const chapterScenesRef = ref(database, `campaigns/${campaignId}/chapters/${chapterId}/scenes`);
+        const chapterSnapshot = await get(chapterScenesRef);
+
+        if (chapterSnapshot.exists()) {
+          let scenesArray = chapterSnapshot.val();
+          scenesArray = scenesArray.filter(id => id !== sceneId);
+          await set(chapterScenesRef, scenesArray);
+        }
+      }
+
+      console.log(`✅ Scene deleted: ${sceneId} from chapter ${chapterId}`);
+      return true;
+    }
+
+    return false;
   } catch (error) {
     console.error("❌ Failed to delete scene:", error);
     return false;

@@ -427,10 +427,11 @@
 <p id="currentSceneDescription" style="color: rgba(255,255,255,0.7); font-size: 0.9em; margin-top: 5px;"></p>
 </div>
 <div class="quick-add-scene">
-<h4>Quick Add Scene</h4>
-<input type="text" id="quickSceneName" class="text-input" placeholder="Scene name" style="margin-bottom: 10px;">
-<textarea id="quickSceneDesc" class="text-input" placeholder="Scene description" rows="2" style="margin-bottom: 10px;"></textarea>
-<button class="header-btn" id="quickAddSceneBtn">+ Add Scene to Campaign</button>
+<h4>Quick Add Scene (Vignette/Moment)</h4>
+<p style="color: rgba(255,255,255,0.6); font-size: 0.9em; margin: 0 0 10px 0;">Scenes are specific moments, locations, or encounters within a chapter</p>
+<input type="text" id="quickSceneName" class="text-input" placeholder="Scene name (e.g., 'Danny's Comedy Club')" style="margin-bottom: 10px;">
+<textarea id="quickSceneDesc" class="text-input" placeholder="Brief description of this moment/location" rows="2" style="margin-bottom: 10px;"></textarea>
+<button class="header-btn" id="quickAddSceneBtn">+ Add Scene to Current Chapter</button>
 </div>
 </div>
 
@@ -453,8 +454,9 @@
 </div>
 </div>
 <div style="margin-bottom: 15px;">
-<label style="display: block; margin-bottom: 5px;">Chapter Script</label>
-<textarea id="newChapterScript" class="text-input" placeholder="Enter chapter script..." rows="6"></textarea>
+<label style="display: block; margin-bottom: 5px;">Chapter Script (Main Story Content)</label>
+<p style="color: rgba(255,255,255,0.6); font-size: 0.85em; margin: 0 0 8px 0;">This is where you put the main narrative, MC notes, and guidance for this chapter</p>
+<textarea id="newChapterScript" class="text-input" placeholder="Enter chapter script, story beats, MC guidance..." rows="6"></textarea>
 </div>
 <button class="header-btn" id="addCampaignChapterBtn">+ Add Chapter to Campaign</button>
 </div>
@@ -554,18 +556,18 @@
 <div class="modal hidden" id="editSceneModal">
 <div class="modal-content">
 <div class="modal-header">
-<h2>Edit Scene</h2>
+<h2>Edit Scene (Vignette/Moment)</h2>
 <button class="close-modal-btn" id="closeEditSceneBtn">X</button>
 </div>
 <div class="modal-body">
 <form id="editSceneForm">
 <div style="margin-bottom: 15px;">
 <label style="display: block; margin-bottom: 5px;">Scene Name</label>
-<input type="text" id="editSceneName" class="text-input" required>
+<input type="text" id="editSceneName" class="text-input" placeholder="e.g., 'The Comedy Cellar'" required>
 </div>
 <div style="margin-bottom: 15px;">
 <label style="display: block; margin-bottom: 5px;">Description</label>
-<textarea id="editSceneDesc" class="text-input" rows="3"></textarea>
+<textarea id="editSceneDesc" class="text-input" rows="3" placeholder="Brief description of this moment/location"></textarea>
 </div>
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
 <div>
