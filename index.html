@@ -20,12 +20,11 @@
 <option value="4">Chapter 4: The Mogul's Empire</option>
 <option value="5">Chapter 5: The Titan's Domain</option>
 </select>
-<button class="header-btn" id="campaignSettingsBtn" title="Campaign Settings">⚙️</button> <button class="header-btn" id="broadcastBtn" title="Broadcast to Players">📡 Broadcast</button>
+<button class="header-btn" id="campaignSettingsBtn" title="Campaign Settings">⚙️</button> <button class="header-btn" id="sessionMgmtBtn" title="Session Management">💾 Sessions</button> <button class="header-btn" id="playerOverviewBtn" title="Player Overview">👥 Players</button> <button class="header-btn" id="broadcastBtn" title="Broadcast to Players">📡 Broadcast</button>
 </div>
 <div class="header-controls">
 <button class="header-btn" id="toggleScriptBtn" title="Toggle Script Panel (S)">Script</button>
 <button class="header-btn" id="toggleMcMovesBtn" title="Toggle MC Moves (M)">MC Moves</button>
-<button class="header-btn" id="openCharMgmtBtn" title="Character Management (C)">Characters</button>
 </div>
 </header>
 <!-- SPOTLIGHT BAR -->
@@ -311,20 +310,38 @@
 </div>
 </div>
 </div>
-<!-- CHARACTER MANAGEMENT MODAL -->
-<div class="modal hidden" id="charMgmtModal">
+<!-- SESSION MANAGEMENT MODAL -->
+<div class="modal hidden" id="sessionMgmtModal">
+<div class="modal-content">
+<div class="modal-header">
+<h2>Session Management</h2>
+<button class="close-modal-btn" id="closeSessionMgmtBtn">X</button>
+</div>
+<div class="modal-body">
+<h3>Current Session: <span id="currentSessionName">Default Session</span></h3>
+<div style="margin: 20px 0;">
+<button class="header-btn" onclick="saveSession()" style="margin: 5px;">💾 Save Current Session</button>
+<button class="header-btn" onclick="saveSessionAs()" style="margin: 5px;">📝 Save As New Session</button>
+</div>
+<hr style="margin: 20px 0; border-color: rgba(255,255,255,0.2);"/>
+<h3>Saved Sessions</h3>
+<div id="sessionList" style="margin-top: 10px;">
+<!-- Sessions will be listed here -->
+</div>
+</div>
+</div>
+</div>
+<!-- PLAYER OVERVIEW MODAL -->
+<div class="modal hidden" id="playerOverviewModal">
 <div class="modal-content large-modal">
 <div class="modal-header">
-<h2>Character Management</h2>
-<button class="close-modal-btn" id="closeCharMgmtModalBtn">X</button>
+<h2>Player Overview & Tag Management</h2>
+<button class="close-modal-btn" id="closePlayerOverviewBtn">X</button>
 </div>
-<div class="modal-tabs">
-<button class="modal-tab active" data-tab="list">Character List</button>
-<button class="modal-tab" data-tab="edit">Create/Edit Character</button>
-<button class="modal-tab" data-tab="import">Import/Export</button>
+<div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+<div id="playerOverviewContent">
+<!-- Player cards will be rendered here -->
 </div>
-<div class="modal-content-area" id="charMgmtContent">
-<!-- Content loads dynamically -->
 </div>
 </div>
 </div>
@@ -504,12 +521,30 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('📍 Scene:', payload.currentScene.name);
         }
         
-        // Get music info
+        // Get music info with playlist and loop settings
         if (trackSelect && trackSelect.selectedIndex > 0) {
             const opt = trackSelect.options[trackSelect.selectedIndex];
             payload.currentMusic.name = opt.textContent.trim();
             payload.currentMusic.url = opt.value || '';
-            console.log('🎵 Music:', payload.currentMusic.name);
+
+            // Include loop setting
+            const loopBtn = document.getElementById('loopBtn');
+            payload.currentMusic.isLooping = loopBtn ? loopBtn.classList.contains('active') : false;
+
+            // Include playlist if it exists
+            const playlistTracksDiv = document.getElementById('playlistTracks');
+            if (playlistTracksDiv && playlistTracksDiv.children.length > 0) {
+                payload.currentMusic.playlist = [];
+                Array.from(playlistTracksDiv.children).forEach(item => {
+                    const trackName = item.textContent.replace('▶ ', '').replace('🗑️', '').trim();
+                    const trackUrl = item.dataset.url;
+                    if (trackUrl) {
+                        payload.currentMusic.playlist.push({ name: trackName, url: trackUrl });
+                    }
+                });
+            }
+
+            console.log('🎵 Music:', payload.currentMusic.name, 'Loop:', payload.currentMusic.isLooping);
         }
         
         // Get character info
@@ -547,7 +582,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 </body>
-</html>  
-</body>
 </html>
-Fix Firebase module
