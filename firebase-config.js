@@ -4,7 +4,8 @@
 // ================================
 
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-import { getDatabase, ref, set, onValue } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+import { getDatabase, ref, set, get, push, onValue } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -52,7 +53,34 @@ if (database) {
     console.log('✅ MC App ready to broadcast and receive player data');
 }
 
-// Export BOTH 'db' and 'database' for compatibility
+// Anonymous authentication for MC users
+let auth;
+try {
+    auth = getAuth(app);
+    window.currentUserId = null;
+
+    // Sign in anonymously
+    signInAnonymously(auth).then(() => {
+        console.log('✅ Signed in anonymously for MC operations');
+    }).catch((error) => {
+        console.error('❌ Anonymous sign-in failed:', error);
+    });
+
+    // Track auth state
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            window.currentUserId = user.uid;
+            console.log('✅ MC authenticated:', user.uid);
+        } else {
+            window.currentUserId = null;
+        }
+    });
+} catch (error) {
+    console.error('❌ Auth initialization failed:', error);
+}
+
+// Export for campaign-manager-mc.js compatibility
 // firebase-broadcast.js expects 'db'
-// app-MC.js uses window.firebaseDatabase
-export { database, db, ref, set, onValue };
+// app.js uses window.firebaseDatabase
+// campaign-manager-mc.js expects { database, ref, set, get, push, onValue }
+export { database, db, ref, set, get, push, onValue, auth };
