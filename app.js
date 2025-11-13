@@ -694,6 +694,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log('✅ MC App initialized successfully');
 });
 
+// Listen for Firebase auth completion and reload campaigns
+window.addEventListener('firebaseAuthReady', async (event) => {
+    console.log('🔐 Firebase auth ready, reloading campaigns...', event.detail.userId);
+    await loadFirebaseCampaigns();
+});
+
 // ===================================
 // CORE FUNCTIONS
 // ===================================
@@ -704,19 +710,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function loadFirebaseCampaigns() {
     try {
-        // Wait for auth to be ready (max 5 seconds)
-        let retries = 0;
-        while (!window.currentUserId && retries < 10) {
-            console.log('⏳ Waiting for Firebase auth...');
-            await new Promise(resolve => setTimeout(resolve, 500));
-            retries++;
-        }
-
+        // Check if auth is ready
         if (!window.currentUserId) {
-            console.warn('⚠️ Firebase auth not ready - campaigns may not load');
+            console.log('⏳ Auth not ready yet - will retry when auth completes');
+            populateCampaignDropdown(); // Show hardcoded campaigns for now
+            return;
         }
 
-        console.log('🔍 Loading Firebase campaigns...');
+        console.log('🔍 Loading Firebase campaigns for user:', window.currentUserId);
         const campaigns = await getMyCampaigns();
 
         if (campaigns && campaigns.length > 0) {
@@ -1666,21 +1667,49 @@ function stopSessionBroadcast() {
         });
 }
 
+// Flag to track if app has finished initializing (prevents premature broadcast stops)
+let appInitialized = false;
+
+// Mark app as initialized after initial setup
+setTimeout(() => {
+    appInitialized = true;
+    console.log('✅ App initialization complete, broadcast management active');
+}, 3000);
+
 // Broadcast session when page becomes visible
 document.addEventListener('visibilitychange', () => {
-    if (!document.hidden && players.length > 0) {
+    // Don't stop broadcast during initial page load
+    if (!appInitialized) {
+        console.log('⏭️ Ignoring visibility change during initialization');
+        return;
+    }
+
+    if (!document.hidden) {
+        // Page is visible again, restart broadcast
+        console.log('📡 Page visible, broadcasting session...');
         broadcastSessionToPlayers();
-    } else if (document.hidden) {
+    } else {
+        // Page is hidden, stop broadcast to save resources
+        console.log('🔇 Page hidden, stopping broadcast...');
         stopSessionBroadcast();
     }
 });
 
 // Broadcast session periodically (every 30 seconds)
 setInterval(() => {
-    if (!document.hidden && players.length > 0) {
+    if (!document.hidden) {
+        // Keep broadcasting while page is visible
         broadcastSessionToPlayers();
     }
 }, 30000);
+
+// Initial broadcast after a short delay to ensure everything is initialized
+setTimeout(() => {
+    if (!document.hidden) {
+        console.log('📡 Initial session broadcast...');
+        broadcastSessionToPlayers();
+    }
+}, 2000);
 
 // ===================================
 // SESSION MANAGEMENT

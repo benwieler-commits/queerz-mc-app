@@ -71,6 +71,11 @@ try {
         if (user) {
             window.currentUserId = user.uid;
             console.log('✅ MC authenticated:', user.uid);
+
+            // Dispatch custom event so app.js can reload campaigns
+            window.dispatchEvent(new CustomEvent('firebaseAuthReady', {
+                detail: { userId: user.uid }
+            }));
         } else {
             window.currentUserId = null;
         }
