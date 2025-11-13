@@ -1,0 +1,959 @@
+// ===================================
+// QUEERZ! MC COMPANION - ENHANCED
+// Main Application Logic
+// ===================================
+
+import { broadcast } from './firebase-broadcast.js';
+import {
+    createCampaign,
+    addScene,
+    loadCampaign,
+    getMyCampaigns,
+    listenToCampaign
+} from './campaign-manager-mc.js';
+
+// ===================================
+// GLOBAL STATE
+// ===================================
+
+let players = [];
+let activePlayerIndex = -1;
+let currentCampaignId = null;
+let currentArc = 'arc-1';
+let currentChapter = 1;
+let campaigns = {};
+let checkpoints = [];
+let counters = {
+    ignorance: { current: 0, max: 5 },
+    acceptance: { current: 0 },
+    rejection: { current: 0 }
+};
+let playlist = [];
+let isLooping = false;
+let currentPlaylistIndex = 0;
+
+// Session state
+let currentSession = {
+    name: 'Default Session',
+    players: [],
+    checkpoints: [],
+    counters: {...counters}
+};
+let savedSessions = [];
+
+// ===================================
+// INITIALIZATION
+// ===================================
+
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('🎨 Initializing MC Companion...');
+
+    // Load from local storage
+    loadFromLocalStorage();
+
+    // Setup event listeners
+    setupEventListeners();
+
+    // Load campaigns
+    await loadCampaigns();
+
+    // Initialize UI
+    renderPlayers();
+    renderCheckpoints();
+    updateCounterDisplays();
+
+    console.log('✅ MC Companion initialized');
+});
+
+// ===================================
+// LOCAL STORAGE
+// ===================================
+
+function loadFromLocalStorage() {
+    try {
+        const savedPlayers = localStorage.getItem('mcApp_players_v2');
+        if (savedPlayers) players = JSON.parse(savedPlayers);
+
+        const savedCheckpoints = localStorage.getItem('mcApp_checkpoints');
+        if (savedCheckpoints) checkpoints = JSON.parse(savedCheckpoints);
+
+        const savedCounters = localStorage.getItem('mcApp_counters');
+        if (savedCounters) counters = JSON.parse(savedCounters);
+
+        const savedSessions = localStorage.getItem('mcApp_sessions_v2');
+        if (savedSessions) savedSessions = JSON.parse(savedSessions);
+
+        const savedCurrentSession = localStorage.getItem('mcApp_currentSession_v2');
+        if (savedCurrentSession) {
+            currentSession = JSON.parse(savedCurrentSession);
+            players = currentSession.players || [];
+            checkpoints = currentSession.checkpoints || [];
+            counters = currentSession.counters || {ignorance: {current: 0, max: 5}, acceptance: {current: 0}, rejection: {current: 0}};
+        }
+
+        console.log('✅ Loaded from localStorage');
+    } catch (error) {
+        console.error('❌ Error loading from localStorage:', error);
+    }
+}
+
+function saveToLocalStorage() {
+    try {
+        currentSession.players = players;
+        currentSession.checkpoints = checkpoints;
+        currentSession.counters = counters;
+
+        localStorage.setItem('mcApp_players_v2', JSON.stringify(players));
+        localStorage.setItem('mcApp_checkpoints', JSON.stringify(checkpoints));
+        localStorage.setItem('mcApp_counters', JSON.stringify(counters));
+        localStorage.setItem('mcApp_currentSession_v2', JSON.stringify(currentSession));
+        localStorage.setItem('mcApp_sessions_v2', JSON.stringify(savedSessions));
+    } catch (error) {
+        console.error('❌ Error saving to localStorage:', error);
+    }
+}
+
+// ===================================
+// CAMPAIGN MANAGEMENT
+// ===================================
+
+async function loadCampaigns() {
+    try {
+        // Load from JSON file
+        const response = await fetch('./campaigns/example-campaign.json');
+        if (response.ok) {
+            const campaign = await response.json();
+            campaigns[campaign.id] = campaign;
+        }
+
+        // Load from Firebase
+        const firebaseCampaigns = await getMyCampaigns();
+        firebaseCampaigns.forEach(campaign => {
+            campaigns[`firebase-${campaign.id}`] = campaign;
+        });
+
+        // Populate campaign dropdown
+        populateCampaignSelect();
+    } catch (error) {
+        console.error('❌ Error loading campaigns:', error);
+    }
+}
+
+function populateCampaignSelect() {
+    const campaignSelect = document.getElementById('campaignSelect');
+    if (!campaignSelect) return;
+
+    campaignSelect.innerHTML = '<option value="">Select Campaign...</option>';
+
+    Object.entries(campaigns).forEach(([id, campaign]) => {
+        const option = document.createElement('option');
+        option.value = id;
+        option.textContent = campaign.name || campaign.metadata?.name || id;
+        campaignSelect.appendChild(option);
+    });
+}
+
+// ===================================
+// PLAYER MANAGEMENT
+// ===================================
+
+function renderPlayers() {
+    const spotlightPlayers = document.getElementById('spotlightPlayers');
+    if (!spotlightPlayers) return;
+
+    const addBtn = spotlightPlayers.querySelector('.add-btn');
+    spotlightPlayers.innerHTML = '';
+
+    players.forEach((player, index) => {
+        const playerBtn = document.createElement('button');
+        playerBtn.className = 'player-btn';
+        if (index === activePlayerIndex) {
+            playerBtn.classList.add('active');
+        }
+
+        playerBtn.innerHTML = `${player.name} <span class="remove-player" data-index="${index}">×</span>`;
+
+        playerBtn.addEventListener('click', (e) => {
+            if (e.target.classList.contains('remove-player')) {
+                removePlayer(index);
+            } else {
+                setActivePlayer(index);
+            }
+        });
+
+        spotlightPlayers.appendChild(playerBtn);
+    });
+
+    if (addBtn) {
+        spotlightPlayers.appendChild(addBtn);
+    }
+
+    updatePlayerTagsDisplay();
+    saveToLocalStorage();
+}
+
+function addPlayer(name) {
+    const newPlayer = {
+        name: name || `Player ${players.length + 1}`,
+        tags: {
+            story: [],
+            status: []
+        }
+    };
+
+    players.push(newPlayer);
+    renderPlayers();
+    broadcastToPlayers();
+}
+
+function removePlayer(index) {
+    if (confirm(`Remove ${players[index].name}?`)) {
+        players.splice(index, 1);
+        if (activePlayerIndex === index) {
+            activePlayerIndex = -1;
+        } else if (activePlayerIndex > index) {
+            activePlayerIndex--;
+        }
+        renderPlayers();
+        broadcastToPlayers();
+    }
+}
+
+function setActivePlayer(index) {
+    activePlayerIndex = index;
+    renderPlayers();
+    updatePlayerTagsDisplay();
+}
+
+// ===================================
+// TAG MANAGEMENT
+// ===================================
+
+const TAG_DATABASE = {
+    story: {
+        beneficial: ['Advantage', 'Protected', 'Hidden', 'Inspired', 'Coordinated', 'Prepared', 'Intel', 'Backup', 'Momentum', 'Focus'],
+        harmful: ['Exposed', 'Vulnerable', 'Shaken', 'Conforming', 'Isolated', 'Overwhelmed', 'Marked', 'Distracted'],
+        investigation: ['Clue Found', 'Witness Located', 'Evidence Gathered', 'Pattern Recognized', 'Connection Made']
+    },
+    status: {
+        beneficial: ['+1 Forward', '+1 Ongoing', 'Armored', 'Enhanced', 'Invisible', 'Flying'],
+        harmful: ['Shaken (-1 Ongoing)', 'Conforming (-1 to Resist)', 'Marked', 'Wounded', 'Exhausted', 'Confused']
+    }
+};
+
+function updatePlayerTagsDisplay() {
+    const container = document.getElementById('playerTagsContainer');
+    if (!container) return;
+
+    if (activePlayerIndex === -1 || !players[activePlayerIndex]) {
+        container.innerHTML = '<p class="placeholder-text">Select a player from the spotlight to manage tags</p>';
+        return;
+    }
+
+    const player = players[activePlayerIndex];
+    const html = `
+        <h4 style="color: #F4D35E; margin-bottom: 15px;">Tags for ${player.name}</h4>
+
+        <div class="tag-section">
+            <h4>Story Tags</h4>
+            <div class="tags-display" id="storyTagsDisplay">
+                ${renderTags(player.tags.story, 'story')}
+                <button class="add-tag-btn" onclick="showAddTagDialog('story')">+ Add Story Tag</button>
+            </div>
+        </div>
+
+        <div class="tag-section">
+            <h4>Status Tags</h4>
+            <div class="tags-display" id="statusTagsDisplay">
+                ${renderTags(player.tags.status, 'status')}
+                <button class="add-tag-btn" onclick="showAddTagDialog('status')">+ Add Status Tag</button>
+            </div>
+        </div>
+    `;
+
+    container.innerHTML = html;
+}
+
+function renderTags(tags, type) {
+    if (!tags || tags.length === 0) {
+        return '<span class="placeholder-text">No tags</span>';
+    }
+
+    return tags.map(tag => {
+        const tagType = getTagType(tag, type);
+        return `
+            <div class="tag-badge ${tagType}">
+                ${tag}
+                <span class="remove-tag" onclick="removeTag('${type}', '${tag}')">×</span>
+            </div>
+        `;
+    }).join('');
+}
+
+function getTagType(tag, categoryType) {
+    const category = TAG_DATABASE[categoryType];
+    if (!category) return 'neutral';
+
+    for (const [type, tags] of Object.entries(category)) {
+        if (tags.includes(tag)) {
+            return type === 'beneficial' ? 'beneficial' : type === 'harmful' ? 'harmful' : 'neutral';
+        }
+    }
+    return 'neutral';
+}
+
+window.showAddTagDialog = function(tagType) {
+    if (activePlayerIndex === -1) {
+        alert('Please select a player first');
+        return;
+    }
+
+    const categories = TAG_DATABASE[tagType];
+    let dialogHTML = '<div style="max-height: 400px; overflow-y: auto;">';
+
+    for (const [category, tags] of Object.entries(categories)) {
+        dialogHTML += `<div style="margin-bottom: 15px;">`;
+        dialogHTML += `<strong style="text-transform: capitalize; color: #E89B9B;">${category}:</strong><br>`;
+        tags.forEach(tag => {
+            dialogHTML += `<button class="add-tag-btn" style="margin: 5px;" onclick="addTag('${tagType}', '${tag}'); closeTagDialog();">${tag}</button>`;
+        });
+        dialogHTML += `</div>`;
+    }
+
+    dialogHTML += `<hr style="border-color: rgba(74, 124, 126, 0.3); margin: 15px 0;">`;
+    dialogHTML += `<strong>Or enter custom tag:</strong><br>`;
+    dialogHTML += `<input type="text" id="customTagInput" class="text-input" placeholder="Custom tag name">`;
+    dialogHTML += `<button class="header-btn" style="margin-top: 10px;" onclick="addCustomTag('${tagType}')">Add Custom</button>`;
+    dialogHTML += `</div>`;
+
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.id = 'tagDialog';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add ${tagType === 'story' ? 'Story' : 'Status'} Tag</h2>
+                <button class="close-modal-btn" onclick="closeTagDialog()">×</button>
+            </div>
+            ${dialogHTML}
+        </div>
+    `;
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeTagDialog();
+    });
+    document.body.appendChild(modal);
+};
+
+window.closeTagDialog = function() {
+    const dialog = document.getElementById('tagDialog');
+    if (dialog) dialog.remove();
+};
+
+window.addTag = function(type, tag) {
+    if (activePlayerIndex === -1) return;
+
+    const player = players[activePlayerIndex];
+    if (!player.tags[type].includes(tag)) {
+        player.tags[type].push(tag);
+        updatePlayerTagsDisplay();
+        saveToLocalStorage();
+    }
+};
+
+window.addCustomTag = function(type) {
+    const input = document.getElementById('customTagInput');
+    if (!input || !input.value.trim()) {
+        alert('Please enter a tag name');
+        return;
+    }
+
+    addTag(type, input.value.trim());
+    closeTagDialog();
+};
+
+window.removeTag = function(type, tag) {
+    if (activePlayerIndex === -1) return;
+
+    const player = players[activePlayerIndex];
+    const index = player.tags[type].indexOf(tag);
+    if (index > -1) {
+        player.tags[type].splice(index, 1);
+        updatePlayerTagsDisplay();
+        saveToLocalStorage();
+    }
+};
+
+// ===================================
+// CHECKPOINT MANAGEMENT
+// ===================================
+
+function renderCheckpoints() {
+    const container = document.getElementById('progressContainer');
+    if (!container) return;
+
+    if (checkpoints.length === 0) {
+        container.innerHTML = '<p class="placeholder-text">No checkpoints yet. Add story checkpoints to track progress!</p>';
+        return;
+    }
+
+    container.innerHTML = checkpoints.map((checkpoint, index) => `
+        <div class="checkpoint ${checkpoint.completed ? 'completed' : ''}">
+            <input type="checkbox" class="checkpoint-checkbox"
+                   ${checkpoint.completed ? 'checked' : ''}
+                   onchange="toggleCheckpoint(${index})">
+            <div class="checkpoint-label">${checkpoint.description}</div>
+        </div>
+    `).join('');
+}
+
+window.toggleCheckpoint = function(index) {
+    checkpoints[index].completed = !checkpoints[index].completed;
+
+    // If this checkpoint has a next chapter, load it
+    if (checkpoints[index].completed && checkpoints[index].nextChapter) {
+        currentChapter = checkpoints[index].nextChapter;
+        const chapterSelect = document.getElementById('chapterSelect');
+        if (chapterSelect) chapterSelect.value = currentChapter;
+        loadChapterContent();
+    }
+
+    renderCheckpoints();
+    saveToLocalStorage();
+};
+
+function addCheckpoint(description, nextChapter = null) {
+    checkpoints.push({
+        description,
+        nextChapter: nextChapter ? parseInt(nextChapter) : null,
+        completed: false,
+        timestamp: Date.now()
+    });
+
+    renderCheckpoints();
+    saveToLocalStorage();
+}
+
+// ===================================
+// COUNTER MANAGEMENT
+// ===================================
+
+function updateCounterDisplays() {
+    const ignoranceCounter = document.getElementById('ignoranceCounter');
+    const acceptanceCounter = document.getElementById('acceptanceCounter');
+    const rejectionCounter = document.getElementById('rejectionCounter');
+
+    if (ignoranceCounter) ignoranceCounter.textContent = counters.ignorance.current;
+    if (acceptanceCounter) acceptanceCounter.textContent = counters.acceptance.current;
+    if (rejectionCounter) rejectionCounter.textContent = counters.rejection.current;
+}
+
+window.changeCounter = function(type, delta) {
+    counters[type].current = Math.max(0, counters[type].current + delta);
+
+    // Cap ignorance counter at max
+    if (type === 'ignorance' && counters[type].max) {
+        counters[type].current = Math.min(counters[type].current, counters[type].max);
+    }
+
+    updateCounterDisplays();
+    saveToLocalStorage();
+};
+
+window.resetCounter = function(type) {
+    counters[type].current = 0;
+    updateCounterDisplays();
+    saveToLocalStorage();
+};
+
+window.toggleInnerSpaceCounters = function() {
+    const container = document.getElementById('innerSpaceCounters');
+    const toggleText = document.getElementById('innerSpaceToggleText');
+
+    if (container.style.display === 'none' || !container.style.display) {
+        container.style.display = 'grid';
+        toggleText.textContent = 'Hide Inner Space Counters';
+    } else {
+        container.style.display = 'none';
+        toggleText.textContent = 'Show Inner Space Counters';
+    }
+};
+
+// ===================================
+// DICE ROLLER
+// ===================================
+
+function rollDice() {
+    const die1 = Math.floor(Math.random() * 6) + 1;
+    const die2 = Math.floor(Math.random() * 6) + 1;
+    const modifier = parseInt(document.getElementById('powerModifier').value) || 0;
+    const total = die1 + die2 + modifier;
+
+    document.getElementById('die1').textContent = die1;
+    document.getElementById('die2').textContent = die2;
+    document.getElementById('modDisplay').textContent = modifier >= 0 ? `+${modifier}` : modifier;
+    document.getElementById('totalDisplay').textContent = total;
+
+    const resultElement = document.getElementById('rollResult');
+    let resultText, resultColor;
+
+    if (total <= 6) {
+        resultText = 'MISS (6-) - MC makes a move';
+        resultColor = '#ff6b6b';
+    } else if (total <= 9) {
+        resultText = 'PARTIAL HIT (7-9) - Success with cost';
+        resultColor = '#F4D35E';
+    } else {
+        resultText = 'FULL HIT (10+) - Success!';
+        resultColor = '#4ADE80';
+    }
+
+    resultElement.textContent = resultText;
+    resultElement.style.color = resultColor;
+}
+
+// ===================================
+// MUSIC PLAYER
+// ===================================
+
+function setupMusicPlayer() {
+    const audioPlayer = document.getElementById('audioPlayer');
+    const playBtn = document.getElementById('playMusicBtn');
+    const pauseBtn = document.getElementById('pauseMusicBtn');
+    const stopBtn = document.getElementById('stopMusicBtn');
+    const loopBtn = document.getElementById('loopMusicBtn');
+    const addPlaylistBtn = document.getElementById('addPlaylistBtn');
+    const musicSelect = document.getElementById('musicSelect');
+    const nowPlaying = document.getElementById('nowPlaying');
+
+    playBtn?.addEventListener('click', () => {
+        if (audioPlayer.src) {
+            audioPlayer.play();
+            const selectedOption = musicSelect.options[musicSelect.selectedIndex];
+            nowPlaying.textContent = `Now Playing: ${selectedOption.textContent}`;
+        }
+    });
+
+    pauseBtn?.addEventListener('click', () => audioPlayer.pause());
+
+    stopBtn?.addEventListener('click', () => {
+        audioPlayer.pause();
+        audioPlayer.currentTime = 0;
+        nowPlaying.textContent = 'No track playing';
+    });
+
+    loopBtn?.addEventListener('click', () => {
+        isLooping = !isLooping;
+        audioPlayer.loop = isLooping;
+        loopBtn.classList.toggle('active');
+    });
+
+    addPlaylistBtn?.addEventListener('click', () => {
+        const selected = musicSelect.options[musicSelect.selectedIndex];
+        if (selected && selected.value) {
+            playlist.push({
+                name: selected.textContent,
+                url: selected.value
+            });
+            renderPlaylist();
+        }
+    });
+
+    musicSelect?.addEventListener('change', (e) => {
+        const selected = e.target.options[e.target.selectedIndex];
+        if (selected && selected.value) {
+            audioPlayer.src = selected.value;
+        }
+    });
+
+    audioPlayer?.addEventListener('ended', () => {
+        if (!isLooping && playlist.length > 0) {
+            playNextInPlaylist();
+        }
+    });
+}
+
+function renderPlaylist() {
+    const container = document.getElementById('playlistContainer');
+    const tracksDiv = document.getElementById('playlistTracks');
+
+    if (playlist.length > 0) {
+        container.classList.remove('hidden');
+        tracksDiv.innerHTML = playlist.map((track, index) => `
+            <div class="playlist-item" onclick="playFromPlaylist(${index})">
+                <span>${track.name}</span>
+                <span style="cursor: pointer;" onclick="event.stopPropagation(); removeFromPlaylist(${index})">🗑️</span>
+            </div>
+        `).join('');
+    } else {
+        container.classList.add('hidden');
+    }
+}
+
+window.playFromPlaylist = function(index) {
+    const track = playlist[index];
+    const audioPlayer = document.getElementById('audioPlayer');
+    const nowPlaying = document.getElementById('nowPlaying');
+
+    audioPlayer.src = track.url;
+    audioPlayer.play();
+    nowPlaying.textContent = `Now Playing: ${track.name}`;
+    currentPlaylistIndex = index;
+};
+
+window.removeFromPlaylist = function(index) {
+    playlist.splice(index, 1);
+    renderPlaylist();
+};
+
+function playNextInPlaylist() {
+    if (playlist.length === 0) return;
+    currentPlaylistIndex = (currentPlaylistIndex + 1) % playlist.length;
+    playFromPlaylist(currentPlaylistIndex);
+}
+
+// ===================================
+// BROADCAST FUNCTIONALITY
+// ===================================
+
+async function broadcastToPlayers() {
+    try {
+        const environmentSelect = document.getElementById('environmentSelect');
+        const npcSelect = document.getElementById('npcSelect');
+        const musicSelect = document.getElementById('musicSelect');
+
+        const payload = {
+            environment: {
+                name: environmentSelect?.options[environmentSelect.selectedIndex]?.textContent || '',
+                imageUrl: environmentSelect?.options[environmentSelect.selectedIndex]?.dataset?.img || ''
+            },
+            npc: {
+                name: npcSelect?.options[npcSelect.selectedIndex]?.textContent || '',
+                imageUrl: npcSelect?.options[npcSelect.selectedIndex]?.dataset?.img || ''
+            },
+            music: {
+                name: musicSelect?.options[musicSelect.selectedIndex]?.textContent || '',
+                url: musicSelect?.value || '',
+                isLooping: isLooping,
+                playlist: playlist
+            },
+            players: players.map(p => ({
+                name: p.name,
+                tags: p.tags
+            })),
+            counters: counters,
+            timestamp: Date.now()
+        };
+
+        await broadcast(payload);
+
+        showExportIndicator('Broadcast sent to players!');
+        console.log('✅ Broadcast successful');
+    } catch (error) {
+        console.error('❌ Broadcast failed:', error);
+        alert('Failed to broadcast: ' + error.message);
+    }
+}
+
+// ===================================
+// EXPORT FUNCTIONALITY
+// ===================================
+
+function exportCampaignProgress() {
+    const exportData = {
+        campaign: {
+            id: currentCampaignId,
+            arc: currentArc,
+            chapter: currentChapter
+        },
+        session: currentSession.name,
+        players: players,
+        checkpoints: checkpoints,
+        counters: counters,
+        exportDate: new Date().toISOString()
+    };
+
+    const dataStr = JSON.stringify(exportData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `campaign-progress-${Date.now()}.json`;
+    link.click();
+
+    URL.revokeObjectURL(url);
+
+    showExportIndicator('Campaign progress exported!');
+}
+
+function showExportIndicator(message) {
+    const indicator = document.createElement('div');
+    indicator.className = 'export-indicator';
+    indicator.textContent = message;
+    document.body.appendChild(indicator);
+
+    setTimeout(() => {
+        indicator.remove();
+    }, 3000);
+}
+
+// ===================================
+// SESSION MANAGEMENT
+// ===================================
+
+window.saveCurrentSession = function() {
+    const name = prompt('Save session as:', currentSession.name);
+    if (!name) return;
+
+    currentSession.name = name;
+    const existingIndex = savedSessions.findIndex(s => s.name === name);
+
+    if (existingIndex >= 0) {
+        savedSessions[existingIndex] = {...currentSession};
+    } else {
+        savedSessions.push({...currentSession});
+    }
+
+    saveToLocalStorage();
+    renderSessionList();
+    alert(`Session "${name}" saved!`);
+};
+
+window.saveSessionAs = function() {
+    const name = prompt('Enter new session name:');
+    if (!name) return;
+
+    const newSession = {...currentSession, name};
+    savedSessions.push(newSession);
+
+    saveToLocalStorage();
+    renderSessionList();
+    alert(`Session "${name}" created!`);
+};
+
+function renderSessionList() {
+    const container = document.getElementById('sessionList');
+    if (!container) return;
+
+    if (savedSessions.length === 0) {
+        container.innerHTML = '<p class="placeholder-text">No saved sessions yet</p>';
+        return;
+    }
+
+    container.innerHTML = savedSessions.map((session, index) => `
+        <div style="background: rgba(74, 124, 126, 0.2); padding: 15px; margin: 10px 0; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h4 style="color: #F4D35E; margin-bottom: 5px;">${session.name}</h4>
+                <p style="color: rgba(245, 239, 230, 0.7); font-size: 0.9rem;">
+                    Players: ${session.players?.length || 0} | Checkpoints: ${session.checkpoints?.length || 0}
+                </p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="header-btn" onclick="loadSession(${index})">📂 Load</button>
+                <button class="header-btn" onclick="deleteSession(${index})" style="background: rgba(255, 107, 107, 0.4);">🗑️</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+window.loadSession = function(index) {
+    if (!savedSessions[index]) return;
+
+    currentSession = {...savedSessions[index]};
+    players = currentSession.players || [];
+    checkpoints = currentSession.checkpoints || [];
+    counters = currentSession.counters || {ignorance: {current: 0, max: 5}, acceptance: {current: 0}, rejection: {current: 0}};
+
+    renderPlayers();
+    renderCheckpoints();
+    updateCounterDisplays();
+    saveToLocalStorage();
+
+    const sessionModal = document.getElementById('sessionModal');
+    if (sessionModal) sessionModal.classList.add('hidden');
+
+    alert(`Session "${currentSession.name}" loaded!`);
+};
+
+window.deleteSession = function(index) {
+    if (!confirm(`Delete session "${savedSessions[index].name}"?`)) return;
+
+    savedSessions.splice(index, 1);
+    saveToLocalStorage();
+    renderSessionList();
+};
+
+// ===================================
+// EVENT LISTENERS SETUP
+// ===================================
+
+function setupEventListeners() {
+    // Player management
+    const addPlayerBtn = document.getElementById('addPlayerBtn');
+    const playerModal = document.getElementById('playerModal');
+    const closePlayerModalBtn = document.getElementById('closePlayerModalBtn');
+    const cancelPlayerBtn = document.getElementById('cancelPlayerBtn');
+    const confirmPlayerBtn = document.getElementById('confirmPlayerBtn');
+    const playerNameInput = document.getElementById('playerNameInput');
+
+    addPlayerBtn?.addEventListener('click', () => {
+        playerModal?.classList.remove('hidden');
+        if (playerNameInput) playerNameInput.value = '';
+    });
+
+    closePlayerModalBtn?.addEventListener('click', () => playerModal?.classList.add('hidden'));
+    cancelPlayerBtn?.addEventListener('click', () => playerModal?.classList.add('hidden'));
+
+    confirmPlayerBtn?.addEventListener('click', () => {
+        const name = playerNameInput?.value.trim();
+        if (name) {
+            addPlayer(name);
+            playerModal?.classList.add('hidden');
+        } else {
+            alert('Please enter a player name');
+        }
+    });
+
+    // Checkpoint management
+    const addCheckpointBtn = document.getElementById('addCheckpointBtn');
+    const checkpointModal = document.getElementById('checkpointModal');
+    const closeCheckpointModalBtn = document.getElementById('closeCheckpointModalBtn');
+    const cancelCheckpointBtn = document.getElementById('cancelCheckpointBtn');
+    const confirmCheckpointBtn = document.getElementById('confirmCheckpointBtn');
+
+    addCheckpointBtn?.addEventListener('click', () => {
+        checkpointModal?.classList.remove('hidden');
+        const input = document.getElementById('checkpointInput');
+        if (input) input.value = '';
+    });
+
+    closeCheckpointModalBtn?.addEventListener('click', () => checkpointModal?.classList.add('hidden'));
+    cancelCheckpointBtn?.addEventListener('click', () => checkpointModal?.classList.add('hidden'));
+
+    confirmCheckpointBtn?.addEventListener('click', () => {
+        const description = document.getElementById('checkpointInput')?.value.trim();
+        const nextChapter = document.getElementById('checkpointNextChapter')?.value;
+
+        if (description) {
+            addCheckpoint(description, nextChapter);
+            checkpointModal?.classList.add('hidden');
+        } else {
+            alert('Please enter a checkpoint description');
+        }
+    });
+
+    // Broadcast
+    const broadcastAllBtn = document.getElementById('broadcastAllBtn');
+    broadcastAllBtn?.addEventListener('click', broadcastToPlayers);
+
+    // Export
+    const exportCampaignBtn = document.getElementById('exportCampaignBtn');
+    exportCampaignBtn?.addEventListener('click', exportCampaignProgress);
+
+    // Dice roller
+    const rollDiceBtn = document.getElementById('rollDiceBtn');
+    rollDiceBtn?.addEventListener('click', rollDice);
+
+    // Panels
+    const toggleScriptBtn = document.getElementById('toggleScriptBtn');
+    const toggleMcMovesBtn = document.getElementById('toggleMcMovesBtn');
+    const scriptPanel = document.getElementById('scriptPanel');
+    const mcMovesPanel = document.getElementById('mcMovesPanel');
+    const closeScriptBtn = document.getElementById('closeScriptBtn');
+    const closeMcMovesBtn = document.getElementById('closeMcMovesBtn');
+
+    toggleScriptBtn?.addEventListener('click', () => scriptPanel?.classList.toggle('hidden'));
+    toggleMcMovesBtn?.addEventListener('click', () => mcMovesPanel?.classList.toggle('hidden'));
+    closeScriptBtn?.addEventListener('click', () => scriptPanel?.classList.add('hidden'));
+    closeMcMovesBtn?.addEventListener('click', () => mcMovesPanel?.classList.add('hidden'));
+
+    // Session management
+    const sessionMgmtBtn = document.getElementById('sessionMgmtBtn');
+    const sessionModal = document.getElementById('sessionModal');
+    const closeSessionModalBtn = document.getElementById('closeSessionModalBtn');
+
+    sessionMgmtBtn?.addEventListener('click', () => {
+        sessionModal?.classList.remove('hidden');
+        renderSessionList();
+        const currentSessionName = document.getElementById('currentSessionName');
+        if (currentSessionName) currentSessionName.textContent = currentSession.name;
+    });
+
+    closeSessionModalBtn?.addEventListener('click', () => sessionModal?.classList.add('hidden'));
+
+    // Campaign settings
+    const campaignSettingsBtn = document.getElementById('campaignSettingsBtn');
+    const campaignSettingsModal = document.getElementById('campaignSettingsModal');
+    const closeCampaignSettingsBtn = document.getElementById('closeCampaignSettingsBtn');
+
+    campaignSettingsBtn?.addEventListener('click', () => campaignSettingsModal?.classList.remove('hidden'));
+    closeCampaignSettingsBtn?.addEventListener('click', () => campaignSettingsModal?.classList.add('hidden'));
+
+    // Player overview
+    const playerOverviewBtn = document.getElementById('playerOverviewBtn');
+    const playerOverviewModal = document.getElementById('playerOverviewModal');
+    const closePlayerOverviewBtn = document.getElementById('closePlayerOverviewBtn');
+
+    playerOverviewBtn?.addEventListener('click', () => {
+        playerOverviewModal?.classList.remove('hidden');
+        renderPlayerOverview();
+    });
+
+    closePlayerOverviewBtn?.addEventListener('click', () => playerOverviewModal?.classList.add('hidden'));
+
+    // Music player
+    setupMusicPlayer();
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        if (e.key === 's' || e.key === 'S') {
+            e.preventDefault();
+            scriptPanel?.classList.toggle('hidden');
+        } else if (e.key === 'm' || e.key === 'M') {
+            e.preventDefault();
+            mcMovesPanel?.classList.toggle('hidden');
+        }
+    });
+}
+
+// ===================================
+// PLAYER OVERVIEW
+// ===================================
+
+function renderPlayerOverview() {
+    const container = document.getElementById('playerOverviewContent');
+    if (!container) return;
+
+    if (players.length === 0) {
+        container.innerHTML = '<p class="placeholder-text">No players yet</p>';
+        return;
+    }
+
+    container.innerHTML = players.map((player, index) => `
+        <div style="background: rgba(74, 124, 126, 0.2); padding: 20px; margin: 15px 0; border-radius: 15px; border: 2px solid rgba(74, 124, 126, 0.4);">
+            <h3 style="color: #F4D35E; margin-bottom: 15px;">${player.name}</h3>
+
+            <div style="margin-bottom: 15px;">
+                <h4 style="color: #E89B9B; margin-bottom: 10px;">Story Tags</h4>
+                <div class="tags-display">
+                    ${renderTags(player.tags.story, 'story')}
+                </div>
+            </div>
+
+            <div>
+                <h4 style="color: #E89B9B; margin-bottom: 10px;">Status Tags</h4>
+                <div class="tags-display">
+                    ${renderTags(player.tags.status, 'status')}
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ===================================
+// EXPORT GLOBALS
+// ===================================
+
+console.log('✅ MC Companion App loaded successfully');
