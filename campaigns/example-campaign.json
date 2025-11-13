@@ -1,0 +1,351 @@
+{
+  "id": "queerz-chapter1-example",
+  "name": "QUEERZ! Chapter 1: The Jester's Last Laugh",
+  "description": "A washed-up comedian spreads hate through nostalgia. Can the team save him from himself?",
+  "arc": "arc-1",
+  "currentChapter": 1,
+  "chapters": [
+    {
+      "number": 1,
+      "name": "The Jester's Last Laugh",
+      "overview": "The Queerz investigate harassment in NYC's Theater District, discovering Danny 'The Jester' Carbone who leads the Tough Crowd gang targeting LGBTQ+ venues.",
+      "scenes": [
+        {
+          "number": 1,
+          "name": "Café Greenwich - The Call to Action",
+          "location": "cafe-greenwich",
+          "music": "cafe-greenwich-1",
+          "content": "Mama Jay gathers the team at Café Greenwich with reports of escalating harassment in the Theater District. Someone calling themselves 'The Jester' is leading a group called the Tough Crowd, targeting LGBTQ+ performers and venues.",
+          "npcs": ["mama-jay"],
+          "tags": ["Investigation Begins", "Tough Crowd Introduced"]
+        },
+        {
+          "number": 2,
+          "name": "Theater District Investigation",
+          "location": "theater-district",
+          "music": "theater-district-1",
+          "content": "Players investigate the Theater District, talking to performers, examining vandalized venues, and potentially encountering Tough Crowd members.",
+          "npcs": ["pawn-tough-crowd"],
+          "tags": ["Clue Found", "Evidence Gathered", "Pattern Recognized", "Lead: Danny Carbone"]
+        },
+        {
+          "number": 3,
+          "name": "Moretti's Comedy Cellar - The Confrontation",
+          "location": "morettis-cellar",
+          "music": "danny-battle-1",
+          "content": "The abandoned comedy club where Danny once performed. Players find his journal and confront him with 2-4 Tough Crowd Pawns. Can be resolved through combat or diplomacy.",
+          "npcs": ["danny-jester", "pawn-tough-crowd"],
+          "tags": ["Danny's History", "Motivation: Bitterness"]
+        }
+      ],
+      "innerSpace": {
+        "description": "Danny's Inner Space is a shabby NYC apartment frozen in the late 90s, covered with comedy posters from his glory days. A CRT TV plays his old sets on loop.",
+        "coreWounds": [
+          {
+            "name": "The Industry Changed",
+            "description": "Danny feels abandoned by the comedy world when his edgy humor became unacceptable",
+            "approaches": {
+              "talkItOut": "The jokes didn't change - we learned who they hurt",
+              "care": "Being left behind hurts. But you're hurting others now",
+              "slay": "You weren't left behind - you refused to grow"
+            },
+            "tags": ["Understanding: Industry Change", "Core Wound: Abandonment"]
+          },
+          {
+            "name": "The Glory Days",
+            "description": "Manifestations of Danny's 90s success appear - clippings, awards, audience laughter - all frozen in time",
+            "approaches": {
+              "talkItOut": "You can't go back - but you can move forward",
+              "care": "You're trying to freeze time because you're afraid",
+              "slay": "That version of you caused real harm"
+            },
+            "tags": ["Core Wound: Glory Lost", "Understanding: Fear of Irrelevance"]
+          },
+          {
+            "name": "The Real Fear",
+            "description": "Danny's apartment walls close in. TV shows his decline - smaller venues, smaller crowds, finally just online rants",
+            "approaches": {
+              "talkItOut": "You can learn new ways to be funny - ways that don't hurt",
+              "care": "You're more than your comedy. You're a person who can grow",
+              "slay": "Then find a new way. The world doesn't owe you an audience"
+            },
+            "tags": ["Core Wound: Identity Crisis", "Path to Redemption"]
+          }
+        ],
+        "counters": {
+          "acceptance": {
+            "description": "Represents Danny accepting that he needs to change and grow",
+            "triggers": [
+              "Players show compassion for his struggles",
+              "Danny acknowledges harm he caused",
+              "Players offer path to redemption"
+            ]
+          },
+          "rejection": {
+            "description": "Represents Danny doubling down on his bitterness",
+            "triggers": [
+              "Players attack without understanding",
+              "Danny's nostalgia is dismissed entirely",
+              "No alternative offered to his worldview"
+            ]
+          }
+        }
+      },
+      "aftermath": {
+        "outcomes": [
+          {
+            "condition": "best",
+            "description": "Danny is redeemed - breaks down crying and accepts he was wrong",
+            "consequences": [
+              "Danny publicly apologizes",
+              "Begins restorative justice at House Rainbow",
+              "Uses platform to amplify marginalized voices",
+              "Tough Crowd dissolves"
+            ],
+            "nextChapterImpact": "Danny offers information about Professor Pierce, who he met at a 'concerned citizens' meeting"
+          },
+          {
+            "condition": "partial",
+            "description": "Danny understands but isn't ready to change",
+            "consequences": [
+              "Danny quietly retires from public view",
+              "Tough Crowd fractures but doesn't fully stop",
+              "Seed is planted for future growth"
+            ],
+            "nextChapterImpact": "Some Tough Crowd members become recruits for Pierce's movement"
+          },
+          {
+            "condition": "worst",
+            "description": "Danny rejects help and doubles down on nostalgia",
+            "consequences": [
+              "Danny allies with Professor Pierce",
+              "Tough Crowd becomes more organized",
+              "Harassment escalates"
+            ],
+            "nextChapterImpact": "Danny actively supports Pierce's movement, making Chapter 2 harder"
+          }
+        ]
+      },
+      "consequences": {
+        "description": "Community response and character growth opportunities",
+        "rippleEffects": [
+          "Theater District LGBTQ+ venues hold solidarity events",
+          "House Rainbow gains reputation",
+          "Young performers cite team as inspiration",
+          "Media coverage varies based on how public confrontation was"
+        ]
+      },
+      "scalingAndPacing": {
+        "partySize": {
+          "1-2": {
+            "ignoranceLimit": 5,
+            "pawns": 1,
+            "difficulty": "Standard - Danny + 1 Pawn at Moretti's"
+          },
+          "3-4": {
+            "ignoranceLimit": 5,
+            "pawns": 2,
+            "difficulty": "Standard - Danny + 2 Pawns at Moretti's"
+          },
+          "5+": {
+            "ignoranceLimit": 6,
+            "pawns": 3,
+            "difficulty": "Challenging - Danny + 3-4 Pawns at Moretti's"
+          }
+        },
+        "sessionLength": {
+          "oneShot": "4-5 hours - Streamline Scene 1 (15-20 min), focus Scene 2 investigation (45-60 min), quick Scene 3 combat (30-45 min), core Inner Space moments (60-90 min)",
+          "twoSession": "Session 1: Scenes 1-2 (3-4 hours). Session 2: Scene 3-Aftermath (3-4 hours)",
+          "epic": "3+ sessions - Full investigation with all optional encounters, extended Inner Space with all wounds"
+        },
+        "difficultyAdjustments": {
+          "easier": {
+            "ignoranceLimitModifier": -2,
+            "additionalTags": 3,
+            "note": "Lower Danny's Ignorance Limit to 3-4, give more Story Tags from investigation, make Danny more receptive to diplomacy"
+          },
+          "harder": {
+            "ignoranceLimitModifier": +2,
+            "additionalPawns": 1,
+            "note": "Increase Danny's Ignorance Limit to 6-7, add second Justice Knight (veteran Tough Crowd member), more complex Inner Space wounds"
+          }
+        }
+      },
+      "combatEncounters": [
+        {
+          "name": "Optional Tough Crowd Encounter (Scene 2)",
+          "type": "combat-optional",
+          "ignoranceLimit": 3,
+          "pawns": 2,
+          "specialMechanics": [
+            "Can be resolved through TALK IT OUT or CARE",
+            "Pawns reveal meeting location if persuaded"
+          ],
+          "location": "Theater District streets"
+        },
+        {
+          "name": "Danny 'The Jester' Final Confrontation",
+          "type": "combat-or-diplomacy",
+          "ignoranceLimit": 5,
+          "pawns": 2,
+          "specialMechanics": [
+            "Danny can summon 'hurtful punchlines' as attacks",
+            "Construct move: Exclusionary Humor",
+            "Can be convinced to enter Inner Space with successful TALK IT OUT (10+)"
+          ],
+          "location": "Moretti's Comedy Cellar stage"
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "id": "mama-jay",
+      "name": "Mama Jay Rainbow",
+      "role": "ally",
+      "imageUrl": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/mama-jay-portrait.png",
+      "description": "Founder of House Rainbow and owner of Café Greenwich. A wise mentor figure who guides the heroes.",
+      "motivations": ["Protect LGBTQ+ community", "Guide young heroes", "Build safe spaces"],
+      "backstory": "Former ballroom legend who opened Café Greenwich as a sanctuary for queer youth",
+      "justiceKnight": {
+        "isJusticeKnight": false
+      }
+    },
+    {
+      "id": "danny-civilian",
+      "name": "Danny 'Dice' Carbone",
+      "role": "villain-redeemable",
+      "imageUrl": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/danny-civilian.png",
+      "description": "Former stand-up comedian who feels left behind by changing times. Currently in civilian form.",
+      "motivations": ["Reclaim past glory", "Prove 'real comedy' still works", "Make people laugh like they used to"],
+      "backstory": "King of New York Comedy in the 90s, Danny's edgy humor became problematic. Rather than evolve, he grew bitter.",
+      "justiceKnight": {
+        "isJusticeKnight": false
+      }
+    },
+    {
+      "id": "danny-jester",
+      "name": "Danny 'The Jester'",
+      "role": "villain",
+      "imageUrl": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/danny-justice-knight.png",
+      "description": "Justice Knight form. Spreads 'Nostalgic Justice' through comedy that cuts and excludes.",
+      "motivations": ["Bring back 'real comedy'", "Punish 'woke' performers", "Freeze time in the 90s"],
+      "backstory": "Transformed by Ignorance into a Justice Knight embodying toxic nostalgia",
+      "justiceKnight": {
+        "isJusticeKnight": true,
+        "construct": "Nostalgic Justice",
+        "ignoranceLimit": 5,
+        "moves": [
+          "Hurtful Punchline - Deal emotional harm with cutting jokes",
+          "Rally the Crowd - Summon/empower Tough Crowd Pawns",
+          "That's Not Funny Anymore - Counter player moves with shame"
+        ]
+      }
+    },
+    {
+      "id": "pawn-tough-crowd",
+      "name": "Tough Crowd Pawn",
+      "role": "villain-pawn",
+      "imageUrl": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/pawn-tough-crowd-general.png",
+      "description": "Brainwashed follower of Danny. Working-class person infected with Nostalgic Ignorance.",
+      "motivations": ["Support Danny", "Bring back 'the good old days'", "Fight 'wokeness'"],
+      "backstory": "Vulnerable person who found community in Danny's nostalgia-fueled movement",
+      "justiceKnight": {
+        "isJusticeKnight": false
+      }
+    }
+  ],
+  "locations": [
+    {
+      "id": "cafe-greenwich",
+      "name": "Café Greenwich",
+      "imageUrl": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/cafe-greenwich.jpg",
+      "description": "House Rainbow's headquarters. A warm, welcoming café filled with ballroom memorabilia and rainbow flags.",
+      "atmosphere": "Safe, warm, community-focused. Smells of coffee and fresh pastries.",
+      "musicSuggestions": ["cafe-greenwich-1", "cafe-greenwich-2"]
+    },
+    {
+      "id": "theater-district",
+      "name": "Theater District",
+      "imageUrl": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/theater-district.jpg",
+      "description": "Mix of old and new - historic theaters alongside modern comedy clubs. Some posters defaced with 'MAKE COMEDY FUNNY AGAIN'",
+      "atmosphere": "Vibrant but tense. Street performers, tourists, but underlying fear from recent harassment.",
+      "musicSuggestions": ["theater-district-1", "theater-district-2"]
+    },
+    {
+      "id": "morettis-cellar",
+      "name": "Moretti's Comedy Cellar",
+      "imageUrl": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/morettis-comedy-cellar.webp",
+      "description": "Abandoned comedy club, closed for 15 years but recently active. Time capsule of 90s comedy scene.",
+      "atmosphere": "Dusty, nostalgic, haunting. Old posters of Danny's glory days line the walls.",
+      "musicSuggestions": ["theater-district-2", "danny-battle-1"]
+    }
+  ],
+  "music": [
+    {
+      "id": "cafe-greenwich-1",
+      "name": "Cafe Greenwich 1",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/cafe-greenwich-1.mp3",
+      "category": "location",
+      "mood": "peaceful"
+    },
+    {
+      "id": "theater-district-1",
+      "name": "Theater District Investigation 1",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/theater-district-investigation-1.mp3",
+      "category": "location",
+      "mood": "tense"
+    },
+    {
+      "id": "danny-battle-1",
+      "name": "Danny Battle 1",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/danny-battle-1.mp3",
+      "category": "combat",
+      "mood": "dramatic"
+    },
+    {
+      "id": "inner-space-1",
+      "name": "Inner Space Theme 1",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/emotional-themes/inner-space-theme-1.mp3",
+      "category": "emotional",
+      "mood": "introspective"
+    }
+  ],
+  "storyTags": {
+    "beneficial": ["Advantage", "Protected", "Hidden", "Inspired", "Coordinated", "Prepared", "Intel", "Backup"],
+    "harmful": ["Exposed", "Vulnerable", "Shaken", "Conforming", "Isolated", "Overwhelmed"],
+    "investigation": ["Clue Found", "Witness Located", "Evidence Gathered", "Pattern Recognized", "Connection Made", "Lead Discovered"],
+    "emotional": ["Hopeful", "Determined", "Angry", "Scared", "Confident", "Protective"]
+  },
+  "statusTags": {
+    "beneficial": ["+1 Forward", "+1 Ongoing", "Armored", "Enhanced"],
+    "harmful": ["Shaken (-1 Ongoing)", "Conforming (-1 to Resist)", "Marked", "Wounded", "Exhausted"]
+  },
+  "checkpoints": [
+    {
+      "description": "Players discovered Tough Crowd connection to Danny Carbone",
+      "triggersChapter": null,
+      "optional": false
+    },
+    {
+      "description": "Players found Moretti's Comedy Cellar location",
+      "triggersChapter": null,
+      "optional": false
+    },
+    {
+      "description": "Players confronted Danny at Moretti's",
+      "triggersChapter": null,
+      "optional": false
+    },
+    {
+      "description": "Players entered Danny's Inner Space",
+      "triggersChapter": null,
+      "optional": false
+    },
+    {
+      "description": "Danny's fate resolved (Redeemed/Partial/Vendetta)",
+      "triggersChapter": 2,
+      "optional": false
+    }
+  ]
+}
