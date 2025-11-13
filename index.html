@@ -584,6 +584,35 @@
 </div>
 </div>
 </div>
+
+<!-- EDIT CHAPTER MODAL -->
+<div class="modal hidden" id="editChapterModal">
+<div class="modal-content">
+<div class="modal-header">
+<h2>Edit Chapter</h2>
+<button class="close-modal-btn" id="closeEditChapterBtn">X</button>
+</div>
+<div class="modal-body">
+<form id="editChapterForm">
+<div style="margin-bottom: 15px;">
+<label style="display: block; margin-bottom: 5px;">Chapter Number</label>
+<input type="number" id="editChapterNumber" class="text-input" disabled style="background: rgba(255,255,255,0.1);">
+</div>
+<div style="margin-bottom: 15px;">
+<label style="display: block; margin-bottom: 5px;">Chapter Name</label>
+<input type="text" id="editChapterName" class="text-input" placeholder="e.g., 'The Jester's Last Laugh'" required>
+</div>
+<div style="margin-bottom: 15px;">
+<label style="display: block; margin-bottom: 5px;">Chapter Script (Main Story Content)</label>
+<p style="color: rgba(255,255,255,0.6); font-size: 0.85em; margin: 0 0 8px 0;">This is where you put the main narrative, MC notes, and guidance for this chapter</p>
+<textarea id="editChapterScript" class="text-input" rows="10" placeholder="Enter chapter script, story beats, MC guidance..."></textarea>
+</div>
+<button type="submit" class="btn-primary">Save Changes</button>
+</form>
+</div>
+</div>
+</div>
+
 <!-- Firebase (compat CDN to avoid ES module issues on GitHub Pages) -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -817,6 +846,7 @@ import {
   addScene,
   setCurrentScene,
   addChapter,
+  updateChapter,
   getMyCampaigns,
   loadCampaign,
   listenToCampaign,
@@ -824,7 +854,9 @@ import {
   updateCampaignMetadata,
   deleteCampaign,
   updateScene,
-  deleteScene
+  deleteScene,
+  addPlayerToCampaign,
+  removePlayerFromCampaign
 } from './campaign-manager-mc.js';
 
 // Global state for campaign management
@@ -1322,6 +1354,66 @@ async function loadActiveCampaign(campaignId) {
   });
 }
 
+// Edit Chapter Modal Setup
+const editChapterModal = document.getElementById('editChapterModal');
+const closeEditChapterBtn = document.getElementById('closeEditChapterBtn');
+const editChapterForm = document.getElementById('editChapterForm');
+
+if (closeEditChapterBtn) {
+  closeEditChapterBtn.addEventListener('click', function() {
+    editChapterModal.classList.add('hidden');
+  });
+}
+
+// Global function for editing chapters (called from displayChapters)
+window.editChapter = async function(chapterNumber) {
+  if (!activeCampaignData || !activeCampaignData.chapters) {
+    alert('No campaign loaded');
+    return;
+  }
+
+  const chapter = activeCampaignData.chapters[chapterNumber];
+  if (!chapter) {
+    alert('Chapter not found');
+    return;
+  }
+
+  // Populate form
+  document.getElementById('editChapterNumber').value = chapterNumber;
+  document.getElementById('editChapterName').value = chapter.name;
+  document.getElementById('editChapterScript').value = chapter.script || '';
+
+  editChapterModal.classList.remove('hidden');
+};
+
+if (editChapterForm) {
+  editChapterForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const chapterNumber = parseInt(document.getElementById('editChapterNumber').value);
+    const updates = {
+      name: document.getElementById('editChapterName').value,
+      script: document.getElementById('editChapterScript').value
+    };
+
+    const success = await updateChapter(activeCampaignId, chapterNumber, updates);
+
+    if (success) {
+      editChapterModal.classList.add('hidden');
+      await loadActiveCampaign(activeCampaignId);
+
+      // Reload campaigns in main dropdown if we're editing the active campaign
+      if (window.loadFirebaseCampaigns) {
+        await window.loadFirebaseCampaigns();
+      }
+
+      alert('Chapter updated successfully!');
+    } else {
+      alert('Failed to update chapter');
+    }
+  });
+}
+
 function displayChapters() {
   const container = document.getElementById('chaptersListDisplay');
 
@@ -1335,11 +1427,14 @@ function displayChapters() {
   container.innerHTML = chapters.map(([id, chapter]) => `
     <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid ${chapter.number === activeCampaignData.metadata.currentChapter ? '#ffd700' : 'rgba(102, 126, 234, 0.4)'};">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div>
+        <div style="flex: 1;">
           <strong style="color: #ffd700;">Chapter ${chapter.number}</strong>: ${chapter.name}
           ${chapter.number === activeCampaignData.metadata.currentChapter ? '<span style="background: rgba(255,215,0,0.3); padding: 2px 8px; border-radius: 4px; font-size: 0.8em; margin-left: 8px;">Current</span>' : ''}
         </div>
-        <span style="color: rgba(255,255,255,0.5); font-size: 0.9em;">${chapter.scenes?.length || 0} scenes</span>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <span style="color: rgba(255,255,255,0.5); font-size: 0.9em;">${chapter.scenes?.length || 0} scenes</span>
+          <button class="header-btn" onclick="editChapter(${chapter.number})" style="padding: 6px 10px; font-size: 0.85em; background: rgba(165, 94, 234, 0.4);">✏️ Edit</button>
+        </div>
       </div>
     </div>
   `).join('');

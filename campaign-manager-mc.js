@@ -174,6 +174,30 @@ export async function setCurrentChapter(campaignId, chapterNumber) {
   }
 }
 
+export async function updateChapter(campaignId, chapterNumber, updates) {
+  if (!campaignId || !chapterNumber) return false;
+
+  try {
+    const chapterRef = ref(database, `campaigns/${campaignId}/chapters/${chapterNumber}`);
+    const snapshot = await get(chapterRef);
+
+    if (!snapshot.exists()) {
+      console.error("❌ Chapter not found:", chapterNumber);
+      return false;
+    }
+
+    const currentChapter = snapshot.val();
+    const updatedChapter = { ...currentChapter, ...updates };
+
+    await set(chapterRef, updatedChapter);
+    console.log(`✅ Chapter ${chapterNumber} updated`);
+    return true;
+  } catch (error) {
+    console.error("❌ Failed to update chapter:", error);
+    return false;
+  }
+}
+
 export async function progressToNextChapter(campaignId) {
   if (!campaignId) return false;
 
