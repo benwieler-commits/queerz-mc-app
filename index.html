@@ -408,6 +408,18 @@
 </div>
 </div>
 </div>
+
+<!-- Player Management Section -->
+<div id="playerManagementSection" style="display: none; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 20px;">
+<h4 style="margin-bottom: 10px;">👥 Campaign Players</h4>
+<div id="campaignPlayersList" style="margin-bottom: 15px; max-height: 150px; overflow-y: auto;">
+<!-- Players will be listed here -->
+</div>
+<div style="display: flex; gap: 10px;">
+<input type="text" id="addPlayerNameInput" class="text-input" placeholder="Player name" style="flex: 1;">
+<button class="header-btn" id="addPlayerToCampaignBtn">+ Add Player</button>
+</div>
+</div>
 </div>
 
 <!-- Scene Broadcaster -->
@@ -584,6 +596,35 @@
 </div>
 </div>
 </div>
+
+<!-- EDIT CHAPTER MODAL -->
+<div class="modal hidden" id="editChapterModal">
+<div class="modal-content">
+<div class="modal-header">
+<h2>Edit Chapter</h2>
+<button class="close-modal-btn" id="closeEditChapterBtn">X</button>
+</div>
+<div class="modal-body">
+<form id="editChapterForm">
+<div style="margin-bottom: 15px;">
+<label style="display: block; margin-bottom: 5px;">Chapter Number</label>
+<input type="number" id="editChapterNumber" class="text-input" disabled style="background: rgba(255,255,255,0.1);">
+</div>
+<div style="margin-bottom: 15px;">
+<label style="display: block; margin-bottom: 5px;">Chapter Name</label>
+<input type="text" id="editChapterName" class="text-input" placeholder="e.g., 'The Jester's Last Laugh'" required>
+</div>
+<div style="margin-bottom: 15px;">
+<label style="display: block; margin-bottom: 5px;">Chapter Script (Main Story Content)</label>
+<p style="color: rgba(255,255,255,0.6); font-size: 0.85em; margin: 0 0 8px 0;">This is where you put the main narrative, MC notes, and guidance for this chapter</p>
+<textarea id="editChapterScript" class="text-input" rows="10" placeholder="Enter chapter script, story beats, MC guidance..."></textarea>
+</div>
+<button type="submit" class="btn-primary">Save Changes</button>
+</form>
+</div>
+</div>
+</div>
+
 <!-- Firebase (compat CDN to avoid ES module issues on GitHub Pages) -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -817,6 +858,7 @@ import {
   addScene,
   setCurrentScene,
   addChapter,
+  updateChapter,
   getMyCampaigns,
   loadCampaign,
   listenToCampaign,
@@ -824,7 +866,9 @@ import {
   updateCampaignMetadata,
   deleteCampaign,
   updateScene,
-  deleteScene
+  deleteScene,
+  addPlayerToCampaign,
+  removePlayerFromCampaign
 } from './campaign-manager-mc.js';
 
 // Global state for campaign management
@@ -1308,6 +1352,10 @@ async function loadActiveCampaign(campaignId) {
   // Display chapters list
   displayChapters();
 
+  // Display player management section
+  document.getElementById('playerManagementSection').style.display = 'block';
+  displayCampaignPlayers();
+
   console.log('✅ Active campaign loaded:', activeCampaignData.metadata.name);
 
   // Setup real-time listener
@@ -1319,6 +1367,67 @@ async function loadActiveCampaign(campaignId) {
     document.getElementById('selectedCampaignScenes').textContent = updatedCampaign.scenes ? Object.keys(updatedCampaign.scenes).length : 0;
     document.getElementById('selectedCampaignChaptersCount').textContent = updatedCampaign.chapters ? Object.keys(updatedCampaign.chapters).length : 0;
     displayChapters();
+    displayCampaignPlayers();
+  });
+}
+
+// Edit Chapter Modal Setup
+const editChapterModal = document.getElementById('editChapterModal');
+const closeEditChapterBtn = document.getElementById('closeEditChapterBtn');
+const editChapterForm = document.getElementById('editChapterForm');
+
+if (closeEditChapterBtn) {
+  closeEditChapterBtn.addEventListener('click', function() {
+    editChapterModal.classList.add('hidden');
+  });
+}
+
+// Global function for editing chapters (called from displayChapters)
+window.editChapter = async function(chapterNumber) {
+  if (!activeCampaignData || !activeCampaignData.chapters) {
+    alert('No campaign loaded');
+    return;
+  }
+
+  const chapter = activeCampaignData.chapters[chapterNumber];
+  if (!chapter) {
+    alert('Chapter not found');
+    return;
+  }
+
+  // Populate form
+  document.getElementById('editChapterNumber').value = chapterNumber;
+  document.getElementById('editChapterName').value = chapter.name;
+  document.getElementById('editChapterScript').value = chapter.script || '';
+
+  editChapterModal.classList.remove('hidden');
+};
+
+if (editChapterForm) {
+  editChapterForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const chapterNumber = parseInt(document.getElementById('editChapterNumber').value);
+    const updates = {
+      name: document.getElementById('editChapterName').value,
+      script: document.getElementById('editChapterScript').value
+    };
+
+    const success = await updateChapter(activeCampaignId, chapterNumber, updates);
+
+    if (success) {
+      editChapterModal.classList.add('hidden');
+      await loadActiveCampaign(activeCampaignId);
+
+      // Reload campaigns in main dropdown if we're editing the active campaign
+      if (window.loadFirebaseCampaigns) {
+        await window.loadFirebaseCampaigns();
+      }
+
+      alert('Chapter updated successfully!');
+    } else {
+      alert('Failed to update chapter');
+    }
   });
 }
 
@@ -1335,14 +1444,65 @@ function displayChapters() {
   container.innerHTML = chapters.map(([id, chapter]) => `
     <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid ${chapter.number === activeCampaignData.metadata.currentChapter ? '#ffd700' : 'rgba(102, 126, 234, 0.4)'};">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div>
+        <div style="flex: 1;">
           <strong style="color: #ffd700;">Chapter ${chapter.number}</strong>: ${chapter.name}
           ${chapter.number === activeCampaignData.metadata.currentChapter ? '<span style="background: rgba(255,215,0,0.3); padding: 2px 8px; border-radius: 4px; font-size: 0.8em; margin-left: 8px;">Current</span>' : ''}
         </div>
-        <span style="color: rgba(255,255,255,0.5); font-size: 0.9em;">${chapter.scenes?.length || 0} scenes</span>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <span style="color: rgba(255,255,255,0.5); font-size: 0.9em;">${chapter.scenes?.length || 0} scenes</span>
+          <button class="header-btn" onclick="editChapter(${chapter.number})" style="padding: 6px 10px; font-size: 0.85em; background: rgba(165, 94, 234, 0.4);">✏️ Edit</button>
+        </div>
       </div>
     </div>
   `).join('');
+}
+
+function displayCampaignPlayers() {
+  const container = document.getElementById('campaignPlayersList');
+
+  if (!activeCampaignData || !activeCampaignData.players || Object.keys(activeCampaignData.players).length === 0) {
+    container.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 10px;">No players yet. Add players to this campaign below!</p>';
+    return;
+  }
+
+  container.innerHTML = Object.entries(activeCampaignData.players).map(([playerId, playerData]) => `
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: rgba(255,255,255,0.05); border-radius: 5px; margin-bottom: 5px;">
+      <span>${playerData.name || playerId}</span>
+      <button onclick="removePlayerFromCampaignUI('${playerId}')" style="background: rgba(255,0,0,0.3); border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer;">✕</button>
+    </div>
+  `).join('');
+}
+
+// Global function for removing player (called from displayCampaignPlayers)
+window.removePlayerFromCampaignUI = async function(playerId) {
+  if (!activeCampaignId) return;
+
+  if (confirm('Remove this player from the campaign?')) {
+    const success = await removePlayerFromCampaign(activeCampaignId, playerId);
+    if (success) {
+      await loadActiveCampaign(activeCampaignId);
+    }
+  }
+};
+
+// Add Player to Campaign Button
+const addPlayerToCampaignBtn = document.getElementById('addPlayerToCampaignBtn');
+if (addPlayerToCampaignBtn) {
+  addPlayerToCampaignBtn.addEventListener('click', async function() {
+    const playerName = document.getElementById('addPlayerNameInput').value.trim();
+
+    if (!playerName || !activeCampaignId) {
+      alert('Please enter a player name');
+      return;
+    }
+
+    const playerId = await addPlayerToCampaign(activeCampaignId, { name: playerName });
+    if (playerId) {
+      document.getElementById('addPlayerNameInput').value = '';
+      await loadActiveCampaign(activeCampaignId);
+      console.log('✅ Player added:', playerName);
+    }
+  });
 }
 </script>
 

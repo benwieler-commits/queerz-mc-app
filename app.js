@@ -10,6 +10,7 @@ import {
     setCurrentScene,
     addChapter,
     setCurrentChapter,
+    updateChapter,
     progressToNextChapter,
     createBranchPoint,
     resolveBranchPoint,
@@ -678,6 +679,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Load Firebase campaigns and populate dropdown
     await loadFirebaseCampaigns();
 
+    // Initialize chapter dropdown for current campaign
+    updateChapterDropdownForHardcoded(currentCampaignId);
+
     // Load correct chapter tabs and content
     loadChapterTabs();
     loadScriptContent('overview'); // Load default tab
@@ -700,6 +704,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function loadFirebaseCampaigns() {
     try {
+        // Wait for auth to be ready (max 5 seconds)
+        let retries = 0;
+        while (!window.currentUserId && retries < 10) {
+            console.log('⏳ Waiting for Firebase auth...');
+            await new Promise(resolve => setTimeout(resolve, 500));
+            retries++;
+        }
+
+        if (!window.currentUserId) {
+            console.warn('⚠️ Firebase auth not ready - campaigns may not load');
+        }
+
+        console.log('🔍 Loading Firebase campaigns...');
         const campaigns = await getMyCampaigns();
 
         if (campaigns && campaigns.length > 0) {
@@ -709,7 +726,9 @@ async function loadFirebaseCampaigns() {
                 firebaseCampaigns[fbId] = campaign;
             });
 
-            console.log(`✅ Loaded ${campaigns.length} Firebase campaigns`);
+            console.log(`✅ Loaded ${campaigns.length} Firebase campaigns:`, campaigns.map(c => c.name));
+        } else {
+            console.log('ℹ️ No Firebase campaigns found for this user');
         }
 
         // Populate campaign dropdown with both hardcoded and Firebase campaigns
@@ -728,16 +747,13 @@ function populateCampaignDropdown() {
     // Clear existing options except for hardcoded ones (keep them)
     campaignSelect.innerHTML = '';
 
-    // Add hardcoded campaigns
+    // Add hardcoded campaigns (only the playable one)
     const hardcodedOption1 = document.createElement('option');
     hardcodedOption1.value = 'queerz-chapter1';
     hardcodedOption1.textContent = 'QUEERZ! Chapter 1';
     campaignSelect.appendChild(hardcodedOption1);
 
-    const hardcodedOption2 = document.createElement('option');
-    hardcodedOption2.value = 'queerz-chapters-2-5';
-    hardcodedOption2.textContent = 'QUEERZ! Chapters 2-5 (Coming Soon)';
-    campaignSelect.appendChild(hardcodedOption2);
+    // Note: Removed "Chapters 2-5 Coming Soon" as it's not playable yet
 
     // Add divider if there are Firebase campaigns
     if (Object.keys(firebaseCampaigns).length > 0) {
@@ -753,14 +769,16 @@ function populateCampaignDropdown() {
             option.textContent = `📚 ${campaign.name}`;
             campaignSelect.appendChild(option);
         });
+
+        console.log(`✅ Campaign dropdown populated: 1 hardcoded + ${Object.keys(firebaseCampaigns).length} Firebase campaigns`);
+    } else {
+        console.log('✅ Campaign dropdown populated: 1 hardcoded campaign (no Firebase campaigns yet)');
     }
 
     // Set current selection
     if (currentCampaignId) {
         campaignSelect.value = currentCampaignId;
     }
-
-    console.log(`✅ Campaign dropdown populated with ${Object.keys(firebaseCampaigns).length} Firebase campaigns`);
 }
 
 async function loadFirebaseCampaignData(campaignId) {
@@ -815,6 +833,39 @@ function updateChapterDropdownForFirebase(campaignData) {
     if (campaignData.metadata.currentChapter) {
         chapterSelect.value = campaignData.metadata.currentChapter;
         currentChapter = campaignData.metadata.currentChapter;
+    }
+}
+
+function updateChapterDropdownForHardcoded(campaignId) {
+    if (!chapterSelect) return;
+
+    // Clear existing options
+    chapterSelect.innerHTML = '';
+
+    const campaign = availableCampaigns[campaignId];
+    if (!campaign) return;
+
+    // Only show chapters that are marked as available
+    if (campaign.chapters && campaign.chapters.length > 0) {
+        campaign.chapters.forEach(chapter => {
+            if (chapter.available) {  // Only show available chapters
+                const option = document.createElement('option');
+                option.value = chapter.number;
+                option.textContent = chapter.name;
+                chapterSelect.appendChild(option);
+            }
+        });
+    } else {
+        // Fallback: show chapter 1
+        const option = document.createElement('option');
+        option.value = '1';
+        option.textContent = 'Chapter 1';
+        chapterSelect.appendChild(option);
+    }
+
+    // Set current chapter
+    if (chapterSelect.options.length > 0) {
+        chapterSelect.value = currentChapter;
     }
 }
 
@@ -959,9 +1010,9 @@ function initializeEventListeners() {
 
                 // Reset to chapter 1 when changing campaigns
                 currentChapter = 1;
-                if (chapterSelect) {
-                    chapterSelect.value = 1;
-                }
+
+                // Update chapter dropdown for hardcoded campaign
+                updateChapterDropdownForHardcoded(currentCampaignId);
 
                 loadChapterTabs();
                 loadScriptContent('overview');
