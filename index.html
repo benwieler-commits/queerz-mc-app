@@ -408,6 +408,18 @@
 </div>
 </div>
 </div>
+
+<!-- Player Management Section -->
+<div id="playerManagementSection" style="display: none; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 20px;">
+<h4 style="margin-bottom: 10px;">👥 Campaign Players</h4>
+<div id="campaignPlayersList" style="margin-bottom: 15px; max-height: 150px; overflow-y: auto;">
+<!-- Players will be listed here -->
+</div>
+<div style="display: flex; gap: 10px;">
+<input type="text" id="addPlayerNameInput" class="text-input" placeholder="Player name" style="flex: 1;">
+<button class="header-btn" id="addPlayerToCampaignBtn">+ Add Player</button>
+</div>
+</div>
 </div>
 
 <!-- Scene Broadcaster -->
@@ -1340,6 +1352,10 @@ async function loadActiveCampaign(campaignId) {
   // Display chapters list
   displayChapters();
 
+  // Display player management section
+  document.getElementById('playerManagementSection').style.display = 'block';
+  displayCampaignPlayers();
+
   console.log('✅ Active campaign loaded:', activeCampaignData.metadata.name);
 
   // Setup real-time listener
@@ -1351,6 +1367,7 @@ async function loadActiveCampaign(campaignId) {
     document.getElementById('selectedCampaignScenes').textContent = updatedCampaign.scenes ? Object.keys(updatedCampaign.scenes).length : 0;
     document.getElementById('selectedCampaignChaptersCount').textContent = updatedCampaign.chapters ? Object.keys(updatedCampaign.chapters).length : 0;
     displayChapters();
+    displayCampaignPlayers();
   });
 }
 
@@ -1438,6 +1455,54 @@ function displayChapters() {
       </div>
     </div>
   `).join('');
+}
+
+function displayCampaignPlayers() {
+  const container = document.getElementById('campaignPlayersList');
+
+  if (!activeCampaignData || !activeCampaignData.players || Object.keys(activeCampaignData.players).length === 0) {
+    container.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 10px;">No players yet. Add players to this campaign below!</p>';
+    return;
+  }
+
+  container.innerHTML = Object.entries(activeCampaignData.players).map(([playerId, playerData]) => `
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: rgba(255,255,255,0.05); border-radius: 5px; margin-bottom: 5px;">
+      <span>${playerData.name || playerId}</span>
+      <button onclick="removePlayerFromCampaignUI('${playerId}')" style="background: rgba(255,0,0,0.3); border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer;">✕</button>
+    </div>
+  `).join('');
+}
+
+// Global function for removing player (called from displayCampaignPlayers)
+window.removePlayerFromCampaignUI = async function(playerId) {
+  if (!activeCampaignId) return;
+
+  if (confirm('Remove this player from the campaign?')) {
+    const success = await removePlayerFromCampaign(activeCampaignId, playerId);
+    if (success) {
+      await loadActiveCampaign(activeCampaignId);
+    }
+  }
+};
+
+// Add Player to Campaign Button
+const addPlayerToCampaignBtn = document.getElementById('addPlayerToCampaignBtn');
+if (addPlayerToCampaignBtn) {
+  addPlayerToCampaignBtn.addEventListener('click', async function() {
+    const playerName = document.getElementById('addPlayerNameInput').value.trim();
+
+    if (!playerName || !activeCampaignId) {
+      alert('Please enter a player name');
+      return;
+    }
+
+    const playerId = await addPlayerToCampaign(activeCampaignId, { name: playerName });
+    if (playerId) {
+      document.getElementById('addPlayerNameInput').value = '';
+      await loadActiveCampaign(activeCampaignId);
+      console.log('✅ Player added:', playerName);
+    }
+  });
 }
 </script>
 
