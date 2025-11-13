@@ -77,9 +77,19 @@ function setupPlayerListener() {
         console.log('📥 Syncing player data from Player App:', playerData);
 
         // playerData structure from Player App:
-        // { playerName: { character: {...}, tags: {...} } }
+        // playerCharacters/[uid]: {
+        //   name: string,
+        //   pronouns: string,
+        //   portraitUrl: string,
+        //   currentStatuses: [],
+        //   storyTags: [],
+        //   juice: number,
+        //   themes: []
+        // }
 
-        Object.entries(playerData).forEach(([playerName, data]) => {
+        Object.entries(playerData).forEach(([playerId, data]) => {
+            const playerName = data.name || playerId || 'Unnamed Character';
+
             // Find existing player or create new one
             let player = players.find(p => p.name === playerName);
 
@@ -87,6 +97,10 @@ function setupPlayerListener() {
                 // New player - add to spotlight
                 player = {
                     name: playerName,
+                    pronouns: data.pronouns || '',
+                    portraitUrl: data.portraitUrl || '',
+                    juice: data.juice || 0,
+                    themes: data.themes || [],
                     tags: {
                         story: [],
                         status: []
@@ -94,41 +108,40 @@ function setupPlayerListener() {
                 };
                 players.push(player);
                 console.log(`✅ Added new player from Player App: ${playerName}`);
+            } else {
+                // Update existing player data
+                if (data.pronouns) player.pronouns = data.pronouns;
+                if (data.portraitUrl) player.portraitUrl = data.portraitUrl;
+                if (data.juice !== undefined) player.juice = data.juice;
+                if (data.themes) player.themes = data.themes;
             }
 
-            // Sync tags from player app
-            if (data.tags) {
-                // Merge story tags
-                if (data.tags.story && Array.isArray(data.tags.story)) {
-                    data.tags.story.forEach(tag => {
-                        if (!player.tags.story.includes(tag)) {
-                            player.tags.story.push(tag);
-                        }
-                    });
-                }
-
-                // Merge status tags
-                if (data.tags.status && Array.isArray(data.tags.status)) {
-                    data.tags.status.forEach(tag => {
-                        if (!player.tags.status.includes(tag)) {
-                            player.tags.status.push(tag);
-                        }
-                    });
-                }
+            // Sync story tags from Player App
+            if (data.storyTags && Array.isArray(data.storyTags)) {
+                data.storyTags.forEach(tag => {
+                    if (!player.tags.story.includes(tag)) {
+                        player.tags.story.push(tag);
+                    }
+                });
             }
 
-            // Store character data for reference
-            if (data.character) {
-                player.character = data.character;
+            // Sync status tags from Player App (currentStatuses → status tags)
+            if (data.currentStatuses && Array.isArray(data.currentStatuses)) {
+                data.currentStatuses.forEach(tag => {
+                    if (!player.tags.status.includes(tag)) {
+                        player.tags.status.push(tag);
+                    }
+                });
             }
         });
 
         // Update UI
         renderPlayers();
+        renderPlayerOverview();
         saveToLocalStorage();
     });
 
-    console.log('✅ Player listener setup complete');
+    console.log('✅ Player listener setup - MC App ready to receive player broadcasts');
 }
 
 // ===================================
