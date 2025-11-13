@@ -1196,3 +1196,86 @@ body {
         transform: translateX(0);
     }
 }
+
+/* === COUNTER BUBBLES === */
+.counter-bubble {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 3px solid #4A7C7E;
+    background: rgba(26, 26, 26, 0.8);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.counter-bubble:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(74, 124, 126, 0.6);
+}
+
+.counter-bubble.filled {
+    background: linear-gradient(135deg, #4A7C7E 0%, #2D5456 100%);
+    border-color: #67E8F9;
+    box-shadow: 0 0 10px rgba(103, 232, 249, 0.4);
+}
+
+.counter-bubble[data-counter="ignorance"].filled {
+    background: linear-gradient(135deg, #E89B9B 0%, #8B5A5A 100%);
+    border-color: #E89B9B;
+    box-shadow: 0 0 10px rgba(232, 155, 155, 0.4);
+}
+
+.counter-bubble[data-counter="acceptance"].filled {
+    background: linear-gradient(135deg, #4A7C7E 0%, #2D5456 100%);
+    border-color: #4ADE80;
+    box-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
+}
+
+.counter-bubble[data-counter="rejection"].filled {
+    background: linear-gradient(135deg, #8B5A5A 0%, #5A3A3A 100%);
+    border-color: #E89B9B;
+    box-shadow: 0 0 10px rgba(232, 155, 155, 0.4);
+}
+
+.inline-counter {
+    user-select: none;
+}
+
+.counter-bubbles-container {
+    flex-wrap: wrap;
+}
+
+/* === SCRIPT CONTENT IMPROVEMENTS === */
+.script-text {
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+.scene-branches label:hover {
+    background: rgba(74, 124, 126, 0.3) !important;
+}
+
+.outcome-branches label:hover {
+    opacity: 0.9;
+}
+
+/* Radio button styling */
+input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #4A7C7E;
+    cursor: pointer;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .counter-bubble {
+        width: 25px;
+        height: 25px;
+    }
+
+    .inline-counter {
+        margin: 10px 0 !important;
+    }
+}
