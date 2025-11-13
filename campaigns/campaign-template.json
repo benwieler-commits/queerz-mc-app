@@ -101,7 +101,7 @@
             "note": "Give more story tags from investigation"
           },
           "harder": {
-            "ignoranceLimitModifier": +2,
+            "ignoranceLimitModifier": 2,
             "additionalPawns": 1,
             "note": "Add environmental hazards"
           }

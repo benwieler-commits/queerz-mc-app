@@ -165,7 +165,7 @@
             "note": "Lower Danny's Ignorance Limit to 3-4, give more Story Tags from investigation, make Danny more receptive to diplomacy"
           },
           "harder": {
-            "ignoranceLimitModifier": +2,
+            "ignoranceLimitModifier": 2,
             "additionalPawns": 1,
             "note": "Increase Danny's Ignorance Limit to 6-7, add second Justice Knight (veteran Tough Crowd member), more complex Inner Space wounds"
           }

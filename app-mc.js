@@ -3,7 +3,7 @@
 // Main Application Logic
 // ===================================
 
-import { broadcast } from './firebase-broadcast.js';
+import { broadcast, listenToPlayers } from './firebase-broadcast.js';
 import {
     createCampaign,
     addScene,
@@ -62,8 +62,74 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderCheckpoints();
     updateCounterDisplays();
 
+    // Listen for player data from Player App
+    setupPlayerListener();
+
     console.log('✅ MC Companion initialized');
 });
+
+// ===================================
+// PLAYER DATA SYNC FROM PLAYER APP
+// ===================================
+
+function setupPlayerListener() {
+    listenToPlayers((playerData) => {
+        console.log('📥 Syncing player data from Player App:', playerData);
+
+        // playerData structure from Player App:
+        // { playerName: { character: {...}, tags: {...} } }
+
+        Object.entries(playerData).forEach(([playerName, data]) => {
+            // Find existing player or create new one
+            let player = players.find(p => p.name === playerName);
+
+            if (!player) {
+                // New player - add to spotlight
+                player = {
+                    name: playerName,
+                    tags: {
+                        story: [],
+                        status: []
+                    }
+                };
+                players.push(player);
+                console.log(`✅ Added new player from Player App: ${playerName}`);
+            }
+
+            // Sync tags from player app
+            if (data.tags) {
+                // Merge story tags
+                if (data.tags.story && Array.isArray(data.tags.story)) {
+                    data.tags.story.forEach(tag => {
+                        if (!player.tags.story.includes(tag)) {
+                            player.tags.story.push(tag);
+                        }
+                    });
+                }
+
+                // Merge status tags
+                if (data.tags.status && Array.isArray(data.tags.status)) {
+                    data.tags.status.forEach(tag => {
+                        if (!player.tags.status.includes(tag)) {
+                            player.tags.status.push(tag);
+                        }
+                    });
+                }
+            }
+
+            // Store character data for reference
+            if (data.character) {
+                player.character = data.character;
+            }
+        });
+
+        // Update UI
+        renderPlayers();
+        saveToLocalStorage();
+    });
+
+    console.log('✅ Player listener setup complete');
+}
 
 // ===================================
 // LOCAL STORAGE
@@ -80,8 +146,8 @@ function loadFromLocalStorage() {
         const savedCounters = localStorage.getItem('mcApp_counters');
         if (savedCounters) counters = JSON.parse(savedCounters);
 
-        const savedSessions = localStorage.getItem('mcApp_sessions_v2');
-        if (savedSessions) savedSessions = JSON.parse(savedSessions);
+        const savedSessionsData = localStorage.getItem('mcApp_sessions_v2');
+        if (savedSessionsData) savedSessions = JSON.parse(savedSessionsData);
 
         const savedCurrentSession = localStorage.getItem('mcApp_currentSession_v2');
         if (savedCurrentSession) {
@@ -151,6 +217,163 @@ function populateCampaignSelect() {
         option.textContent = campaign.name || campaign.metadata?.name || id;
         campaignSelect.appendChild(option);
     });
+}
+
+function loadCampaignScript(campaignId) {
+    const campaign = campaigns[campaignId];
+    if (!campaign) return;
+
+    const scriptContent = document.getElementById('scriptContent');
+    const scriptTabs = document.getElementById('scriptTabs');
+    const scriptPanelTitle = document.getElementById('scriptPanelTitle');
+
+    if (!scriptContent || !scriptTabs) return;
+
+    // Update panel title
+    if (scriptPanelTitle) {
+        scriptPanelTitle.textContent = campaign.name || 'Campaign Script';
+    }
+
+    // Get first chapter
+    const chapter = campaign.chapters && campaign.chapters[0];
+    if (!chapter) {
+        scriptContent.innerHTML = '<p class="placeholder-text">No chapter content available</p>';
+        return;
+    }
+
+    // Create tabs
+    scriptTabs.innerHTML = '';
+    const tabs = [
+        { id: 'overview', label: 'Overview' },
+        { id: 'scenes', label: 'Scenes' },
+        { id: 'innerSpace', label: 'Inner Space' },
+        { id: 'aftermath', label: 'Aftermath' },
+        { id: 'scaling', label: 'Scaling' }
+    ];
+
+    tabs.forEach((tab, index) => {
+        const tabBtn = document.createElement('button');
+        tabBtn.className = `tab-btn ${index === 0 ? 'active' : ''}`;
+        tabBtn.textContent = tab.label;
+        tabBtn.onclick = () => {
+            // Remove active from all tabs
+            scriptTabs.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            tabBtn.classList.add('active');
+            displayScriptTab(chapter, tab.id);
+        };
+        scriptTabs.appendChild(tabBtn);
+    });
+
+    // Display overview by default
+    displayScriptTab(chapter, 'overview');
+}
+
+function displayScriptTab(chapter, tabId) {
+    const scriptContent = document.getElementById('scriptContent');
+    if (!scriptContent) return;
+
+    let html = '';
+
+    switch (tabId) {
+        case 'overview':
+            html = `
+                <h2>${chapter.name}</h2>
+                <p>${chapter.overview || 'No overview available'}</p>
+                ${chapter.scenes ? `<h3>Scenes (${chapter.scenes.length})</h3><ul>${chapter.scenes.map(s => `<li><strong>${s.name}</strong> - ${s.location}</li>`).join('')}</ul>` : ''}
+            `;
+            break;
+
+        case 'scenes':
+            if (chapter.scenes && chapter.scenes.length > 0) {
+                html = chapter.scenes.map(scene => `
+                    <h3>Scene ${scene.number}: ${scene.name}</h3>
+                    <p><strong>Location:</strong> ${scene.location}</p>
+                    <p><strong>Music:</strong> ${scene.music}</p>
+                    <div style="white-space: pre-wrap; margin: 15px 0;">${scene.content}</div>
+                    ${scene.npcs ? `<p><strong>NPCs:</strong> ${scene.npcs.join(', ')}</p>` : ''}
+                    ${scene.tags ? `<p><strong>Tags:</strong> ${scene.tags.join(', ')}</p>` : ''}
+                    <hr style="border-color: rgba(74, 124, 126, 0.3); margin: 20px 0;">
+                `).join('');
+            } else {
+                html = '<p class="placeholder-text">No scenes available</p>';
+            }
+            break;
+
+        case 'innerSpace':
+            if (chapter.innerSpace) {
+                html = `
+                    <h2>Inner Space</h2>
+                    <p>${chapter.innerSpace.description}</p>
+                    ${chapter.innerSpace.coreWounds ? `
+                        <h3>Core Wounds</h3>
+                        ${chapter.innerSpace.coreWounds.map(wound => `
+                            <div style="background: rgba(74, 124, 126, 0.2); padding: 15px; margin: 15px 0; border-radius: 10px;">
+                                <h4 style="color: #E89B9B;">${wound.name}</h4>
+                                <p>${wound.description}</p>
+                                <h5>Approaches:</h5>
+                                <ul>
+                                    <li><strong>Talk It Out:</strong> ${wound.approaches.talkItOut}</li>
+                                    <li><strong>Care:</strong> ${wound.approaches.care}</li>
+                                    <li><strong>Slay:</strong> ${wound.approaches.slay}</li>
+                                </ul>
+                            </div>
+                        `).join('')}
+                    ` : ''}
+                `;
+            } else {
+                html = '<p class="placeholder-text">No Inner Space content available</p>';
+            }
+            break;
+
+        case 'aftermath':
+            if (chapter.aftermath && chapter.aftermath.outcomes) {
+                html = `
+                    <h2>Aftermath & Outcomes</h2>
+                    ${chapter.aftermath.outcomes.map(outcome => `
+                        <div style="background: rgba(74, 124, 126, 0.2); padding: 15px; margin: 15px 0; border-radius: 10px;">
+                            <h4 style="color: #F4D35E; text-transform: capitalize;">${outcome.condition} Outcome</h4>
+                            <p>${outcome.description}</p>
+                            <h5>Consequences:</h5>
+                            <ul>${outcome.consequences.map(c => `<li>${c}</li>`).join('')}</ul>
+                            <p><strong>Next Chapter Impact:</strong> ${outcome.nextChapterImpact}</p>
+                        </div>
+                    `).join('')}
+                `;
+            } else {
+                html = '<p class="placeholder-text">No aftermath content available</p>';
+            }
+            break;
+
+        case 'scaling':
+            if (chapter.scalingAndPacing) {
+                const scaling = chapter.scalingAndPacing;
+                html = `
+                    <h2>Scaling & Pacing</h2>
+                    ${scaling.partySize ? `
+                        <h3>Party Size Adjustments</h3>
+                        ${Object.entries(scaling.partySize).map(([size, config]) => `
+                            <div style="background: rgba(74, 124, 126, 0.2); padding: 15px; margin: 15px 0; border-radius: 10px;">
+                                <h4 style="color: #67E8F9;">${size} Players</h4>
+                                <p><strong>Ignorance Limit:</strong> ${config.ignoranceLimit}</p>
+                                <p><strong>Pawns:</strong> ${config.pawns}</p>
+                                <p>${config.difficulty}</p>
+                            </div>
+                        `).join('')}
+                    ` : ''}
+                    ${scaling.sessionLength ? `
+                        <h3>Session Length Options</h3>
+                        ${Object.entries(scaling.sessionLength).map(([type, desc]) => `
+                            <p><strong style="color: #E89B9B; text-transform: capitalize;">${type}:</strong> ${desc}</p>
+                        `).join('')}
+                    ` : ''}
+                `;
+            } else {
+                html = '<p class="placeholder-text">No scaling content available</p>';
+            }
+            break;
+    }
+
+    scriptContent.innerHTML = html;
 }
 
 // ===================================
@@ -811,6 +1034,15 @@ function setupEventListeners() {
             playerModal?.classList.add('hidden');
         } else {
             alert('Please enter a player name');
+        }
+    });
+
+    // Campaign selection
+    const campaignSelect = document.getElementById('campaignSelect');
+    campaignSelect?.addEventListener('change', (e) => {
+        currentCampaignId = e.target.value;
+        if (currentCampaignId && campaigns[currentCampaignId]) {
+            loadCampaignScript(currentCampaignId);
         }
     });
 
