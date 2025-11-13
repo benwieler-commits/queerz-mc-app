@@ -549,6 +549,12 @@ body {
     gap: 15px;
 }
 
+@media (max-width: 600px) {
+    .inner-space-counters {
+        grid-template-columns: 1fr;
+    }
+}
+
 .acceptance-counter {
     border-color: rgba(74, 222, 128, 0.5);
 }

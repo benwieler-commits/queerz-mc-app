@@ -3,7 +3,7 @@
 // Main Application Logic
 // ===================================
 
-import { broadcast } from './firebase-broadcast.js';
+import { broadcast, listenToPlayers } from './firebase-broadcast.js';
 import {
     createCampaign,
     addScene,
@@ -62,8 +62,74 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderCheckpoints();
     updateCounterDisplays();
 
+    // Listen for player data from Player App
+    setupPlayerListener();
+
     console.log('✅ MC Companion initialized');
 });
+
+// ===================================
+// PLAYER DATA SYNC FROM PLAYER APP
+// ===================================
+
+function setupPlayerListener() {
+    listenToPlayers((playerData) => {
+        console.log('📥 Syncing player data from Player App:', playerData);
+
+        // playerData structure from Player App:
+        // { playerName: { character: {...}, tags: {...} } }
+
+        Object.entries(playerData).forEach(([playerName, data]) => {
+            // Find existing player or create new one
+            let player = players.find(p => p.name === playerName);
+
+            if (!player) {
+                // New player - add to spotlight
+                player = {
+                    name: playerName,
+                    tags: {
+                        story: [],
+                        status: []
+                    }
+                };
+                players.push(player);
+                console.log(`✅ Added new player from Player App: ${playerName}`);
+            }
+
+            // Sync tags from player app
+            if (data.tags) {
+                // Merge story tags
+                if (data.tags.story && Array.isArray(data.tags.story)) {
+                    data.tags.story.forEach(tag => {
+                        if (!player.tags.story.includes(tag)) {
+                            player.tags.story.push(tag);
+                        }
+                    });
+                }
+
+                // Merge status tags
+                if (data.tags.status && Array.isArray(data.tags.status)) {
+                    data.tags.status.forEach(tag => {
+                        if (!player.tags.status.includes(tag)) {
+                            player.tags.status.push(tag);
+                        }
+                    });
+                }
+            }
+
+            // Store character data for reference
+            if (data.character) {
+                player.character = data.character;
+            }
+        });
+
+        // Update UI
+        renderPlayers();
+        saveToLocalStorage();
+    });
+
+    console.log('✅ Player listener setup complete');
+}
 
 // ===================================
 // LOCAL STORAGE
