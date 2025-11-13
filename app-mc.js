@@ -198,11 +198,26 @@ function saveToLocalStorage() {
 
 async function loadCampaigns() {
     try {
-        // Load from JSON file
-        const response = await fetch('./campaigns/example-campaign.json');
-        if (response.ok) {
-            const campaign = await response.json();
-            campaigns[campaign.id] = campaign;
+        // List of campaign files to load
+        const campaignFiles = [
+            'example-campaign.json',
+            'tori-campaign.json'
+        ];
+
+        // Load each campaign file
+        for (const filename of campaignFiles) {
+            try {
+                const response = await fetch(`./campaigns/${filename}`);
+                if (response.ok) {
+                    const campaign = await response.json();
+                    campaigns[campaign.id] = campaign;
+                    console.log(`✅ Loaded campaign: ${campaign.name || filename}`);
+                } else {
+                    console.warn(`⚠️ Campaign file not found: ${filename}`);
+                }
+            } catch (err) {
+                console.warn(`⚠️ Error loading ${filename}:`, err.message);
+            }
         }
 
         // Load from Firebase
