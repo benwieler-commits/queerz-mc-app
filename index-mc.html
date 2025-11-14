@@ -158,51 +158,12 @@
                 </div>
                 <div class="counter-display">
                     <div class="counter-value" id="ignoranceCounter">0</div>
-                    <div class="counter-max">/ <span id="ignoranceMax">5</span></div>
                 </div>
                 <div class="counter-controls">
                     <button class="counter-btn decrement" onclick="changeCounter('ignorance', -1)">−</button>
                     <button class="counter-btn increment" onclick="changeCounter('ignorance', 1)">+</button>
                 </div>
             </div>
-
-            <!-- Inner Space Counters (Justice Knight Specific) -->
-            <div id="innerSpaceCounters" class="inner-space-counters" style="display: none;">
-                <!-- Acceptance Counter -->
-                <div class="counter-section acceptance-counter">
-                    <div class="counter-header">
-                        <h4>Acceptance</h4>
-                        <button class="counter-btn reset" onclick="resetCounter('acceptance')">Reset</button>
-                    </div>
-                    <div class="counter-display">
-                        <div class="counter-value" id="acceptanceCounter">0</div>
-                    </div>
-                    <div class="counter-controls">
-                        <button class="counter-btn decrement" onclick="changeCounter('acceptance', -1)">−</button>
-                        <button class="counter-btn increment" onclick="changeCounter('acceptance', 1)">+</button>
-                    </div>
-                </div>
-
-                <!-- Rejection Counter -->
-                <div class="counter-section rejection-counter">
-                    <div class="counter-header">
-                        <h4>Rejection</h4>
-                        <button class="counter-btn reset" onclick="resetCounter('rejection')">Reset</button>
-                    </div>
-                    <div class="counter-display">
-                        <div class="counter-value" id="rejectionCounter">0</div>
-                    </div>
-                    <div class="counter-controls">
-                        <button class="counter-btn decrement" onclick="changeCounter('rejection', -1)">−</button>
-                        <button class="counter-btn increment" onclick="changeCounter('rejection', 1)">+</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Toggle Inner Space Counters -->
-            <button class="header-btn" style="width: 100%; margin-top: 15px;" onclick="toggleInnerSpaceCounters()">
-                <span id="innerSpaceToggleText">Show Inner Space Counters</span>
-            </button>
         </section>
 
         <!-- DICE ROLLER -->
