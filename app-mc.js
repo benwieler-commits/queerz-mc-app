@@ -200,8 +200,6 @@ async function loadCampaigns() {
     try {
         // List of campaign files to load
         const campaignFiles = [
-            'example-campaign.json',
-            'tori-campaign.json'
         ];
 
         // Load each campaign file
