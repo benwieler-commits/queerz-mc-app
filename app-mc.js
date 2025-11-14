@@ -24,7 +24,7 @@ let currentChapter = 1;
 let campaigns = {};
 let checkpoints = [];
 let counters = {
-    ignorance: { current: 0, max: 5 },
+    ignorance: { current: 0 },
     acceptance: { current: 0 },
     rejection: { current: 0 }
 };
@@ -167,7 +167,7 @@ function loadFromLocalStorage() {
             currentSession = JSON.parse(savedCurrentSession);
             players = currentSession.players || [];
             checkpoints = currentSession.checkpoints || [];
-            counters = currentSession.counters || {ignorance: {current: 0, max: 5}, acceptance: {current: 0}, rejection: {current: 0}};
+            counters = currentSession.counters || {ignorance: {current: 0}, acceptance: {current: 0}, rejection: {current: 0}};
         }
 
         console.log('✅ Loaded from localStorage');
@@ -722,18 +722,6 @@ function setActivePlayer(index) {
 // TAG MANAGEMENT
 // ===================================
 
-const TAG_DATABASE = {
-    story: {
-        beneficial: ['Advantage', 'Protected', 'Hidden', 'Inspired', 'Coordinated', 'Prepared', 'Intel', 'Backup', 'Momentum', 'Focus'],
-        harmful: ['Exposed', 'Vulnerable', 'Shaken', 'Conforming', 'Isolated', 'Overwhelmed', 'Marked', 'Distracted'],
-        investigation: ['Clue Found', 'Witness Located', 'Evidence Gathered', 'Pattern Recognized', 'Connection Made']
-    },
-    status: {
-        beneficial: ['+1 Forward', '+1 Ongoing', 'Armored', 'Enhanced', 'Invisible', 'Flying'],
-        harmful: ['Shaken (-1 Ongoing)', 'Conforming (-1 to Resist)', 'Marked', 'Wounded', 'Exhausted', 'Confused']
-    }
-};
-
 function updatePlayerTagsDisplay() {
     const container = document.getElementById('playerTagsContainer');
     if (!container) return;
@@ -784,14 +772,7 @@ function renderTags(tags, type) {
 }
 
 function getTagType(tag, categoryType) {
-    const category = TAG_DATABASE[categoryType];
-    if (!category) return 'neutral';
-
-    for (const [type, tags] of Object.entries(category)) {
-        if (tags.includes(tag)) {
-            return type === 'beneficial' ? 'beneficial' : type === 'harmful' ? 'harmful' : 'neutral';
-        }
-    }
+    // All tags are neutral - script-specific classification should be done via tag naming
     return 'neutral';
 }
 
@@ -801,23 +782,13 @@ window.showAddTagDialog = function(tagType) {
         return;
     }
 
-    const categories = TAG_DATABASE[tagType];
-    let dialogHTML = '<div style="max-height: 400px; overflow-y: auto;">';
-
-    for (const [category, tags] of Object.entries(categories)) {
-        dialogHTML += `<div style="margin-bottom: 15px;">`;
-        dialogHTML += `<strong style="text-transform: capitalize; color: #E89B9B;">${category}:</strong><br>`;
-        tags.forEach(tag => {
-            dialogHTML += `<button class="add-tag-btn" style="margin: 5px;" onclick="addTag('${tagType}', '${tag}'); closeTagDialog();">${tag}</button>`;
-        });
-        dialogHTML += `</div>`;
-    }
-
-    dialogHTML += `<hr style="border-color: rgba(74, 124, 126, 0.3); margin: 15px 0;">`;
-    dialogHTML += `<strong>Or enter custom tag:</strong><br>`;
-    dialogHTML += `<input type="text" id="customTagInput" class="text-input" placeholder="Custom tag name">`;
-    dialogHTML += `<button class="header-btn" style="margin-top: 10px;" onclick="addCustomTag('${tagType}')">Add Custom</button>`;
-    dialogHTML += `</div>`;
+    const dialogHTML = `
+        <div style="max-height: 400px; overflow-y: auto;">
+            <p style="margin-bottom: 15px; color: #E89B9B;">Enter a script-specific tag for the current scene:</p>
+            <input type="text" id="customTagInput" class="text-input" placeholder="Custom tag name" autofocus>
+            <button class="header-btn" style="margin-top: 10px; width: 100%;" onclick="addCustomTag('${tagType}')">Add Tag</button>
+        </div>
+    `;
 
     const modal = document.createElement('div');
     modal.className = 'modal';
@@ -835,6 +806,19 @@ window.showAddTagDialog = function(tagType) {
         if (e.target === modal) closeTagDialog();
     });
     document.body.appendChild(modal);
+
+    // Allow Enter key to submit
+    setTimeout(() => {
+        const input = document.getElementById('customTagInput');
+        if (input) {
+            input.focus();
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    addCustomTag(tagType);
+                }
+            });
+        }
+    }, 100);
 };
 
 window.closeTagDialog = function() {
@@ -850,6 +834,8 @@ window.addTag = function(type, tag) {
         player.tags[type].push(tag);
         updatePlayerTagsDisplay();
         saveToLocalStorage();
+        // Automatically broadcast just tags without resetting layout/audio
+        broadcastTagsOnly();
     }
 };
 
@@ -873,6 +859,8 @@ window.removeTag = function(type, tag) {
         player.tags[type].splice(index, 1);
         updatePlayerTagsDisplay();
         saveToLocalStorage();
+        // Automatically broadcast just tags without resetting layout/audio
+        broadcastTagsOnly();
     }
 };
 
@@ -943,11 +931,6 @@ function updateCounterDisplays() {
 window.changeCounter = function(type, delta) {
     counters[type].current = Math.max(0, counters[type].current + delta);
 
-    // Cap ignorance counter at max
-    if (type === 'ignorance' && counters[type].max) {
-        counters[type].current = Math.min(counters[type].current, counters[type].max);
-    }
-
     updateCounterDisplays();
     saveToLocalStorage();
 };
@@ -958,18 +941,6 @@ window.resetCounter = function(type) {
     saveToLocalStorage();
 };
 
-window.toggleInnerSpaceCounters = function() {
-    const container = document.getElementById('innerSpaceCounters');
-    const toggleText = document.getElementById('innerSpaceToggleText');
-
-    if (container.style.display === 'none' || !container.style.display) {
-        container.style.display = 'grid';
-        toggleText.textContent = 'Hide Inner Space Counters';
-    } else {
-        container.style.display = 'none';
-        toggleText.textContent = 'Show Inner Space Counters';
-    }
-};
 
 // ===================================
 // DICE ROLLER
@@ -1107,6 +1078,27 @@ function playNextInPlaylist() {
 // ===================================
 // BROADCAST FUNCTIONALITY
 // ===================================
+
+async function broadcastTagsOnly() {
+    try {
+        // Broadcast only player tags and counters, without changing music/environment/npc
+        // This prevents resetting the audio player
+        const payload = {
+            players: players.map(p => ({
+                name: p.name,
+                tags: p.tags
+            })),
+            counters: counters,
+            timestamp: Date.now(),
+            tagsOnly: true  // Flag to indicate this is a tags-only update
+        };
+
+        await broadcast(payload);
+        console.log('✅ Tags broadcast successful (audio not affected)');
+    } catch (error) {
+        console.error('❌ Tags broadcast failed:', error);
+    }
+}
 
 async function broadcastToPlayers() {
     try {
@@ -1255,7 +1247,7 @@ window.loadSession = function(index) {
     currentSession = {...savedSessions[index]};
     players = currentSession.players || [];
     checkpoints = currentSession.checkpoints || [];
-    counters = currentSession.counters || {ignorance: {current: 0, max: 5}, acceptance: {current: 0}, rejection: {current: 0}};
+    counters = currentSession.counters || {ignorance: {current: 0}, acceptance: {current: 0}, rejection: {current: 0}};
 
     renderPlayers();
     renderCheckpoints();

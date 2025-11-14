@@ -886,6 +886,7 @@ body {
 
 .panel-content {
     padding: 20px;
+    padding-bottom: 60px; /* Extra padding at bottom to ensure all content is visible when scrolling */
     line-height: 1.8;
 }
 
