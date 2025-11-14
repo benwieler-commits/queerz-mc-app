@@ -333,8 +333,12 @@ function renderCounterBubbles(type, limit, sceneId) {
     }
 
     const label = type === 'ignorance' ? 'Ignorance Limit' :
+                  type === 'youAreEnough' ? 'You Are Enough' :
+                  type === 'proveYourWorth' ? 'Prove Your Worth' :
                   type === 'acceptance' ? 'Acceptance' : 'Rejection';
     const color = type === 'ignorance' ? '#E89B9B' :
+                  type === 'youAreEnough' ? '#4A7C7E' :
+                  type === 'proveYourWorth' ? '#8B5A5A' :
                   type === 'acceptance' ? '#4A7C7E' : '#8B5A5A';
 
     return `
@@ -440,17 +444,17 @@ function displayScriptTab(chapter, tabId, sceneData = null) {
 
         case 'innerSpace':
             if (chapter.innerSpace) {
-                // Render acceptance/rejection counters for Inner Space
-                const acceptanceLimit = chapter.innerSpace.counters?.acceptance?.triggers?.length || 5;
-                const rejectionLimit = chapter.innerSpace.counters?.rejection?.triggers?.length || 5;
+                // Render youAreEnough/proveYourWorth counters for Inner Space
+                const youAreEnoughLimit = chapter.innerSpace.counters?.youAreEnough?.triggers?.length || 7;
+                const proveYourWorthLimit = chapter.innerSpace.counters?.proveYourWorth?.triggers?.length || 6;
 
                 html = `
                     <div class="innerspace-content">
                         <h2 style="color: #E89B9B;">Inner Space</h2>
 
                         <div class="innerspace-counters" style="margin: 20px 0; padding: 15px; background: rgba(74, 124, 126, 0.1); border-radius: 10px;">
-                            ${renderCounterBubbles('acceptance', acceptanceLimit, 'innerspace')}
-                            ${renderCounterBubbles('rejection', rejectionLimit, 'innerspace')}
+                            ${renderCounterBubbles('youAreEnough', youAreEnoughLimit, 'innerspace')}
+                            ${renderCounterBubbles('proveYourWorth', proveYourWorthLimit, 'innerspace')}
                         </div>
 
                         <div class="script-text" style="line-height: 1.7; margin: 20px 0;">
@@ -477,21 +481,21 @@ function displayScriptTab(chapter, tabId, sceneData = null) {
                         ${chapter.innerSpace.counters ? `
                             <h3 style="color: #E89B9B; margin-top: 30px;">Counter Triggers</h3>
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
-                                ${chapter.innerSpace.counters.acceptance ? `
+                                ${chapter.innerSpace.counters.youAreEnough ? `
                                     <div style="background: rgba(74, 124, 126, 0.15); padding: 15px; border-radius: 10px;">
-                                        <h4 style="color: #4A7C7E; margin-bottom: 10px;">Acceptance</h4>
-                                        <p style="font-size: 14px; margin-bottom: 10px;">${chapter.innerSpace.counters.acceptance.description || ''}</p>
-                                        ${chapter.innerSpace.counters.acceptance.triggers ? `
-                                            <ul style="font-size: 13px;">${chapter.innerSpace.counters.acceptance.triggers.map(t => `<li style="margin: 5px 0;">${t}</li>`).join('')}</ul>
+                                        <h4 style="color: #4A7C7E; margin-bottom: 10px;">You Are Enough</h4>
+                                        <p style="font-size: 14px; margin-bottom: 10px;">${chapter.innerSpace.counters.youAreEnough.description || ''}</p>
+                                        ${chapter.innerSpace.counters.youAreEnough.triggers ? `
+                                            <ul style="font-size: 13px;">${chapter.innerSpace.counters.youAreEnough.triggers.map(t => `<li style="margin: 5px 0;">${t}</li>`).join('')}</ul>
                                         ` : ''}
                                     </div>
                                 ` : ''}
-                                ${chapter.innerSpace.counters.rejection ? `
+                                ${chapter.innerSpace.counters.proveYourWorth ? `
                                     <div style="background: rgba(139, 90, 90, 0.15); padding: 15px; border-radius: 10px;">
-                                        <h4 style="color: #8B5A5A; margin-bottom: 10px;">Rejection</h4>
-                                        <p style="font-size: 14px; margin-bottom: 10px;">${chapter.innerSpace.counters.rejection.description || ''}</p>
-                                        ${chapter.innerSpace.counters.rejection.triggers ? `
-                                            <ul style="font-size: 13px;">${chapter.innerSpace.counters.rejection.triggers.map(t => `<li style="margin: 5px 0;">${t}</li>`).join('')}</ul>
+                                        <h4 style="color: #8B5A5A; margin-bottom: 10px;">Prove Your Worth</h4>
+                                        <p style="font-size: 14px; margin-bottom: 10px;">${chapter.innerSpace.counters.proveYourWorth.description || ''}</p>
+                                        ${chapter.innerSpace.counters.proveYourWorth.triggers ? `
+                                            <ul style="font-size: 13px;">${chapter.innerSpace.counters.proveYourWorth.triggers.map(t => `<li style="margin: 5px 0;">${t}</li>`).join('')}</ul>
                                         ` : ''}
                                     </div>
                                 ` : ''}

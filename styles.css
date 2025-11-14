@@ -855,12 +855,17 @@ body {
     background: rgba(0, 0, 0, 0.3);
     border-bottom: 2px solid rgba(74, 124, 126, 0.3);
     flex-wrap: wrap;
+    overflow-x: auto; /* Allow horizontal scrolling if tabs overflow */
+    overflow-y: visible; /* Allow wrapped tabs to show */
+    gap: 4px; /* Add small gap between tabs for better visibility */
+    padding: 4px; /* Padding around tabs */
 }
 
 .tab-btn {
-    flex: 1;
-    min-width: 100px;
-    padding: 12px 8px;
+    flex: 0 0 auto; /* Changed from flex: 1 to allow natural sizing */
+    min-width: 80px;
+    max-width: 150px; /* Prevent tabs from getting too wide */
+    padding: 12px 12px;
     background: transparent;
     border: none;
     color: rgba(245, 239, 230, 0.6);
@@ -871,6 +876,9 @@ body {
     border-bottom: 3px solid transparent;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    white-space: nowrap; /* Prevent text wrapping within tabs */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Show ... if text is too long */
 }
 
 .tab-btn:hover {
