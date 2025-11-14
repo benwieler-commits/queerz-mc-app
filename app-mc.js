@@ -77,9 +77,19 @@ function setupPlayerListener() {
         console.log('📥 Syncing player data from Player App:', playerData);
 
         // playerData structure from Player App:
-        // { playerName: { character: {...}, tags: {...} } }
+        // playerCharacters/[uid]: {
+        //   name: string,
+        //   pronouns: string,
+        //   portraitUrl: string,
+        //   currentStatuses: [],
+        //   storyTags: [],
+        //   juice: number,
+        //   themes: []
+        // }
 
-        Object.entries(playerData).forEach(([playerName, data]) => {
+        Object.entries(playerData).forEach(([playerId, data]) => {
+            const playerName = data.name || playerId || 'Unnamed Character';
+
             // Find existing player or create new one
             let player = players.find(p => p.name === playerName);
 
@@ -87,6 +97,10 @@ function setupPlayerListener() {
                 // New player - add to spotlight
                 player = {
                     name: playerName,
+                    pronouns: data.pronouns || '',
+                    portraitUrl: data.portraitUrl || '',
+                    juice: data.juice || 0,
+                    themes: data.themes || [],
                     tags: {
                         story: [],
                         status: []
@@ -94,41 +108,40 @@ function setupPlayerListener() {
                 };
                 players.push(player);
                 console.log(`✅ Added new player from Player App: ${playerName}`);
+            } else {
+                // Update existing player data
+                if (data.pronouns) player.pronouns = data.pronouns;
+                if (data.portraitUrl) player.portraitUrl = data.portraitUrl;
+                if (data.juice !== undefined) player.juice = data.juice;
+                if (data.themes) player.themes = data.themes;
             }
 
-            // Sync tags from player app
-            if (data.tags) {
-                // Merge story tags
-                if (data.tags.story && Array.isArray(data.tags.story)) {
-                    data.tags.story.forEach(tag => {
-                        if (!player.tags.story.includes(tag)) {
-                            player.tags.story.push(tag);
-                        }
-                    });
-                }
-
-                // Merge status tags
-                if (data.tags.status && Array.isArray(data.tags.status)) {
-                    data.tags.status.forEach(tag => {
-                        if (!player.tags.status.includes(tag)) {
-                            player.tags.status.push(tag);
-                        }
-                    });
-                }
+            // Sync story tags from Player App
+            if (data.storyTags && Array.isArray(data.storyTags)) {
+                data.storyTags.forEach(tag => {
+                    if (!player.tags.story.includes(tag)) {
+                        player.tags.story.push(tag);
+                    }
+                });
             }
 
-            // Store character data for reference
-            if (data.character) {
-                player.character = data.character;
+            // Sync status tags from Player App (currentStatuses → status tags)
+            if (data.currentStatuses && Array.isArray(data.currentStatuses)) {
+                data.currentStatuses.forEach(tag => {
+                    if (!player.tags.status.includes(tag)) {
+                        player.tags.status.push(tag);
+                    }
+                });
             }
         });
 
         // Update UI
         renderPlayers();
+        renderPlayerOverview();
         saveToLocalStorage();
     });
 
-    console.log('✅ Player listener setup complete');
+    console.log('✅ Player listener setup - MC App ready to receive player broadcasts');
 }
 
 // ===================================
@@ -185,11 +198,26 @@ function saveToLocalStorage() {
 
 async function loadCampaigns() {
     try {
-        // Load from JSON file
-        const response = await fetch('./campaigns/example-campaign.json');
-        if (response.ok) {
-            const campaign = await response.json();
-            campaigns[campaign.id] = campaign;
+        // List of campaign files to load
+        const campaignFiles = [
+            'example-campaign.json',
+            'tori-campaign.json'
+        ];
+
+        // Load each campaign file
+        for (const filename of campaignFiles) {
+            try {
+                const response = await fetch(`./campaigns/${filename}`);
+                if (response.ok) {
+                    const campaign = await response.json();
+                    campaigns[campaign.id] = campaign;
+                    console.log(`✅ Loaded campaign: ${campaign.name || filename}`);
+                } else {
+                    console.warn(`⚠️ Campaign file not found: ${filename}`);
+                }
+            } catch (err) {
+                console.warn(`⚠️ Error loading ${filename}:`, err.message);
+            }
         }
 
         // Load from Firebase
@@ -219,6 +247,14 @@ function populateCampaignSelect() {
     });
 }
 
+// Track current scene and script state
+let currentScriptState = {
+    chapterId: null,
+    sceneId: null,
+    branchChoices: {},
+    counterStates: {}
+};
+
 function loadCampaignScript(campaignId) {
     const campaign = campaigns[campaignId];
     if (!campaign) return;
@@ -241,15 +277,28 @@ function loadCampaignScript(campaignId) {
         return;
     }
 
-    // Create tabs
+    // Store chapter reference
+    currentScriptState.chapterId = chapter.number;
+
+    // Create tabs - individual tabs for each scene
     scriptTabs.innerHTML = '';
-    const tabs = [
-        { id: 'overview', label: 'Overview' },
-        { id: 'scenes', label: 'Scenes' },
-        { id: 'innerSpace', label: 'Inner Space' },
-        { id: 'aftermath', label: 'Aftermath' },
-        { id: 'scaling', label: 'Scaling' }
-    ];
+    const tabs = [{ id: 'overview', label: 'Overview' }];
+
+    // Add individual scene tabs
+    if (chapter.scenes && chapter.scenes.length > 0) {
+        chapter.scenes.forEach((scene, index) => {
+            tabs.push({
+                id: `scene-${scene.number}`,
+                label: `Scene ${scene.number}`,
+                sceneData: scene
+            });
+        });
+    }
+
+    // Add other tabs
+    tabs.push({ id: 'innerSpace', label: 'Inner Space' });
+    tabs.push({ id: 'aftermath', label: 'Aftermath' });
+    tabs.push({ id: 'scaling', label: 'Scaling' });
 
     tabs.forEach((tab, index) => {
         const tabBtn = document.createElement('button');
@@ -259,7 +308,11 @@ function loadCampaignScript(campaignId) {
             // Remove active from all tabs
             scriptTabs.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             tabBtn.classList.add('active');
-            displayScriptTab(chapter, tab.id);
+            if (tab.sceneData) {
+                displayScriptTab(chapter, tab.id, tab.sceneData);
+            } else {
+                displayScriptTab(chapter, tab.id);
+            }
         };
         scriptTabs.appendChild(tabBtn);
     });
@@ -268,57 +321,183 @@ function loadCampaignScript(campaignId) {
     displayScriptTab(chapter, 'overview');
 }
 
-function displayScriptTab(chapter, tabId) {
+// Helper function to render counter bubbles
+function renderCounterBubbles(type, limit, sceneId) {
+    const stateKey = `${type}-${sceneId}`;
+    const currentState = currentScriptState.counterStates[stateKey] || 0;
+
+    let bubbles = '';
+    for (let i = 0; i < limit; i++) {
+        const filled = i < currentState ? 'filled' : '';
+        bubbles += `<div class="counter-bubble ${filled}" data-counter="${type}" data-scene="${sceneId}" data-index="${i}"></div>`;
+    }
+
+    const label = type === 'ignorance' ? 'Ignorance Limit' :
+                  type === 'acceptance' ? 'Acceptance' : 'Rejection';
+    const color = type === 'ignorance' ? '#E89B9B' :
+                  type === 'acceptance' ? '#4A7C7E' : '#8B5A5A';
+
+    return `
+        <div class="inline-counter" style="margin: 15px 0; padding: 10px; background: rgba(26, 26, 26, 0.5); border-radius: 10px; display: inline-block;">
+            <div style="color: ${color}; font-weight: bold; margin-bottom: 5px; font-size: 14px;">${label}</div>
+            <div class="counter-bubbles-container" style="display: flex; gap: 8px;">
+                ${bubbles}
+            </div>
+        </div>
+    `;
+}
+
+// Helper function to find combat encounters in scene content
+function renderSceneWithCounters(scene) {
+    let content = scene.content || scene.description || 'No scene content available';
+
+    // Check for combat encounter in the scene
+    const combatMatch = content.match(/Ignorance Limit:\s*(\d+)/i);
+    let combatHtml = '';
+
+    if (combatMatch) {
+        const ignoranceLimit = parseInt(combatMatch[1]);
+        combatHtml = renderCounterBubbles('ignorance', ignoranceLimit, `scene-${scene.number}`);
+    }
+
+    return combatHtml;
+}
+
+function displayScriptTab(chapter, tabId, sceneData = null) {
     const scriptContent = document.getElementById('scriptContent');
     if (!scriptContent) return;
 
     let html = '';
 
+    // Handle individual scene tabs
+    if (tabId.startsWith('scene-') && sceneData) {
+        currentScriptState.sceneId = sceneData.number;
+
+        const counterBubbles = renderSceneWithCounters(sceneData);
+
+        html = `
+            <div class="scene-content">
+                <h2 style="color: #F4D35E; margin-bottom: 15px;">Scene ${sceneData.number}: ${sceneData.name || 'Untitled Scene'}</h2>
+                ${sceneData.location ? `<p style="color: #E89B9B; margin-bottom: 10px;"><strong>Location:</strong> ${sceneData.location}</p>` : ''}
+                ${sceneData.music ? `<p style="color: #E89B9B; margin-bottom: 10px;"><strong>Music:</strong> ${sceneData.music}</p>` : ''}
+
+                ${counterBubbles ? `<div class="combat-counters" style="margin: 20px 0;">${counterBubbles}</div>` : ''}
+
+                <div class="script-text" style="white-space: pre-wrap; line-height: 1.7; margin: 20px 0;">
+                    ${sceneData.content || sceneData.description || 'No scene content available'}
+                </div>
+
+                ${sceneData.npcs && sceneData.npcs.length > 0 ? `
+                    <p style="margin-top: 15px; color: #4A7C7E;"><strong>NPCs:</strong> ${sceneData.npcs.join(', ')}</p>
+                ` : ''}
+                ${sceneData.tags && sceneData.tags.length > 0 ? `
+                    <p style="margin-top: 10px; color: #4A7C7E;"><strong>Tags:</strong> ${sceneData.tags.join(', ')}</p>
+                ` : ''}
+
+                ${sceneData.branches ? `
+                    <div class="scene-branches" style="margin-top: 30px; padding: 20px; background: rgba(74, 124, 126, 0.15); border-radius: 10px;">
+                        <h3 style="color: #F4D35E; margin-bottom: 15px;">What happens next?</h3>
+                        ${sceneData.branches.map((branch, idx) => `
+                            <label style="display: block; margin: 10px 0; cursor: pointer; padding: 10px; background: rgba(26, 26, 26, 0.3); border-radius: 5px;">
+                                <input type="radio" name="scene-${sceneData.number}-branch" value="${branch.nextScene}"
+                                    onchange="handleBranchSelection(${sceneData.number}, '${branch.nextScene}', '${branch.label}')"
+                                    ${currentScriptState.branchChoices[`scene-${sceneData.number}`] === branch.nextScene ? 'checked' : ''}>
+                                <span style="margin-left: 10px; color: #F5EFE6;">${branch.label}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                ` : ''}
+            </div>
+        `;
+
+        scriptContent.innerHTML = html;
+        attachCounterListeners();
+        return;
+    }
+
     switch (tabId) {
         case 'overview':
             html = `
-                <h2>${chapter.name}</h2>
-                <p>${chapter.overview || 'No overview available'}</p>
-                ${chapter.scenes ? `<h3>Scenes (${chapter.scenes.length})</h3><ul>${chapter.scenes.map(s => `<li><strong>${s.name}</strong> - ${s.location}</li>`).join('')}</ul>` : ''}
+                <div class="overview-content">
+                    <h2 style="color: #F4D35E;">${chapter.name || `Chapter ${chapter.number}`}</h2>
+                    <div class="script-text" style="line-height: 1.7; margin: 20px 0;">
+                        ${chapter.overview || 'No overview available'}
+                    </div>
+                    ${chapter.scenes ? `
+                        <h3 style="color: #E89B9B; margin-top: 30px;">Scenes (${chapter.scenes.length})</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            ${chapter.scenes.map(s => `
+                                <li style="margin: 10px 0; padding: 10px; background: rgba(74, 124, 126, 0.15); border-radius: 5px;">
+                                    <strong style="color: #F4D35E;">Scene ${s.number}: ${s.name}</strong>
+                                    <br><span style="color: #4A7C7E;">${s.location}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    ` : ''}
+                </div>
             `;
-            break;
-
-        case 'scenes':
-            if (chapter.scenes && chapter.scenes.length > 0) {
-                html = chapter.scenes.map(scene => `
-                    <h3>Scene ${scene.number}: ${scene.name}</h3>
-                    <p><strong>Location:</strong> ${scene.location}</p>
-                    <p><strong>Music:</strong> ${scene.music}</p>
-                    <div style="white-space: pre-wrap; margin: 15px 0;">${scene.content}</div>
-                    ${scene.npcs ? `<p><strong>NPCs:</strong> ${scene.npcs.join(', ')}</p>` : ''}
-                    ${scene.tags ? `<p><strong>Tags:</strong> ${scene.tags.join(', ')}</p>` : ''}
-                    <hr style="border-color: rgba(74, 124, 126, 0.3); margin: 20px 0;">
-                `).join('');
-            } else {
-                html = '<p class="placeholder-text">No scenes available</p>';
-            }
             break;
 
         case 'innerSpace':
             if (chapter.innerSpace) {
+                // Render acceptance/rejection counters for Inner Space
+                const acceptanceLimit = chapter.innerSpace.counters?.acceptance?.triggers?.length || 5;
+                const rejectionLimit = chapter.innerSpace.counters?.rejection?.triggers?.length || 5;
+
                 html = `
-                    <h2>Inner Space</h2>
-                    <p>${chapter.innerSpace.description}</p>
-                    ${chapter.innerSpace.coreWounds ? `
-                        <h3>Core Wounds</h3>
-                        ${chapter.innerSpace.coreWounds.map(wound => `
-                            <div style="background: rgba(74, 124, 126, 0.2); padding: 15px; margin: 15px 0; border-radius: 10px;">
-                                <h4 style="color: #E89B9B;">${wound.name}</h4>
-                                <p>${wound.description}</p>
-                                <h5>Approaches:</h5>
-                                <ul>
-                                    <li><strong>Talk It Out:</strong> ${wound.approaches.talkItOut}</li>
-                                    <li><strong>Care:</strong> ${wound.approaches.care}</li>
-                                    <li><strong>Slay:</strong> ${wound.approaches.slay}</li>
-                                </ul>
+                    <div class="innerspace-content">
+                        <h2 style="color: #E89B9B;">Inner Space</h2>
+
+                        <div class="innerspace-counters" style="margin: 20px 0; padding: 15px; background: rgba(74, 124, 126, 0.1); border-radius: 10px;">
+                            ${renderCounterBubbles('acceptance', acceptanceLimit, 'innerspace')}
+                            ${renderCounterBubbles('rejection', rejectionLimit, 'innerspace')}
+                        </div>
+
+                        <div class="script-text" style="line-height: 1.7; margin: 20px 0;">
+                            ${chapter.innerSpace.description || ''}
+                        </div>
+
+                        ${chapter.innerSpace.coreWounds ? `
+                            <h3 style="color: #E89B9B; margin-top: 30px;">Core Wounds</h3>
+                            ${chapter.innerSpace.coreWounds.map(wound => `
+                                <div style="background: rgba(232, 155, 155, 0.15); padding: 20px; margin: 15px 0; border-radius: 10px; border-left: 4px solid #E89B9B;">
+                                    <h4 style="color: #F4D35E; margin-bottom: 10px;">${wound.name}</h4>
+                                    <p style="line-height: 1.7; margin-bottom: 15px;">${wound.description}</p>
+                                    ${wound.approaches ? `
+                                        <div style="margin-top: 15px;">
+                                            <p style="margin: 10px 0;"><strong style="color: #4A7C7E;">Talk It Out:</strong> ${wound.approaches.talkItOut || 'N/A'}</p>
+                                            <p style="margin: 10px 0;"><strong style="color: #4A7C7E;">Care:</strong> ${wound.approaches.care || 'N/A'}</p>
+                                            <p style="margin: 10px 0;"><strong style="color: #4A7C7E;">Slay:</strong> ${wound.approaches.slay || 'N/A'}</p>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            `).join('')}
+                        ` : ''}
+
+                        ${chapter.innerSpace.counters ? `
+                            <h3 style="color: #E89B9B; margin-top: 30px;">Counter Triggers</h3>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                                ${chapter.innerSpace.counters.acceptance ? `
+                                    <div style="background: rgba(74, 124, 126, 0.15); padding: 15px; border-radius: 10px;">
+                                        <h4 style="color: #4A7C7E; margin-bottom: 10px;">Acceptance</h4>
+                                        <p style="font-size: 14px; margin-bottom: 10px;">${chapter.innerSpace.counters.acceptance.description || ''}</p>
+                                        ${chapter.innerSpace.counters.acceptance.triggers ? `
+                                            <ul style="font-size: 13px;">${chapter.innerSpace.counters.acceptance.triggers.map(t => `<li style="margin: 5px 0;">${t}</li>`).join('')}</ul>
+                                        ` : ''}
+                                    </div>
+                                ` : ''}
+                                ${chapter.innerSpace.counters.rejection ? `
+                                    <div style="background: rgba(139, 90, 90, 0.15); padding: 15px; border-radius: 10px;">
+                                        <h4 style="color: #8B5A5A; margin-bottom: 10px;">Rejection</h4>
+                                        <p style="font-size: 14px; margin-bottom: 10px;">${chapter.innerSpace.counters.rejection.description || ''}</p>
+                                        ${chapter.innerSpace.counters.rejection.triggers ? `
+                                            <ul style="font-size: 13px;">${chapter.innerSpace.counters.rejection.triggers.map(t => `<li style="margin: 5px 0;">${t}</li>`).join('')}</ul>
+                                        ` : ''}
+                                    </div>
+                                ` : ''}
                             </div>
-                        `).join('')}
-                    ` : ''}
+                        ` : ''}
+                    </div>
                 `;
             } else {
                 html = '<p class="placeholder-text">No Inner Space content available</p>';
@@ -328,16 +507,41 @@ function displayScriptTab(chapter, tabId) {
         case 'aftermath':
             if (chapter.aftermath && chapter.aftermath.outcomes) {
                 html = `
-                    <h2>Aftermath & Outcomes</h2>
-                    ${chapter.aftermath.outcomes.map(outcome => `
-                        <div style="background: rgba(74, 124, 126, 0.2); padding: 15px; margin: 15px 0; border-radius: 10px;">
-                            <h4 style="color: #F4D35E; text-transform: capitalize;">${outcome.condition} Outcome</h4>
-                            <p>${outcome.description}</p>
-                            <h5>Consequences:</h5>
-                            <ul>${outcome.consequences.map(c => `<li>${c}</li>`).join('')}</ul>
-                            <p><strong>Next Chapter Impact:</strong> ${outcome.nextChapterImpact}</p>
+                    <div class="aftermath-content">
+                        <h2 style="color: #E89B9B;">Aftermath & Outcomes</h2>
+                        <p style="margin: 15px 0; font-style: italic; color: #F5EFE6;">Select the outcome that best matches your session:</p>
+
+                        <div class="outcome-branches">
+                            ${chapter.aftermath.outcomes.map((outcome, idx) => `
+                                <div style="margin: 20px 0; padding: 20px; background: rgba(74, 124, 126, 0.15); border-radius: 10px; border-left: 4px solid ${outcome.condition === 'best' ? '#4A7C7E' : outcome.condition === 'worst' ? '#8B5A5A' : '#F4D35E'};">
+                                    <label style="cursor: pointer; display: block;">
+                                        <input type="radio" name="aftermath-outcome" value="${outcome.condition}"
+                                            onchange="handleAftermathSelection('${outcome.condition}')"
+                                            ${currentScriptState.branchChoices['aftermath'] === outcome.condition ? 'checked' : ''}>
+                                        <h3 style="display: inline; color: #F4D35E; text-transform: capitalize; margin-left: 10px;">${outcome.condition} Outcome</h3>
+                                    </label>
+                                    <p style="line-height: 1.7; margin: 15px 0;">${outcome.description}</p>
+                                    ${outcome.consequences && outcome.consequences.length > 0 ? `
+                                        <h4 style="color: #E89B9B; margin-top: 15px;">Consequences:</h4>
+                                        <ul style="margin: 10px 0;">${outcome.consequences.map(c => `<li style="margin: 5px 0;">${c}</li>`).join('')}</ul>
+                                    ` : ''}
+                                    ${outcome.nextChapterImpact ? `
+                                        <p style="margin-top: 15px;"><strong style="color: #4A7C7E;">Next Chapter Impact:</strong> ${outcome.nextChapterImpact}</p>
+                                    ` : ''}
+                                </div>
+                            `).join('')}
                         </div>
-                    `).join('')}
+
+                        ${chapter.consequences ? `
+                            <div style="margin-top: 30px; padding: 20px; background: rgba(232, 155, 155, 0.1); border-radius: 10px;">
+                                <h3 style="color: #E89B9B;">Long-term Consequences</h3>
+                                <p style="line-height: 1.7; margin: 15px 0;">${chapter.consequences.description || ''}</p>
+                                ${chapter.consequences.rippleEffects && chapter.consequences.rippleEffects.length > 0 ? `
+                                    <ul style="margin: 10px 0;">${chapter.consequences.rippleEffects.map(e => `<li style="margin: 5px 0;">${e}</li>`).join('')}</ul>
+                                ` : ''}
+                            </div>
+                        ` : ''}
+                    </div>
                 `;
             } else {
                 html = '<p class="placeholder-text">No aftermath content available</p>';
@@ -348,24 +552,42 @@ function displayScriptTab(chapter, tabId) {
             if (chapter.scalingAndPacing) {
                 const scaling = chapter.scalingAndPacing;
                 html = `
-                    <h2>Scaling & Pacing</h2>
-                    ${scaling.partySize ? `
-                        <h3>Party Size Adjustments</h3>
-                        ${Object.entries(scaling.partySize).map(([size, config]) => `
-                            <div style="background: rgba(74, 124, 126, 0.2); padding: 15px; margin: 15px 0; border-radius: 10px;">
-                                <h4 style="color: #67E8F9;">${size} Players</h4>
-                                <p><strong>Ignorance Limit:</strong> ${config.ignoranceLimit}</p>
-                                <p><strong>Pawns:</strong> ${config.pawns}</p>
-                                <p>${config.difficulty}</p>
+                    <div class="scaling-content">
+                        <h2 style="color: #E89B9B;">Scaling & Pacing</h2>
+                        ${scaling.partySize ? `
+                            <h3 style="color: #4A7C7E; margin-top: 30px;">Party Size Adjustments</h3>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
+                                ${Object.entries(scaling.partySize).map(([size, config]) => `
+                                    <div style="background: rgba(74, 124, 126, 0.15); padding: 15px; border-radius: 10px;">
+                                        <h4 style="color: #F4D35E; margin-bottom: 10px;">${size} Players</h4>
+                                        <p style="margin: 5px 0;"><strong>Ignorance Limit:</strong> ${config.ignoranceLimit}</p>
+                                        <p style="margin: 5px 0;"><strong>Pawns:</strong> ${config.pawns}</p>
+                                        <p style="margin: 5px 0; font-style: italic; color: #E89B9B;">${config.difficulty}</p>
+                                    </div>
+                                `).join('')}
                             </div>
-                        `).join('')}
-                    ` : ''}
-                    ${scaling.sessionLength ? `
-                        <h3>Session Length Options</h3>
-                        ${Object.entries(scaling.sessionLength).map(([type, desc]) => `
-                            <p><strong style="color: #E89B9B; text-transform: capitalize;">${type}:</strong> ${desc}</p>
-                        `).join('')}
-                    ` : ''}
+                        ` : ''}
+                        ${scaling.sessionLength ? `
+                            <h3 style="color: #4A7C7E; margin-top: 30px;">Session Length Options</h3>
+                            <div style="margin-top: 15px;">
+                                ${Object.entries(scaling.sessionLength).map(([type, desc]) => `
+                                    <p style="margin: 15px 0;"><strong style="color: #F4D35E; text-transform: capitalize;">${type.replace(/([A-Z])/g, ' $1')}:</strong> ${desc}</p>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                        ${scaling.difficultyAdjustments ? `
+                            <h3 style="color: #4A7C7E; margin-top: 30px;">Difficulty Adjustments</h3>
+                            <div style="margin-top: 15px;">
+                                ${Object.entries(scaling.difficultyAdjustments).map(([type, settings]) => `
+                                    <div style="margin: 15px 0; padding: 15px; background: rgba(232, 155, 155, 0.1); border-radius: 10px;">
+                                        <h4 style="color: #F4D35E; text-transform: capitalize;">${type}</h4>
+                                        <p style="margin: 10px 0;">${settings.note || ''}</p>
+                                        <p style="margin: 5px 0; font-size: 14px; color: #E89B9B;">Ignorance Modifier: ${settings.ignoranceLimitModifier >= 0 ? '+' : ''}${settings.ignoranceLimitModifier || 0}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
                 `;
             } else {
                 html = '<p class="placeholder-text">No scaling content available</p>';
@@ -374,7 +596,55 @@ function displayScriptTab(chapter, tabId) {
     }
 
     scriptContent.innerHTML = html;
+    attachCounterListeners();
 }
+
+// Attach click listeners to counter bubbles
+function attachCounterListeners() {
+    document.querySelectorAll('.counter-bubble').forEach(bubble => {
+        bubble.addEventListener('click', function() {
+            const type = this.dataset.counter;
+            const sceneId = this.dataset.scene;
+            const index = parseInt(this.dataset.index);
+            const stateKey = `${type}-${sceneId}`;
+
+            // Toggle: if clicking a filled bubble, empty from that point
+            // If clicking an empty bubble, fill up to that point
+            if (this.classList.contains('filled')) {
+                currentScriptState.counterStates[stateKey] = index;
+            } else {
+                currentScriptState.counterStates[stateKey] = index + 1;
+            }
+
+            // Update all bubbles for this counter
+            const container = this.parentElement;
+            container.querySelectorAll('.counter-bubble').forEach((b, i) => {
+                if (i < currentScriptState.counterStates[stateKey]) {
+                    b.classList.add('filled');
+                } else {
+                    b.classList.remove('filled');
+                }
+            });
+
+            saveToLocalStorage();
+        });
+    });
+}
+
+// Handle branch selection in scenes
+window.handleBranchSelection = function(sceneNumber, nextScene, label) {
+    currentScriptState.branchChoices[`scene-${sceneNumber}`] = nextScene;
+    console.log(`Branch selected: ${label} → Scene ${nextScene}`);
+    saveToLocalStorage();
+    // Could auto-navigate to next scene here if desired
+};
+
+// Handle aftermath outcome selection
+window.handleAftermathSelection = function(outcome) {
+    currentScriptState.branchChoices['aftermath'] = outcome;
+    console.log(`Aftermath outcome selected: ${outcome}`);
+    saveToLocalStorage();
+};
 
 // ===================================
 // PLAYER MANAGEMENT

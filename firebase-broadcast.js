@@ -25,7 +25,7 @@ export function broadcast(payload) {
 
 // Listen for data FROM Players TO MC
 export function listenToPlayers(callback) {
-  const playersRef = ref(db, "players");
+  const playersRef = ref(db, "playerCharacters");
   onValue(playersRef, (snapshot) => {
     const data = snapshot.val();
     if (data) {
