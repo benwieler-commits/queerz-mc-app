@@ -198,8 +198,10 @@ function saveToLocalStorage() {
 
 async function loadCampaigns() {
     try {
-        // List of campaign files to load
-        const campaignFiles = [campaign-chapter1-kaylin-vale.json
+        // List of campaign files to load (excluding campaign-template.json)
+        const campaignFiles = [
+            'campaign-chapter1-kaylin-vale.json',
+            'example-campaign.json'
         ];
 
         // Load each campaign file
