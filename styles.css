@@ -276,7 +276,7 @@ body {
 
 .broadcast-display {
     min-height: 200px;
-    max-height: 300px;
+    max-height: 500px; /* Increased from 300px to show full character portraits */
     background: #1a1a1a;
     border-radius: 8px;
     display: flex;
