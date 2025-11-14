@@ -1,0 +1,605 @@
+{
+  "id": "family-you-choose-ch1",
+  "name": "You Never Regret The Family You Choose - Chapter 1",
+  "description": "Solo introductory campaign about learning 'You are enough, as you are today.' Kaylin Vale, a beloved community organizer, has fallen to the Ignorant Seven and become The Keeper, spreading the harmful philosophy of Earned Love.",
+  "arc": "arc-1-worthiness",
+  "currentChapter": 1,
+  "theme": "You are enough, as you are today",
+  
+  "chapters": [
+    {
+      "number": 1,
+      "name": "The Perfectionist's Prison",
+      "overview": "The player investigates reports of a beloved community organizer, Kaylin Vale, who has transformed into The Keeper - a Justice Knight spreading 'Earned Love' ideology through Jade Exchange. Through investigation, confrontation, and exploring Kaylin's Inner Space, the player must help her understand that worth doesn't need to be earned. Features deep emotional confrontation with childhood trauma around conditional love and parental abandonment.",
+      
+      "scenes": [
+        {
+          "number": 1,
+          "name": "The Call to Action",
+          "location": "cafe-greenwich",
+          "music": "contemplative-indie",
+          "content": "**READ ALOUD:**\n\n'Café Greenwich smells like coffee, acceptance, and home. Mama Jay Rainbow is behind the counter as always, but her usual warm smile is strained. She's helping a young person who looks close to tears - you recognize them from community events.\n\nAs you enter, Mama Jay catches your eye and subtly gestures for you to wait. The young person - maybe nineteen, wearing a Progress Pride flag pin - is explaining something in a shaky voice:\n\n\"Kaylin used to be so kind. I needed a place to stay for ONE NIGHT and she said of course, you know how she is - was. But then she had this whole LIST. Things I needed to do to earn the space. Clean for three hours. Help with her projects. Attend these mandatory Jade Exchange meetings. When I said I just needed to focus on finding housing, she looked at me with these cold eyes and said I was being ungrateful. That I was *taking* without *giving back*. Now I can't get help from anyone because Kaylin told everyone I'm... I'm a user.\"\n\nThe young person leaves, wiping their eyes. Mama Jay's expression is pained as she turns to you.'\n\n**MAMA JAY'S BRIEFING:**\n\n\"Baby, we've got a problem. Kaylin Vale - you know Kay, right? Everyone knows Kaylin. That sweet girl with the green dresses and the messenger bag full of snacks for people? Well, something's changed. Changed bad.\n\nStarted about a month ago. Kaylin began talking about 'sustainable giving' and 'reciprocal care.' At first, people thought she just needed boundaries - and honey, she DID. That girl worked herself to the bone for everyone. But this... this isn't boundaries. This is something else.\n\nNow she's got this whole system. Calls it Jade Exchange instead of Jade Community. People have to 'earn credits' through volunteering to receive help. She's got followers - calls them The Indebted - who enforce these rules. And the thing is? Some of what Kaylin says makes sense. Burnout is real. Some people do take advantage. But she's gone somewhere dark with it. Somewhere that says love has a price tag.\n\n*Mama Jay slides a green flyer across the counter - it's for a Jade Exchange orientation meeting*\n\nCan you look into this? Talk to folks who knew her before? Kaylin used to practically live at The Lighthouse Community Center - started going there after her parents... well. That's a story she should tell you herself. Might still be there most days.\"",
+          "npcs": ["mama-jay", "distressed-youth"],
+          "tags": ["mama-jays-blessing", "community-concern", "jade-exchange-flyer", "firsthand-account"]
+        },
+        {
+          "number": 2,
+          "name": "Investigation: Devon at the Community Garden",
+          "location": "community-garden",
+          "music": "melancholic-acoustic",
+          "content": "**LOCATION DESCRIPTION:**\n\nSmall urban garden with raised beds full of tomatoes and herbs, a butterfly garden humming with life, and wooden benches for sitting. Devon (she/they, late 20s, purple undercut, perpetually has dirt under their nails) is tending tomato plants. When you mention Kaylin, they sit down heavily on a bench.\n\n**GET A CLUE - AVAILABLE QUESTIONS:**\n\n**Q: \"You were Kaylin's roommate, right?\"**\n\n\"For three years. THREE YEARS. We were best friends. Kaylin was the most generous person I knew. She'd give you her last dollar, her last hour, her last bit of energy. I kept telling her she needed to slow down, take care of herself. But she'd just smile that bright smile and say 'I'm fine! Helping people makes me happy!'\n\nThen I got a new girlfriend. Started spending more time away from the apartment. Kaylin said she was happy for me. But then the comments started. 'Must be nice to have time for romance.' 'Some of us are too busy helping the community to date.' Eventually she sat me down with this FOLDER of everything she'd done for me. Rent she'd covered, groceries she'd bought, emotional support she'd given. Said I needed to 'recommit to reciprocity' or find a new place.\n\nI moved out. Haven't really talked since.\"\n\n**Q: \"Was Kaylin always so... transactional?\"**\n\n\"No! God, no. That's what kills me. Kaylin used to say 'love freely given is the only love that matters.' She'd quote this thing her mom used to say before... before things got bad. But then after her mom left and her dad started that whole 'you have to earn your place in this family' thing, Kaylin changed. Started working twice as hard. Like she was trying to prove she deserved to be loved.\"\n\n**Q: \"Where do you think I can find her?\"**\n\n\"The Lighthouse. Always The Lighthouse. That place saved her when she was a teenager - gave her somewhere to belong when her home life was falling apart. Now she's... I think she's trying to turn it into what she wishes her family had been. A place where the rules are clear and you know where you stand.\"\n\n**Q: \"Does she ever take off that messenger bag?\"**\n\n*Devon laughs sadly.* \"That bag? Her dad gave it to her when she started Jade Community. Told her 'every gift creates an obligation.' She embroidered 'JC' on it herself - for Jade Community. Now I wonder if she sees it as 'Just Conditional.' She carries everyone's problems in that bag. Won't let anyone help her carry it.\"",
+          "npcs": ["devon"],
+          "tags": ["former-best-friends-testimony", "childhood-trauma-mentioned", "her-mom-left", "lighthouse-is-sacred", "messenger-bag-meaning"]
+        },
+        {
+          "number": 3,
+          "name": "Investigation: Marcus at Community Kitchen",
+          "location": "community-kitchen",
+          "music": "warm-ambient",
+          "content": "**LOCATION DESCRIPTION:**\n\nBusy community kitchen serving free meals. The smell of cooking fills the air - today it's vegetable soup and fresh bread. Marcus (he/him, 50s, kind eyes, apron covered in flour) is chopping vegetables when you arrive. When you ask about Kaylin, his expression becomes sad.\n\n**GET A CLUE QUESTIONS:**\n\n**Q: \"You worked with Kaylin on mutual aid, right?\"**\n\n\"Worked. Past tense. Kaylin and I started Jade Community together five years ago. The whole point was mutual aid - 'from each according to ability, to each according to need.' No strings. No ledgers. Just people helping people because we're all in this together.\n\nBut Kaylin always struggled with receiving. Couldn't let anyone help HER. After a while, I think she started resenting the people she was helping. Like they were taking something from her. When the Seven approached her - and I saw those people in their suits talking to her one night - everything changed fast.\"\n\n**Q: \"What exactly changed?\"**\n\n\"She wanted to implement the point system here. At the free kitchen. Said we needed to verify that people had 'contributed to the community' before feeding them. I said absolutely not. That goes against everything mutual aid stands for. She said I was enabling 'takers.'\"\n\n*Marcus looks down at his hands.*\n\n\"The really messed up part? I know she's in pain. I know she gave too much for too long and nobody taught her how to do it sustainably. But the answer isn't THIS. The answer isn't turning care into capitalism.\"\n\n**Q: \"Can she be reached?\"**\n\n\"I don't know. The Kaylin I knew is buried under a lot of hurt and a lot of Ignorance. But she's not gone. I saw her last week outside The Lighthouse, just standing there in the dark, crying. When she saw me, she wiped her eyes and put that bright smile back on. 'I'm fine, Marcus. Better than fine. I'm EFFECTIVE now.' But her eyes were empty.\"",
+          "npcs": ["marcus"],
+          "tags": ["mutual-aid-corrupted", "shes-acting-from-pain", "the-real-kaylin-is-still-there", "ignorant-seven-recruited-her"]
+        },
+        {
+          "number": 4,
+          "name": "Investigation: The Lighthouse Exterior",
+          "location": "lighthouse-exterior",
+          "music": "ominous-quiet",
+          "content": "**READ ALOUD:**\n\n'The Lighthouse Community Center used to glow with activity. You remember coming here for workshops, game nights, support groups. The murals on the outside still show diverse hands reaching toward a lighthouse beam - \"All Are Welcome\" painted in rainbow letters.\n\nBut now there's a new sign on the door:\n\n**LIGHTHOUSE COMMUNITY CENTER**\n*Now Operating as Jade Exchange Hub*\n**ENTRY BY APPOINTMENT ONLY**\n*Prove Your Worth. Earn Your Space.*\n\nThe windows are dark except for the second floor - you can see movement there. A figure in green, pacing. Papers covering every wall.'\n\n**INVESTIGATION OPTIONS:**\n\n**OPTION 1: Check the Community Board**\n\nThe bulletin board tells a story through layers:\n\n*Bottom layer (old):*\n- \"Free Community Dinners - Thursdays 6pm - ALL WELCOME\"\n- \"Support Group - No Experience Necessary\"\n- \"Kaylin's Craft Circle - Bring Nothing But Yourself!\"\n\n*Top layer (new):*\n- \"Jade Exchange Orientation - ATTENDANCE MANDATORY for Service Recipients\"\n- \"Community Dinner - RSVP Required, 2 Volunteer Credits OR $10\"\n- \"Lighthouse Space Rental: 5 Service Hours OR $50 OR Proof of Community Contribution\"\n- A printed \"Jade Exchange Credit System\" explaining point values\n\n**OPTION 2: Peer Through Window (BE VULNERABLE or GET A CLUE)**\n\nLooking through the ground floor window, you see:\n- The former cozy common room is now office-like\n- Desks with filing systems\n- A giant whiteboard with names and numbers\n- Photos of community members with \"Credit Score\" written beneath\n- Kaylin's green scarf draped over a chair\n\n**OPTION 3: Try the Back Entrance**\n\nThe back door is locked, but you notice Kaylin's messenger bag on the fire escape landing. Looking inside (if you do):\n- Notebooks full of lists\n- Printed \"Debt Schedules\"\n- A worn photo of young Kaylin with her mom, both smiling, both wearing green dresses\n- A more recent photo of Kaylin alone at a Jade Community event, surrounded by people, but her eyes look empty\n- A half-written letter: \"Dear Devon, I'm sorry I pushed you away. I just can't stop being afraid that if I'm not useful, I'm nothing. The Seven helped me see that at least if love is transactional, I can control it. I can't control—\" (it cuts off)",
+          "npcs": [],
+          "tags": ["everything-now-has-price", "old-kaylin-buried-here", "credit-scores-for-people", "kaylins-personal-effects", "she-knows-something-is-wrong"]
+        },
+        {
+          "number": 5,
+          "name": "The Confrontation",
+          "location": "lighthouse-main-hall",
+          "music": "building-tension",
+          "content": "**READ ALOUD:**\n\n'The main hall of The Lighthouse is transformed. Where there used to be couches and craft supplies, there are now desks arranged in precise rows. Filing cabinets line the walls. A massive whiteboard displays names, numbers, color-coded credits. The rainbow murals are covered with charts and graphs.\n\nKaylin stands at the center, her messenger bag at her hip, holding a clipboard. She's wearing her green dress, but it looks more like a uniform now. Her blonde hair is pulled back tightly. When she sees you, recognition flashes in her blue eyes - followed by defensiveness.\n\n\"I wondered when you'd show up. Let me guess - Mama Jay sent you? Devon called you? Someone told you the scary story about how Kaylin Vale got 'mean'?\"\n\nShe sets down the clipboard with deliberate calm.\n\n\"I'm not mean. I'm HONEST. I spent years being everyone's emotional support, everyone's safety net, everyone's solution. And you know what I got? Exhausted. Used up. Abandoned the second I couldn't give anymore. So I learned. And now I teach.\"\n\nBefore you can respond, others enter - six people wearing green armbands marked with 'JE'. The Indebted. They position themselves around the room, watchful.\n\nKaylin's expression hardens.\n\n\"Love must be earned. Worth must be proven. Boundaries must be enforced. If you're here to tell me I'm wrong—\"\n\nThe air shimmers. Her eyes begin to glow. The Star of Ignorance materializes as a geometric visor across her face - gold and black angles that make her expression unreadable. Her hair flows free, streaked with deeper gold. Green fabric erupts from her shoulders, draping like binding vines. Her tan coat billows behind her like a cape of authority. Golden ledger pages materialize, floating around her, constantly calculating.\n\n\"—then you're about to get a lesson in consequences.\"\n\n**The Keeper** spreads her arms wide, and the ledger pages swirl.\n\n\"I'm not the victim anymore. I'm not the doormat. I'm not the one who breaks herself for people who don't care. And you're about to learn the price of challenging me in MY space.\"'\n\n**MC NOTES:**\n- This is The Keeper's Justice Knight transformation\n- The Indebted will support her but can be swayed\n- Environmental tags are active: \"Sacred Ground\"-2, \"Everyone Owes Someone\"-2\n- Combat continues until Kaylin's Ignorance reaches 2 or below, opening Inner Space\n- Key dialogue opportunities exist to crack her armor before Inner Space",
+          "npcs": ["kaylin-keeper", "indebted-pawns"],
+          "tags": ["direct-confrontation-with-keeper", "saw-her-vulnerable", "she-mentioned-her-father"]
+        },
+        {
+          "number": 6,
+          "name": "Kaylin's Inner Space - The Kitchen",
+          "location": "inner-space-kitchen",
+          "music": "music-box-haunting",
+          "content": "**READ ALOUD:**\n\n'The world dissolves. You're no longer in The Lighthouse - you're standing in a kitchen. But something's wrong with it.\n\nThe kitchen is spotless. Obsessively clean. Every surface gleams. The refrigerator is covered in papers - report cards, all A's. Achievement certificates. Hand-drawn gold stars. A chore chart with every box checked.\n\nBut the kitchen is also falling apart. Paint peeling. Appliances broken. It's like two realities overlapping - the perfect kitchen a child tried to maintain, and the neglected reality underneath.\n\nThere's a figure at the kitchen table - young Kaylin, maybe twelve years old, wearing a green dress that's too small for her. She's making a list in a notebook:\n\n☐ Perfect Grades\n☐ Make Dad Happy\n☐ Keep House Clean\n☐ Don't Ask for Anything\n☐ Be Worth Keeping\n\nA voice calls from somewhere beyond the kitchen - male, tired, frustrated:\n\n\"Kaylin, did you finish your chores? Did you make dinner? Did you check on your brother? Because your mother LEFT us, Kaylin. Left because we weren't ENOUGH. So you need to be enough for BOTH of you now. You need to EARN your place in this family. Love isn't free. Your mother proved that.\"\n\nYoung Kaylin flinches and adds another item to her list with shaking hands.\n\nThis is where Kaylin learned that love has conditions. This is the prison she never left.'\n\n**INNER SPACE STRUCTURE:**\n\nThree aspects of Kaylin are present:\n1. **Young Kaylin (Age 12)** - Still trying to be perfect\n2. **Current Kaylin (Adult)** - Justice Knight form flickering\n3. **The Father's Voice** - The internalized voice of conditional love\n\n**ENVIRONMENTAL TAGS:**\n- \"Everything Must Be Perfect\"-3\n- \"Mom Left Because We Weren't Enough\"-3 (CORE WOUND)\n- \"Love Must Be Earned\"-2\n- \"The Empty Chair\"-2\n\n**MECHANIC: Two Competing Clocks**\n- **\"You Are Enough\" Clock (0-7)** - Healing/redemption\n- **\"Prove Your Worth\" Clock (0-6)** - Deeper Ignorance\n\n**GOAL:** Get \"You Are Enough\" to 7 before \"Prove Your Worth\" reaches 6",
+          "npcs": ["young-kaylin", "current-kaylin", "fathers-voice"],
+          "tags": []
+        }
+      ],
+      
+      "innerSpace": {
+        "description": "Kaylin's Inner Space manifests as her childhood kitchen where she learned that love must be earned. The space flickers between an obsessively perfect kitchen and a neglected, broken one. Three versions of Kaylin exist here: Young Kaylin (12) desperately trying to be perfect, Current Kaylin flickering between Justice Knight and civilian form, and The Father's Voice - the internalized message that worth must be proven.",
+        
+        "coreWounds": [
+          {
+            "name": "Mom Left Because We Weren't Enough",
+            "description": "Kaylin's mother left when she was 12. Her father told her it was because they weren't good enough, weren't worth staying for. Young Kaylin internalized that her mother's abandonment was her fault - if she had just been better, more helpful, more perfect, mom would have stayed. This became the foundation of her belief that love must be earned.",
+            "approaches": {
+              "talkItOut": "Address the wound directly: 'Your mother didn't leave because of you. Adults leave for adult reasons - their own pain, trauma, inability to cope. A child is never responsible for a parent's choices.' Must be said to BOTH Young and Current Kaylin. (+3 You Are Enough if done well)",
+              "care": "Remove the 'Mom Left Because We Weren't Enough'-3 environmental tag from the space. This requires reading the note on the fridge (from her mom saying 'it's not your fault') aloud to Young Kaylin, and helping her understand her mother was struggling with her own issues. (+3 You Are Enough, transforms the space)",
+              "slay": "Confront The Father's Voice directly: 'You're wrong. Kaylin's mother didn't leave because of Kaylin. And Kaylin's worth isn't determined by what she does for others.' Requires strong roll. Success shatters the voice's hold. (+3 You Are Enough on 10+)"
+            },
+            "tags": ["core-wound-revealed", "mothers-abandonment", "conditional-love-origin"]
+          },
+          {
+            "name": "Love Must Be Earned",
+            "description": "After her mother left, Kaylin's father created a transactional household. Every bit of affection, every moment of approval, had to be earned through perfect grades, chores, and caretaking. Kaylin learned that love isn't given freely - it's payment for services rendered. This belief system followed her into adulthood and was exploited by the Ignorant Seven.",
+            "approaches": {
+              "talkItOut": "Help Kaylin separate her father's voice from truth: 'Do you hear what it's saying? Is that your voice, or your father's?' Creates space for her to recognize the internalized message as separate from reality. (+2 You Are Enough)",
+              "care": "Offer help with no strings attached: 'Let me help you. No ledger. No payback. Just... let me help.' Kaylin will resist terrifyingly - you must maintain the boundary of not accepting 'payment.' (+3 You Are Enough if you resist her attempts to create obligation)",
+              "slay": "Direct challenge to Current Kaylin: 'Your system isn't about sustainability. It's about control. You're terrified of being abandoned again, so you're abandoning people first.' Harsh but accurate. Roll determines effectiveness."
+            },
+            "tags": ["transactional-love-system", "fathers-programming", "earned-affection-model"]
+          },
+          {
+            "name": "I'm Nothing Without Being Useful",
+            "description": "Kaylin's entire identity became wrapped up in being helpful. She measures her worth by how much she gives, how many people she helps, how indispensable she is. The thought of being loved for just existing - not for what she does - is terrifying because it means she has no control over whether people stay.",
+            "approaches": {
+              "talkItOut": "Address the identity crisis: 'What if you're enough, even on your worst day? What if you've always been enough?' Challenges her to imagine worth without achievement. (+2 You Are Enough)",
+              "care": "Help Young Kaylin take down the achievement certificates, one by one. Show her she's valuable without her accomplishments. Physically removing the symbols of earned love. (+2 You Are Enough)",
+              "slay": "Use Strike a Pose to create 'Your Worth Isn't In Your Work'-2 tag. Embody this truth through presence rather than argument. (+1 You Are Enough immediately, ongoing tag for future interactions)"
+            },
+            "tags": ["worth-through-usefulness", "identity-crisis", "fear-of-being-disposable"]
+          }
+        ],
+        
+        "counters": {
+          "youAreEnough": {
+            "description": "Tracks moments showing Kaylin she's valuable without earning it. Reaches 7 = Full redemption",
+            "triggers": [
+              "Addressing core wounds with compassion",
+              "Removing conditional thinking environmental tags",
+              "Offering help without strings attached",
+              "Helping Young Kaylin accept she wasn't responsible",
+              "Showing genuine care for Kaylin as she is, not what she does",
+              "Creating safety without requirements",
+              "Confronting The Father's Voice successfully"
+            ]
+          },
+          "proveYourWorth": {
+            "description": "Kaylin's Ignorance fighting back. Reaches 6 = Lost to deeper Ignorance",
+            "triggers": [
+              "Failed attempts to reach her",
+              "Reinforcing that she must 'fix' herself to be worthy",
+              "The Father's Voice gains strength",
+              "Young Kaylin retreats into perfectionism",
+              "Kaylin interprets care as pity that must be repaid",
+              "Player gives up or stops trying",
+              "Harsh judgments without compassion"
+            ]
+          }
+        }
+      },
+      
+      "aftermath": {
+        "outcomes": [
+          {
+            "condition": "best",
+            "description": "You Are Enough reached 7. Full redemption. Young and Current Kaylin understand they were always enough. The Star of Ignorance crumbles. The kitchen transforms into a livable, imperfect space. The empty chair remains but becomes okay - an acknowledgment of loss without blame.",
+            "consequences": [
+              "Kaylin dismantles Jade Exchange publicly",
+              "She apologizes to those hurt by the system",
+              "The Lighthouse returns to 'All Are Welcome'",
+              "She reaches out to Devon (no guarantees, just genuine apology)",
+              "Partners with Marcus again, but with healthy boundaries",
+              "Begins therapy to process childhood trauma",
+              "Learns to receive help without reciprocating immediately",
+              "The Indebted are released and receive support"
+            ],
+            "nextChapterImpact": "Kaylin becomes an ally. She mentions hearing about others The Seven approached. References to 'The Professor' who validated her philosophy. Player gains 'Helped Kaylin Heal'-2 ongoing tag. The community trusts the player. Seeds planted for future chapters about other Fallen Icons.",
+            "resolution": "The two Kaylins stand together. 'I don't know how to love without keeping score,' they say. 'I don't know who I am if I'm not useful. But maybe that's okay. Maybe that's the work. Not earning. Just... being.'"
+          },
+          {
+            "condition": "partial",
+            "description": "Close call - You Are Enough reached 5-6 but player didn't achieve full breakthrough. OR Prove Your Worth reached 4-5. Kaylin understands intellectually but hasn't emotionally integrated the truth.",
+            "consequences": [
+              "Kaylin steps back from Jade Exchange but doesn't dismantle it",
+              "She apologizes to some people but still struggles with receiving",
+              "The Lighthouse becomes 'conditional welcome' - better than before but not fully open",
+              "Begins therapy but resistant to full healing",
+              "Devon and Marcus remain cautious",
+              "The Indebted are confused, some freed, some still following"
+            ],
+            "nextChapterImpact": "Kaylin is in recovery but fragile. Might appear in future chapters still struggling. The Seven see this as partial failure. Other Fallen Icons may be slightly easier to reach. Player gains 'Partial Victory'-1 tag.",
+            "resolution": "Kaylin says, 'I hear what you're saying. I'm going to try. But this is hard. Really hard.' Her visor cracks but doesn't fully shatter."
+          },
+          {
+            "condition": "worst",
+            "description": "Prove Your Worth reached 6 first. Kaylin lost to deeper Ignorance. The kitchen becomes completely obsessive. Young Kaylin disappears. Current Kaylin's visor reforms stronger.",
+            "consequences": [
+              "The Keeper remains in control",
+              "Jade Exchange expands and becomes harsher",
+              "The Lighthouse is contested space",
+              "Community splits between followers and resisters",
+              "Devon and Marcus close doors to Jade Exchange",
+              "Kaylin is more isolated than ever",
+              "She might recruit other Fallen Icons",
+              "Her Ignorance grows to 6-7"
+            ],
+            "nextChapterImpact": "The Ignorant Seven are emboldened. Other chapters will be harder. Kaylin might appear as Chapter 5's ultimate boss if this is part of full campaign. However, the door isn't completely closed - future redemption possible but much more difficult. Player must live with this failure.",
+            "resolution": "The Keeper: 'You almost had me. But I know better. Love is conditional. Worth must be proven. And you've just proven that even YOUR care had limits. Look - you're leaving. Just like I knew you would.'"
+          }
+        ]
+      },
+      
+      "consequences": {
+        "description": "This chapter establishes the player's approach to Fallen Icons and the Ignorant Seven. Success or failure here ripples through future chapters.",
+        "rippleEffects": [
+          "The approach taken with Kaylin sets precedent for future Fallen Icons",
+          "The community sees how the player handles complex moral situations",
+          "The Ignorant Seven adjust their tactics based on this outcome",
+          "Player's relationship with Mama Jay deepens or strains",
+          "The Lighthouse's role in the community is determined",
+          "Other Fallen Icons may be easier or harder to reach based on this result"
+        ]
+      },
+      
+      "scalingAndPacing": {
+        "partySize": {
+          "1": {
+            "ignoranceLimit": 4,
+            "pawns": 0,
+            "difficulty": "Solo - Streamlined",
+            "adjustments": "Remove Indebted from confrontation. Reduce investigation scenes to 2-3. Inner Space is 1-on-1 focus. Kaylin's Ignorance Limit reduced to 4. Give player NPC ally (Devon or Marcus) for moral support."
+          },
+          "2-3": {
+            "ignoranceLimit": 5,
+            "pawns": 2,
+            "difficulty": "Small Group - Standard",
+            "adjustments": "Run as written. Each player can focus on different aspects of Kaylin's healing in Inner Space. 2 Indebted support The Keeper."
+          },
+          "4-7": {
+            "ignoranceLimit": 6,
+            "pawns": 4,
+            "difficulty": "Full Group - Epic",
+            "adjustments": "Add more Indebted (4-6 total). Increase environmental complications. Inner Space can involve players splitting up to help Young Kaylin and Current Kaylin simultaneously. More elaborate constructs from The Keeper."
+          }
+        },
+        "sessionLength": {
+          "oneShot": "3-4 hours - Combine investigation scenes. Focus on Devon OR Marcus, not both. Skip Lighthouse exterior investigation. Go straight from investigation to confrontation. Streamline Inner Space to 3-4 key moments.",
+          "twoSession": "Session 1: Scenes 1-4 Investigation (2-3 hours). Break after gathering all clues. Session 2: Scene 5-6 Confrontation & Inner Space (2-3 hours). Allows deep emotional processing.",
+          "epic": "3 sessions - Session 1: Full investigation with ALL NPCs (2-3 hours). Session 2: Confrontation and beginning of Inner Space (2-3 hours). Session 3: Complete Inner Space journey and aftermath (2-3 hours). For maximum emotional depth."
+        },
+        "difficultyAdjustments": {
+          "easier": {
+            "ignoranceLimitModifier": -1,
+            "additionalTags": 3,
+            "innerSpaceAdjustment": "You Are Enough only needs 5 points instead of 7",
+            "note": "Give more story tags from investigation. Young Kaylin is more responsive. The Father's Voice is weaker. Good for first-time players or emotional safety."
+          },
+          "harder": {
+            "ignoranceLimitModifier": 2,
+            "additionalPawns": 2,
+            "innerSpaceAdjustment": "Prove Your Worth only needs 5 points instead of 6 to trigger worst outcome",
+            "note": "Add environmental hazards. The Keeper's ledger constructs are more powerful. The Father's Voice is louder. Inner Space requires more nuanced approaches. For experienced players wanting challenge."
+          }
+        }
+      },
+      
+      "combatEncounters": [
+        {
+          "name": "The Keeper + The Indebted",
+          "type": "combat",
+          "location": "lighthouse-main-hall",
+          "ignoranceLimit": 5,
+          "pawns": 2,
+          "description": "Justice Knight confrontation. The Keeper uses ledger constructs and guilt attacks. The Indebted support but can be swayed.",
+          "specialMechanics": [
+            "Ledger pages track every action - can be used creatively",
+            "Environmental tag 'Everyone Owes Someone'-2 affects all actions",
+            "The Keeper's attacks are primarily emotional/verbal",
+            "Helping The Indebted without conditions weakens The Keeper",
+            "Messenger bag is a key object - accessing it provides crucial items",
+            "The Keeper gets more desperate as Ignorance lowers"
+          ],
+          "weaknesses": [
+            "Genuine unconditional care contradicts her philosophy",
+            "References to her mother crack her armor",
+            "The Keeper is exhausted underneath the Ignorance",
+            "The messenger bag photo can trigger memories",
+            "Reminding her what The Lighthouse used to mean"
+          ],
+          "victoryCondition": "Reduce Ignorance to 0-2 to open Inner Space portal"
+        }
+      ]
+    }
+  ],
+  
+  "npcs": [
+    {
+      "id": "mama-jay",
+      "name": "Mama Jay Rainbow",
+      "role": "ally",
+      "imageUrl": "https://drive.google.com/uc?export=view&id=1ajj4lmmoEpxtMvXO61W1956z1oTrVM0_",
+      "description": "Founder of House Rainbow and owner of Café Greenwich. Wise, warm, and deeply concerned about Kaylin. Acts as mentor and mission giver.",
+      "motivations": ["Protect the community", "Help Kaylin heal", "Guide the player"],
+      "backstory": "Mama Jay has seen many people fall to Ignorance. She founded House Rainbow as a safe haven and has a special connection to The Lighthouse, having helped establish it years ago."
+    },
+    {
+      "id": "kaylin-civilian",
+      "name": "Kaylin Vale",
+      "role": "villain-redeemable",
+      "imageUrl": "https://drive.google.com/uc?export=view&id=[KAYLIN-CIVILIAN-IMAGE-ID]",
+      "description": "Beloved community organizer in green dress with blonde wavy hair and blue eyes. Carries a brown messenger bag marked 'JC'. Was once the heart of the community, now lost to Earned Love philosophy.",
+      "motivations": ["Protect herself from abandonment", "Prove her worth", "Make love make sense", "Never be a doormat again"],
+      "backstory": "Kaylin's mother left when she was 12. Her father told her it was because they weren't good enough. She learned love must be earned through achievement and service. Burned out from community organizing, she was recruited by the Ignorant Seven at her lowest point."
+    },
+    {
+      "id": "kaylin-keeper",
+      "name": "The Keeper (Kaylin Vale - Justice Knight)",
+      "role": "villain",
+      "imageUrl": "https://drive.google.com/uc?export=view&id=[KAYLIN-JUSTICE-KNIGHT-IMAGE-ID]",
+      "description": "Justice Knight form with geometric gold/black visor (Star of Ignorance), flowing blonde hair with golden highlights, striped black/white bodysuit, green drapery like binding vines, tan coat flowing like cape. Surrounded by floating golden ledger pages.",
+      "motivations": ["Prove Earned Love is correct", "Protect herself through control", "Make others understand her philosophy", "Never be abandoned again"],
+      "backstory": "The corruption of Kaylin Vale. The Ignorant Seven found her at 2am in The Lighthouse, crying and exhausted. They offered her a philosophy that made sense: if love is transactional, you can control it.",
+      "justiceKnight": {
+        "isJusticeKnight": true,
+        "construct": "The Keeper - Earned Love",
+        "ignoranceLimit": 5,
+        "moves": [
+          "Call in the Debt - Forces target to defend against guilt (SLAY)",
+          "Ledger of Obligations - Environmental tag affecting all",
+          "Conditional Care - Healing with strings attached",
+          "Verdant Chains - Binding vines of obligation",
+          "Keeper's Judgment - Worth score calculation attack"
+        ]
+      }
+    },
+    {
+      "id": "devon",
+      "name": "Devon",
+      "role": "ally",
+      "imageUrl": "https://drive.google.com/uc?export=view&id=[DEVON-IMAGE-ID]",
+      "description": "She/they, late 20s, purple undercut, perpetually has dirt under nails. Former roommate and best friend of Kaylin. Works at community garden. Heartbroken but willing to help.",
+      "motivations": ["Understand what happened to Kaylin", "Protect herself from further hurt", "Help if possible"],
+      "backstory": "Best friends with Kaylin for 3 years until getting a girlfriend and needing more space. Kaylin presented her with a 'ledger' of everything she'd done and demanded 'recommitment to reciprocity.' Devon moved out."
+    },
+    {
+      "id": "marcus",
+      "name": "Marcus",
+      "role": "ally",
+      "imageUrl": "https://drive.google.com/uc?export=view&id=[MARCUS-IMAGE-ID]",
+      "description": "He/him, 50s, kind eyes, flour-covered apron. Co-founded Jade Community with Kaylin. Runs the free community kitchen. Refuses to implement Kaylin's point system.",
+      "motivations": ["Uphold true mutual aid principles", "Help Kaylin if she'll accept it", "Protect vulnerable community members"],
+      "backstory": "Former unhoused person, now stable and giving back. Started Jade Community with Kaylin as true mutual aid. Saw the Ignorant Seven approach her. Tried to stop the corruption but was rejected."
+    },
+    {
+      "id": "indebted-pawns",
+      "name": "The Indebted (Pawns)",
+      "role": "minion",
+      "imageUrl": "https://drive.google.com/uc?export=view&id=[INDEBTED-IMAGE-ID]",
+      "description": "Burned-out community members wearing green 'JE' armbands, carrying tablets tracking credits. Not evil - just exhausted people who found relief in Kaylin's system.",
+      "motivations": ["Find structure in chaos", "Protect themselves from being used", "Support Kaylin who helped them"],
+      "backstory": "People who were taken advantage of in the past. Kaylin's philosophy offered them permission to set boundaries, but corrupted into walls instead. Can be reached with genuine care."
+    },
+    {
+      "id": "young-kaylin",
+      "name": "Young Kaylin (Age 12 - Inner Space)",
+      "role": "aspect",
+      "imageUrl": "https://drive.google.com/uc?export=view&id=[YOUNG-KAYLIN-IMAGE-ID]",
+      "description": "12-year-old Kaylin in green dress (too small), frantically making lists, trying to be perfect. Represents the origin of her trauma.",
+      "motivations": ["Be perfect enough that Mom comes back", "Earn Dad's love", "Prove she's worth keeping"],
+      "backstory": "The aspect of Kaylin frozen at age 12 when her mother left. Still believes if she's just good enough, perfect enough, helpful enough, people won't abandon her."
+    },
+    {
+      "id": "distressed-youth",
+      "name": "Distressed Youth",
+      "role": "neutral",
+      "imageUrl": "",
+      "description": "19-year-old with Progress Pride flag pin. Needed help from Kaylin but was given list of requirements instead. Represents the harm Jade Exchange causes.",
+      "motivations": ["Find housing", "Get help without judgment"],
+      "backstory": "Part of the queer community, in housing crisis, approached Kaylin for help and was met with demands to 'earn' assistance."
+    }
+  ],
+  
+  "locations": [
+    {
+      "id": "cafe-greenwich",
+      "name": "Café Greenwich",
+      "imageUrl": "https://drive.google.com/uc?export=view&id=1SD9HFWYbxEBXrnd6z-780QDXHO-UidlX",
+      "description": "Warm, welcoming café with rainbow flag in window, mismatched furniture, walls covered in community art and event flyers. Smells like coffee and acceptance. Mama Jay's domain.",
+      "atmosphere": "Safe, warm, home-like. The heart of the queer community.",
+      "musicSuggestions": ["warm-ambient", "cafe-jazz"]
+    },
+    {
+      "id": "community-garden",
+      "name": "Community Garden",
+      "imageUrl": "https://drive.google.com/uc?export=view&id=[GARDEN-IMAGE-ID]",
+      "description": "Small urban garden with raised beds full of tomatoes and herbs, butterfly garden, wooden benches. Devon's workspace. Green and alive but tinged with sadness.",
+      "atmosphere": "Peaceful but melancholic. Growing things while processing grief.",
+      "musicSuggestions": ["melancholic-acoustic", "nature-ambient"]
+    },
+    {
+      "id": "community-kitchen",
+      "name": "Community Kitchen",
+      "imageUrl": "https://drive.google.com/uc?export=view&id=[KITCHEN-IMAGE-ID]",
+      "description": "Busy kitchen serving free meals. Industrial but warm. Smell of soup and bread. Marcus's domain. 'All Welcome' sign prominent on wall.",
+      "atmosphere": "Busy, warm, nourishing. True mutual aid in action.",
+      "musicSuggestions": ["warm-ambient", "cooking-sounds"]
+    },
+    {
+      "id": "lighthouse-exterior",
+      "name": "The Lighthouse Community Center - Exterior",
+      "imageUrl": "https://drive.google.com/uc?export=view&id=[LIGHTHOUSE-EXTERIOR-IMAGE-ID]",
+      "description": "Three-story brick building with colorful murals showing diverse hands reaching toward a lighthouse beam. 'All Are Welcome' painted in rainbow letters - now partially covered by new signage about Jade Exchange.",
+      "atmosphere": "What was once welcoming now feels conditional. The warmth is gone.",
+      "musicSuggestions": ["ominous-quiet", "loss-theme"]
+    },
+    {
+      "id": "lighthouse-main-hall",
+      "name": "The Lighthouse Community Center - Main Hall",
+      "imageUrl": "https://drive.google.com/uc?export=view&id=1-4fvxguaEyCEYY9aWqVKpiE3AGIsqZIV",
+      "description": "Transformed former community space. Desks in rows, filing cabinets, giant whiteboard with names and credit scores. Rainbow murals covered with charts and graphs. Office-like and cold where it was once cozy.",
+      "atmosphere": "Sterile, transactional, oppressive. A place that measures worth.",
+      "musicSuggestions": ["building-tension", "ominous-corporate"]
+    },
+    {
+      "id": "inner-space-kitchen",
+      "name": "Kaylin's Inner Space - The Childhood Kitchen",
+      "imageUrl": "https://drive.google.com/uc?export=view&id=[INNER-KITCHEN-IMAGE-ID]",
+      "description": "Kitchen that flickers between obsessively perfect and neglected/broken. Fridge covered in achievement certificates and report cards. Table with two chairs - one for Kaylin, one empty (her mother's). Green dress hanging on a chair. Lists everywhere.",
+      "atmosphere": "Trapped in time. The weight of conditional love made physical. Desperate and suffocating.",
+      "musicSuggestions": ["music-box-haunting", "inner-space-theme"]
+    }
+  ],
+  
+  "music": [
+    {
+      "id": "contemplative-indie",
+      "name": "Contemplative Indie Folk",
+      "url": "https://[YOUR-MUSIC-URL]/contemplative-indie.mp3",
+      "category": "emotional",
+      "mood": "contemplative",
+      "description": "Soft acoustic guitar, gentle piano, searching melody. For investigation and reflection."
+    },
+    {
+      "id": "melancholic-acoustic",
+      "name": "Melancholic Acoustic",
+      "url": "https://[YOUR-MUSIC-URL]/melancholic-acoustic.mp3",
+      "category": "emotional",
+      "mood": "sad",
+      "description": "Devon's theme. Garden sounds, soft guitar, underlying sadness."
+    },
+    {
+      "id": "warm-ambient",
+      "name": "Warm Ambient",
+      "url": "https://[YOUR-MUSIC-URL]/warm-ambient.mp3",
+      "category": "location",
+      "mood": "peaceful",
+      "description": "Community kitchen and café vibes. Welcoming, nourishing."
+    },
+    {
+      "id": "ominous-quiet",
+      "name": "Ominous Quiet",
+      "url": "https://[YOUR-MUSIC-URL]/ominous-quiet.mp3",
+      "category": "location",
+      "mood": "tense",
+      "description": "Something wrong. Loss of warmth. For Lighthouse exterior."
+    },
+    {
+      "id": "building-tension",
+      "name": "Building Tension",
+      "url": "https://[YOUR-MUSIC-URL]/building-tension.mp3",
+      "category": "combat",
+      "mood": "tense",
+      "description": "Electronic elements, rising intensity. Confrontation music."
+    },
+    {
+      "id": "music-box-haunting",
+      "name": "Music Box - Haunting",
+      "url": "https://[YOUR-MUSIC-URL]/music-box-haunting.mp3",
+      "category": "emotional",
+      "mood": "haunting",
+      "description": "Childlike but eerie. Inner Space theme. Innocence twisted."
+    },
+    {
+      "id": "inner-space-theme",
+      "name": "Inner Space Journey",
+      "url": "https://[YOUR-MUSIC-URL]/inner-space-journey.mp3",
+      "category": "emotional",
+      "mood": "intimate",
+      "description": "Stripped back, intimate, emotional. Healing music."
+    },
+    {
+      "id": "resolution-hopeful",
+      "name": "Resolution - Hopeful",
+      "url": "https://[YOUR-MUSIC-URL]/resolution-hopeful.mp3",
+      "category": "heroic",
+      "mood": "hopeful",
+      "description": "If Kaylin is saved. Gentle, warm, acoustic. New beginning."
+    },
+    {
+      "id": "resolution-somber",
+      "name": "Resolution - Somber",
+      "url": "https://[YOUR-MUSIC-URL]/resolution-somber.mp3",
+      "category": "emotional",
+      "mood": "sad",
+      "description": "If Kaylin is lost. Unresolved chords, lingering sadness."
+    }
+  ],
+  
+  "storyTags": {
+    "beneficial": [
+      "Mama Jay's Blessing",
+      "Community Trust",
+      "Understanding Kaylin's Pain",
+      "Lighthouse Connection",
+      "Devon's Support",
+      "Marcus's Wisdom",
+      "Unconditional Care Demonstrated",
+      "Core Wound Revealed",
+      "Genuine Connection Made",
+      "Helped The Indebted"
+    ],
+    "harmful": [
+      "The Keeper's Judgment",
+      "Guilty Conscience",
+      "Unworthy Feeling",
+      "Trapped by Obligation",
+      "Everyone Owes Someone",
+      "Ledger Tracked",
+      "Bound by Chains",
+      "Conditional Love Reinforced"
+    ],
+    "investigation": [
+      "Former Best Friend's Testimony",
+      "Childhood Trauma Mentioned",
+      "Her Mom Left",
+      "Lighthouse Is Sacred",
+      "Messenger Bag's Meaning",
+      "Mutual Aid Corrupted",
+      "She's Acting From Pain",
+      "Real Kaylin Still There",
+      "Ignorant Seven Recruited Her",
+      "Everything Now Has Price",
+      "Credit Scores For People",
+      "Kaylin's Personal Effects",
+      "She Knows Something Is Wrong"
+    ],
+    "emotional": [
+      "Saw Her Vulnerable",
+      "Direct Confrontation",
+      "You Are Enough",
+      "Love Not Conditional",
+      "Mothers Abandonment",
+      "Fathers Programming",
+      "Perfection Not Required",
+      "Worth Without Earning",
+      "Safe Without Requirements"
+    ]
+  },
+  
+  "statusTags": {
+    "beneficial": [
+      "+1 Forward",
+      "+1 Ongoing",
+      "Inspired",
+      "Protected",
+      "Understood",
+      "Supported"
+    ],
+    "harmful": [
+      "Guilty-2",
+      "Unworthy-2",
+      "Shaken-1",
+      "Trapped-2",
+      "Bound-1",
+      "Judged-2",
+      "Obligated-1"
+    ]
+  },
+  
+  "checkpoints": [
+    {
+      "description": "Learned about Kaylin from Mama Jay",
+      "optional": false
+    },
+    {
+      "description": "Spoke with Devon about Kaylin's history",
+      "optional": true
+    },
+    {
+      "description": "Spoke with Marcus about mutual aid corruption",
+      "optional": true
+    },
+    {
+      "description": "Investigated The Lighthouse exterior",
+      "optional": true
+    },
+    {
+      "description": "Found Kaylin's personal effects (messenger bag)",
+      "optional": true
+    },
+    {
+      "description": "Confronted The Keeper",
+      "optional": false
+    },
+    {
+      "description": "Entered Kaylin's Inner Space",
+      "optional": false
+    },
+    {
+      "description": "Addressed 'Mom Left' core wound",
+      "optional": false
+    },
+    {
+      "description": "Helped Young Kaylin",
+      "optional": false
+    },
+    {
+      "description": "Confronted Current Kaylin",
+      "optional": false
+    },
+    {
+      "description": "Challenged The Father's Voice",
+      "optional": false
+    },
+    {
+      "description": "Reached breakthrough moment (You Are Enough = 7)",
+      "optional": false,
+      "triggersChapter": null
+    }
+  ]
+}

@@ -1,0 +1,175 @@
+{
+  "id": "unique-campaign-id",
+  "name": "Campaign Name",
+  "description": "Brief campaign description",
+  "arc": "arc-1",
+  "currentChapter": 1,
+  "chapters": [
+    {
+      "number": 1,
+      "name": "Chapter 1 Title",
+      "overview": "High-level overview of the chapter",
+      "scenes": [
+        {
+          "number": 1,
+          "name": "Scene 1 Name",
+          "location": "Location name",
+          "music": "music-track-id",
+          "content": "Detailed scene description and MC notes",
+          "npcs": ["npc-id-1", "npc-id-2"],
+          "tags": ["story-tag-1", "story-tag-2"]
+        }
+      ],
+      "innerSpace": {
+        "description": "Inner space encounter description",
+        "coreWounds": [
+          {
+            "name": "Core Wound Name",
+            "description": "Description of the emotional wound",
+            "approaches": {
+              "talkItOut": "Dialogue approach",
+              "care": "Compassionate approach",
+              "slay": "Direct confrontation approach"
+            },
+            "tags": ["tag-1", "tag-2"]
+          }
+        ],
+        "counters": {
+          "acceptance": {
+            "description": "What acceptance represents",
+            "triggers": ["Event that increases acceptance"]
+          },
+          "rejection": {
+            "description": "What rejection represents",
+            "triggers": ["Event that increases rejection"]
+          }
+        }
+      },
+      "aftermath": {
+        "outcomes": [
+          {
+            "condition": "best",
+            "description": "Best possible outcome",
+            "consequences": ["Consequence 1", "Consequence 2"],
+            "nextChapterImpact": "How this affects future chapters"
+          },
+          {
+            "condition": "partial",
+            "description": "Partial success outcome",
+            "consequences": ["Consequence 1"],
+            "nextChapterImpact": "Impact description"
+          },
+          {
+            "condition": "worst",
+            "description": "Worst outcome",
+            "consequences": ["Consequence 1", "Consequence 2"],
+            "nextChapterImpact": "Impact description"
+          }
+        ]
+      },
+      "consequences": {
+        "description": "Long-term consequences of this chapter",
+        "rippleEffects": ["Effect 1", "Effect 2"]
+      },
+      "scalingAndPacing": {
+        "partySize": {
+          "1-2": {
+            "ignoranceLimit": 5,
+            "pawns": 1,
+            "difficulty": "Standard"
+          },
+          "3-4": {
+            "ignoranceLimit": 6,
+            "pawns": 2,
+            "difficulty": "Standard"
+          },
+          "5+": {
+            "ignoranceLimit": 7,
+            "pawns": 3,
+            "difficulty": "Standard"
+          }
+        },
+        "sessionLength": {
+          "oneShot": "4-5 hours - Streamline scenes, focus on key moments",
+          "twoSession": "Session 1: Scenes 1-2 (3-4 hours), Session 2: Scene 3-Aftermath (3-4 hours)",
+          "epic": "3+ sessions - Expand each scene with additional encounters"
+        },
+        "difficultyAdjustments": {
+          "easier": {
+            "ignoranceLimitModifier": -1,
+            "additionalTags": 2,
+            "note": "Give more story tags from investigation"
+          },
+          "harder": {
+            "ignoranceLimitModifier": 2,
+            "additionalPawns": 1,
+            "note": "Add environmental hazards"
+          }
+        }
+      },
+      "combatEncounters": [
+        {
+          "name": "Encounter Name",
+          "type": "combat",
+          "ignoranceLimit": 5,
+          "pawns": 2,
+          "specialMechanics": ["Mechanic 1", "Mechanic 2"],
+          "location": "Where this encounter occurs"
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "id": "npc-id",
+      "name": "NPC Name",
+      "role": "villain | ally | neutral",
+      "imageUrl": "https://url-to-image.jpg",
+      "description": "NPC description",
+      "motivations": ["Motivation 1", "Motivation 2"],
+      "backstory": "Brief backstory",
+      "justicKnight": {
+        "isJusticeKnight": true,
+        "construct": "Construct Name",
+        "ignoranceLimit": 5,
+        "moves": ["Move 1", "Move 2"]
+      }
+    }
+  ],
+  "locations": [
+    {
+      "id": "location-id",
+      "name": "Location Name",
+      "imageUrl": "https://url-to-image.jpg",
+      "description": "Location description",
+      "atmosphere": "Mood and feel of the location",
+      "musicSuggestions": ["track-1", "track-2"]
+    }
+  ],
+  "music": [
+    {
+      "id": "track-id",
+      "name": "Track Name",
+      "url": "https://url-to-audio.mp3",
+      "category": "location | combat | emotional | heroic",
+      "mood": "tense | peaceful | dramatic | triumphant"
+    }
+  ],
+  "storyTags": {
+    "beneficial": ["Tag 1", "Tag 2"],
+    "harmful": ["Tag 1", "Tag 2"],
+    "investigation": ["Tag 1", "Tag 2"],
+    "emotional": ["Tag 1", "Tag 2"]
+  },
+  "statusTags": {
+    "beneficial": ["Tag 1", "Tag 2"],
+    "harmful": ["Tag 1", "Tag 2"]
+  },
+  "checkpoints": [
+    {
+      "description": "Major story milestone",
+      "triggersChapter": 2,
+      "optional": false
+    }
+  ]
+}
