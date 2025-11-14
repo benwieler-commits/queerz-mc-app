@@ -886,16 +886,14 @@ body {
 
 .panel-content {
     padding: 20px;
-    padding-bottom: 100px; /* ← ADD THIS: Extra bottom padding for scrolling */
+    padding-bottom: 100px;
     line-height: 1.8;
-    min-height: 100vh; /* ← ADD THIS: Ensures content container is tall enough */
-
-   .side-panel .panel-content {
-    max-height: calc(100vh - 200px); /* Account for header and tabs */
-    overflow-y: auto; /* Enable scrolling within content area */
-    padding-bottom: 100px; /* Extra space at bottom */
 }
 
+.side-panel .panel-content {
+    max-height: calc(100vh - 140px); /* Account for header and tabs */
+    overflow-y: auto; /* Enable scrolling within content area */
+    padding-bottom: 100px; /* Extra space at bottom */
 }
 .panel-content h2 {
     color: #F4D35E;
