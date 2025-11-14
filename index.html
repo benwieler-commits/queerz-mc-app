@@ -1,1510 +1,425 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>QUEERZ! MC Companion</title>
-<link href="styles.css" rel="stylesheet"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUEERZ! MC Companion - Redesigned</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<!-- TOP HEADER -->
-<header class="app-header">
-<h1>QUEERZ! MC Companion</h1>
-<div class="campaign-info">
-<label for="campaignSelect">Campaign:</label>
-<select class="styled-select" id="campaignSelect" style="margin-right: 15px;">
-<option value="queerz-chapter1">QUEERZ! Chapter 1</option>
-<option value="queerz-chapters-2-5">QUEERZ! Chapters 2-5 (Coming Soon)</option>
-</select>
-<label for="chapterSelect">Chapter:</label>
-<select class="styled-select" id="chapterSelect">
-<option value="1">Chapter 1: The Jester's Last Laugh</option>
-<option value="2">Chapter 2: The Professor's Prescription</option>
-<option value="3">Chapter 3: The Champion's Last Stand</option>
-<option value="4">Chapter 4: The Mogul's Empire</option>
-<option value="5">Chapter 5: The Titan's Domain</option>
-</select>
-<button class="header-btn" id="campaignManagerBtn" title="Create & Edit Campaigns">➕ Create Campaign</button> <button class="header-btn" id="campaignSettingsBtn" title="Campaign Settings">⚙️</button> <button class="header-btn" id="sessionMgmtBtn" title="Session Management">💾 Sessions</button> <button class="header-btn" id="playerOverviewBtn" title="Player Overview">👥 Players</button> <button class="header-btn" id="broadcastBtn" title="Broadcast to Players">📡 Broadcast</button>
-</div>
-<div class="header-controls">
-<button class="header-btn" id="toggleScriptBtn" title="Toggle Script Panel (S)">Script</button>
-<button class="header-btn" id="toggleMcMovesBtn" title="Toggle MC Moves (M)">MC Moves</button>
-</div>
-</header>
-<!-- SPOTLIGHT BAR -->
-<section class="spotlight-bar">
-<div class="spotlight-label">SPOTLIGHT:</div>
-<div class="spotlight-players" id="spotlightPlayers">
-<button class="player-btn add-btn" id="addPlayerBtn">+ Add Player</button>
-</div>
-</section>
-<!-- MAIN CONTENT AREA -->
-<main class="main-content">
-<!-- LEFT PANEL: Scene/Location Display -->
-<section class="scene-panel">
-<div class="panel-header">
-<h3>Location</h3>
-<select class="styled-select" id="locationSelect">
-<option value="">Select Location...</option>
-<option data-img="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/cafe-greenwich.jpg" value="cafe-greenwich">Cafe Greenwich</option>
-<option data-img="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/theater-district.jpg" value="theater-district">Theater District</option>
-<option data-img="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/morettis-comedy-cellar.webp" value="morettis">Moretti's Comedy Cellar</option>
-</select>
-</div>
-<div class="scene-display" id="sceneDisplay">
-<div class="placeholder-text">Select a location to display</div>
-</div>
-</section>
-<!-- RIGHT PANEL: Character Sheet (when spotlighted) or NPC Display -->
-<section class="character-panel">
-<div class="panel-header">
-<h3 id="characterPanelTitle">Character/NPC</h3>
-<select class="styled-select" id="characterSelect">
-<option value="">Select Character...</option>
-<option data-img="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/mama-jay-portrait.png" value="mama-jay">Mama Jay Rainbow</option>
-<option data-img="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/danny-civilian.png" value="danny-civilian">Danny Carbone (Civilian)</option>
-<option data-img="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/danny-justice-knight.png" value="danny-justice">Danny "The Jester" (Justice Knight)</option>
-<option data-img="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/pawn-tough-crowd-general.png" value="pawn">Tough Crowd (Pawn)</option>
-</select>
-</div>
-<!-- Character Sheet Display (Visible to Players when spotlighted) -->
-<div class="character-sheet-display hidden" id="characterSheetDisplay">
-<!-- Active player's character sheet shows here -->
-</div>
-<!-- NPC/Character Portrait Display -->
-<div class="character-display" id="characterDisplay">
-<div class="placeholder-text">Select a character to display</div>
-</div>
-<div class="character-info" id="characterInfo"></div>
-</section>
-</main>
-<!-- MOVE ICONS BAR - YOUR CUSTOM ICONS WITH CORRECT PATHS -->
-<section class="moves-bar">
-<div class="moves-label">Core Moves:</div>
-<div class="move-icons">
-<div class="move-icon" title="Be Vulnerable">
-<img alt="Be Vulnerable" src="images/icons/moves/move-be-vulnerable.png"/>
-</div>
-<div class="move-icon" title="Care">
-<img alt="Care" src="images/icons/moves/move-care.png"/>
-</div>
-<div class="move-icon" title="Get a Clue">
-<img alt="Get a Clue" src="images/icons/moves/move-get-a-clue.png"/>
-</div>
-<div class="move-icon" title="Resist">
-<img alt="Resist" src="images/icons/moves/move-resist.png"/>
-</div>
-<div class="move-icon" title="Slay">
-<img alt="Slay" src="images/icons/moves/move-slay.png"/>
-</div>
-<div class="move-icon" title="Strike a Pose">
-<img alt="Strike a Pose" src="images/icons/moves/move-strike-a-pose.png"/>
-</div>
-<div class="move-icon" title="Talk It Out">
-<img alt="Talk It Out" src="images/icons/moves/move-talk-it-out.png"/>
-</div>
-</div>
-</section>
-<!-- BOTTOM CONTROLS -->
-<footer class="bottom-controls">
-<!-- MUSIC PLAYER - COMPLETE 18-TRACK LIBRARY -->
-<div class="music-player">
-<h4>Music</h4>
-<select class="styled-select" id="trackSelect">
-<option value="">Select Track...</option>
-<optgroup label="Locations">
-<option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/cafe-greenwich-1.mp3">Cafe Greenwich 1</option>
-<option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/cafe-greenwich-2.mp3">Cafe Greenwich 2</option>
-<option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/theater-district-investigation-1.mp3">Theater District Investigation 1</option>
-<option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/theater-district-investigation-2.mp3">Theater District Investigation 2</option>
-<option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/university-1.mp3">University 1</option>
-<option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/university-2.mp3">University 2</option>
-</optgroup>
-<optgroup label="Boss Battles">
-<option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/danny-battle-1.mp3">Danny Battle 1</option>
-<option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/danny-battle-2.mp3">Danny Battle 2</option>
-<option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/pierce-battle-1.mp3">Pierce Battle 1</option>
-<option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/pierce-battle-2.mp3">Pierce Battle 2</option>
-<option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/rex-battle-1.mp3">Rex Battle 1</option>
-<option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/rex-battle-2.mp3">Rex Battle 2</option>
-<option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/victoria-battle-1.mp3">Victoria Battle 1</option>
-<option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/victoria-battle-2.mp3">Victoria Battle 2</option>
-<option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/marcus-battle-1.mp3">Marcus Battle 1</option>
-<option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/marcus-battle-2.mp3">Marcus Battle 2</option>
-</optgroup>
-<optgroup label="Emotional Themes">
-<option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/emotional-themes/inner-space-theme-1.mp3">Inner Space Theme 1</option>
-<option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/emotional-themes/inner-space-theme-2.mp3">Inner Space Theme 2</option>
-</optgroup>
-<optgroup label="Pawn Attack">
-    <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/pawn-attack/tough-crowd-work-1.mp3">Tough Crowd Work 1</option>
-    <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/pawn-attack/tough-crowd-work-2.mp3">Tough Crowd Work 2</option>
-  </optgroup>
-  <optgroup label="Hero Time">
-    <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/hero-time/the-new-house-rises.mp3">The New House Rises</option>
-    <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/hero-time/the-tide-turns.mp3">The Tide Turns</option>
-  </optgroup>
-</select>
-<div class="player-controls">
-<button class="control-btn" id="playBtn">Play</button>
-<button class="control-btn" id="pauseBtn">Pause</button>
-<button class="control-btn" id="stopBtn">Stop</button>
-<button class="control-btn" id="loopBtn" title="Loop Current Track">🔁 Loop</button>
-<button class="control-btn" id="addToPlaylistBtn" title="Add to Playlist">➕ Playlist</button>
-<input class="volume-slider" id="volumeSlider" max="100" min="0" type="range" value="70"/>
-<span class="volume-label" id="volumeLabel">70%</span>
-</div>
-<div class="now-playing" id="nowPlaying">No track playing</div>
-<div class="playlist" id="playlist" style="margin-top: 10px; display: none;">
-<strong>Playlist:</strong>
-<div id="playlistTracks" style="margin-top: 5px;"></div>
-</div>
-<audio id="audioPlayer"></audio>
-</div>
-<!-- DICE ROLLER -->
-<div class="dice-roller">
-<h4>Dice Roller</h4>
-<div class="dice-controls">
-<label for="powerModifier">Power Modifier:</label>
-<input class="power-input" id="powerModifier" max="5" min="-5" type="number" value="0"/>
-<button class="roll-btn" id="rollDiceBtn">Roll 2d6</button>
-</div>
-<div class="dice-display" id="diceDisplay">
-<div class="dice-formula">
-<span class="die1">?</span>
-<span class="plus">+</span>
-<span class="die2">?</span>
-<span class="plus">+</span>
-<span class="modifier">?</span>
-<span class="equals">=</span>
-<span class="total">?</span>
-</div>
-<div class="roll-result" id="rollResult"></div>
-</div>
-</div>
-</footer>
-<!-- SCRIPT PANEL (Toggle with S) -->
-<aside class="side-panel script-panel hidden" id="scriptPanel">
-<div class="panel-header-side">
-<h3 id="scriptPanelTitle">Campaign Script - Chapter 1</h3>
-<button class="close-panel-btn" id="closeScriptBtn">X</button>
-</div>
-<div class="panel-search">
-<input class="search-input" id="scriptSearch" placeholder="Search script..." type="text"/>
-</div>
-<div class="panel-tabs">
-<button class="tab-btn active" data-tab="overview">Overview</button>
-<button class="tab-btn" data-tab="scene1">Scene 1</button>
-<button class="tab-btn" data-tab="scene2">Scene 2</button>
-<button class="tab-btn" data-tab="scene3">Scene 3</button>
-<button class="tab-btn" data-tab="innerSpace">Inner Space</button>
-<button class="tab-btn" data-tab="aftermath">Aftermath</button>
-<button class="tab-btn" data-tab="scaling">Scaling</button>
-</div>
-<div class="panel-content" id="scriptContent">
-<!-- Script content loads here -->
-</div>
-</aside>
-<!-- MC MOVES PANEL (Toggle with M) -->
-<aside class="side-panel mc-moves-panel hidden" id="mcMovesPanel">
-<div class="panel-header-side">
-<h3>MC Moves</h3>
-<button class="close-panel-btn" id="closeMcMovesBtn">X</button>
-</div>
-<div class="panel-content" id="mcMovesContent">
-<div class="moves-section">
-<h4>Soft Moves</h4>
-<div class="move-item">
-<strong>Show signs of trouble</strong>
-<p>Foreshadow danger or complications approaching</p>
-</div>
-<div class="move-item">
-<strong>Offer an opportunity</strong>
-<p>Present a chance with a cost or complication</p>
-</div>
-<div class="move-item">
-<strong>Tell them the cost</strong>
-<p>Make the price clear before they commit</p>
-</div>
-<div class="move-item">
-<strong>Put someone in a spot</strong>
-<p>Force a difficult decision or dilemma</p>
-</div>
-<div class="move-item">
-<strong>Present Twisted Justice</strong>
-<p>Show the villain's narrow-minded worldview</p>
-</div>
-</div>
-<div class="moves-section">
-<h4>Hard Moves (On 6- or ignored threat)</h4>
-<div class="move-item">
-<strong>Deal harm</strong>
-<p>Inflict damage or consequences</p>
-</div>
-<div class="move-item">
-<strong>Turn their move back on them</strong>
-<p>Use their action against them</p>
-</div>
-<div class="move-item">
-<strong>Separate them</strong>
-<p>Split the party or isolate someone</p>
-</div>
-<div class="move-item">
-<strong>Make a construct move</strong>
-<p>Use villain's construct abilities</p>
-</div>
-<div class="move-item">
-<strong>Take away their stuff</strong>
-<p>Remove resources or advantages</p>
-</div>
-<div class="move-item">
-<strong>Make them buy</strong>
-<p>Force them to accept a cost immediately</p>
-</div>
-<div class="move-item">
-<strong>Give a status</strong>
-<p>Apply a negative condition (conforming, shaken, etc.)</p>
-</div>
-</div>
-</div>
-</aside>
-<!-- CAMPAIGN SETTINGS MODAL -->
-<div class="modal hidden" id="campaignSettingsModal">
-<div class="modal-content">
-<div class="modal-header">
-<h2>Campaign Settings</h2>
-<button class="close-modal-btn" id="closeCampaignSettingsBtn">X</button>
-</div>
-<div class="modal-body">
-<h3>Story Outcomes</h3>
-<p>Track major story decisions to affect future chapters:</p>
-<div class="outcome-section">
-<h4>Chapter 1: The Jester's Last Laugh</h4>
-<p style="color: rgba(255,255,255,0.8); margin-bottom: 10px;">Select the outcome (affects Chapter 2 content):</p>
-<label>
-<input checked="" name="outcome-chapter1" onchange="setOutcome('chapter1', 'none')" type="radio" value="none"/>
-                        No outcome yet / Haven't played Chapter 1
-                    </label>
-<br/>
-<label>
-<input name="outcome-chapter1" onchange="setOutcome('chapter1', 'redeemed')" type="radio" value="redeemed"/>
-                        Danny was redeemed (saved from Ignorance - Success)
-                    </label>
-<br/>
-<label>
-<input name="outcome-chapter1" onchange="setOutcome('chapter1', 'partial')" type="radio" value="partial"/>
-                        Danny partially reformed (escaped but affected - Partial Success)
-                    </label>
-<br/>
-<label>
-<input name="outcome-chapter1" onchange="setOutcome('chapter1', 'vendetta')" type="radio" value="vendetta"/>
-                        Danny's vendetta continues (allied with Pierce - Failure)
-                    </label>
-</div>
-<div class="outcome-section">
-<h4>Future Chapters</h4>
-<p style="color: rgba(255,255,255,0.6);">Outcome tracking for Chapters 2-5 will be added as you play through the campaign.</p>
-</div>
-<hr style="margin: 20px 0; border-color: rgba(255,255,255,0.2);"/>
-<h3>Export Player Data</h3>
-<p>Export character data to send to players for their companion apps:</p>
-<div id="exportPlayersList" style="margin-top: 10px;">
-<!-- Player export buttons will be added here dynamically -->
-</div>
-</div>
-</div>
-</div>
-<!-- SESSION MANAGEMENT MODAL -->
-<div class="modal hidden" id="sessionMgmtModal">
-<div class="modal-content">
-<div class="modal-header">
-<h2>Session Management</h2>
-<button class="close-modal-btn" id="closeSessionMgmtBtn">X</button>
-</div>
-<div class="modal-body">
-<h3>Current Session: <span id="currentSessionName">Default Session</span></h3>
-<div style="margin: 20px 0;">
-<button class="header-btn" onclick="saveSession()" style="margin: 5px;">💾 Save Current Session</button>
-<button class="header-btn" onclick="saveSessionAs()" style="margin: 5px;">📝 Save As New Session</button>
-</div>
-<hr style="margin: 20px 0; border-color: rgba(255,255,255,0.2);"/>
-<h3>Saved Sessions</h3>
-<div id="sessionList" style="margin-top: 10px;">
-<!-- Sessions will be listed here -->
-</div>
-</div>
-</div>
-</div>
-<!-- PLAYER OVERVIEW MODAL -->
-<div class="modal hidden" id="playerOverviewModal">
-<div class="modal-content large-modal">
-<div class="modal-header">
-<h2>Player Overview & Tag Management</h2>
-<button class="close-modal-btn" id="closePlayerOverviewBtn">X</button>
-</div>
-<div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
-<div id="playerOverviewContent">
-<!-- Player cards will be rendered here -->
-</div>
-</div>
-</div>
-</div>
-<!-- PLAYER NAME INPUT MODAL -->
-<div class="modal hidden" id="playerModal">
-<div class="modal-content">
-<h3>Add Player to Spotlight</h3>
-<p>Select an existing character or enter a name:</p>
-<select class="styled-select" id="playerCharSelect">
-<option value="">-- Select Character --</option>
-</select>
-<p style="text-align: center; margin: 10px 0;">- OR -</p>
-<input class="text-input" id="playerNameInput" name="playerName" placeholder="Enter player name..." type="text"/>
-<div class="modal-buttons">
-<button class="btn-primary" id="confirmPlayerBtn">Add to Spotlight</button>
-<button class="btn-secondary" id="cancelPlayerBtn">Cancel</button>
-</div>
-</div>
-</div>
+    <!-- APP HEADER -->
+    <header class="app-header">
+        <div class="header-top">
+            <h1>QUEERZ! MC Companion</h1>
+            <div class="header-controls">
+                <button class="header-btn" id="toggleScriptBtn" title="Toggle Script Panel (S)">📖 Script</button>
+                <button class="header-btn" id="toggleMcMovesBtn" title="Toggle MC Moves (M)">🎲 MC Moves</button>
+                <button class="header-btn" id="campaignSettingsBtn" title="Campaign Settings">⚙️ Settings</button>
+                <button class="header-btn" id="sessionMgmtBtn" title="Session Management">💾 Sessions</button>
+                <button class="header-btn" id="exportCampaignBtn" title="Export Campaign Progress">📤 Export</button>
+            </div>
+        </div>
+        <div class="campaign-info">
+            <label for="campaignSelect">Campaign:</label>
+            <select class="styled-select" id="campaignSelect">
+                <option value="">Select Campaign...</option>
+            </select>
 
-<!-- CAMPAIGN MANAGER MODAL -->
-<div class="modal hidden" id="campaignManagerModal">
-<div class="modal-content large-modal">
-<div class="modal-header">
-<h2>Create & Edit Campaigns</h2>
-<button class="close-modal-btn" id="closeCampaignManagerBtn">X</button>
-</div>
-<div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
-<!-- Info Box -->
-<div style="background: rgba(102, 126, 234, 0.2); border: 1px solid rgba(102, 126, 234, 0.4); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
-<p style="margin: 0; color: rgba(255,255,255,0.9);">
-💡 <strong>View your campaigns:</strong> All campaigns appear in the main <strong>Campaign dropdown</strong> at the top. Use this manager to create new campaigns and edit existing ones.
-</p>
-</div>
-<!-- Campaign Selection/Creation -->
-<div class="campaign-selector-section">
-<h3>Active Campaign</h3>
-<select class="styled-select" id="activeCampaignSelect" style="width: 100%; margin-bottom: 15px;">
-<option value="">Select Campaign...</option>
-</select>
-<button class="header-btn" id="createNewCampaignBtn" style="margin-bottom: 20px;">+ Create New Campaign</button>
-<div id="campaignInfoDisplay" style="display: none; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 20px;">
-<div style="display: flex; justify-content: space-between; align-items: flex-start;">
-<div style="flex: 1;">
-<h4 id="selectedCampaignName">Campaign Name</h4>
-<p id="selectedCampaignDesc" style="color: rgba(255,255,255,0.7); margin: 10px 0;"></p>
-<div style="display: flex; gap: 15px; margin-top: 10px; flex-wrap: wrap;">
-<span>ID: <code id="selectedCampaignId" style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-size: 0.85em;"></code></span>
-<span>Chapter: <strong id="selectedCampaignChapter">-</strong></span>
-<span>Arc: <strong id="selectedCampaignArc">-</strong></span>
-<span>Players: <strong id="selectedCampaignPlayers">0</strong></span>
-<span>Scenes: <strong id="selectedCampaignScenes">0</strong></span>
-<span>Chapters: <strong id="selectedCampaignChaptersCount">0</strong></span>
-</div>
-</div>
-<div style="display: flex; gap: 8px;">
-<button class="header-btn" id="editCampaignMetadataBtn" style="padding: 8px 12px; background: rgba(165, 94, 234, 0.4);" title="Edit campaign details">✏️ Edit</button>
-<button class="header-btn" id="deleteCampaignBtn" style="padding: 8px 12px; background: rgba(255, 0, 0, 0.3);" title="Delete campaign">🗑️</button>
-</div>
-</div>
-</div>
+            <label for="arcSelect">Arc:</label>
+            <select class="styled-select" id="arcSelect">
+                <option value="arc-1">Arc 1</option>
+                <option value="arc-2">Arc 2</option>
+                <option value="arc-3">Arc 3</option>
+            </select>
 
-<!-- Player Management Section -->
-<div id="playerManagementSection" style="display: none; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 20px;">
-<h4 style="margin-bottom: 10px;">👥 Campaign Players</h4>
-<div id="campaignPlayersList" style="margin-bottom: 15px; max-height: 150px; overflow-y: auto;">
-<!-- Players will be listed here -->
-</div>
-<div style="display: flex; gap: 10px;">
-<input type="text" id="addPlayerNameInput" class="text-input" placeholder="Player name" style="flex: 1;">
-<button class="header-btn" id="addPlayerToCampaignBtn">+ Add Player</button>
-</div>
-</div>
-</div>
+            <label for="chapterSelect">Chapter:</label>
+            <select class="styled-select" id="chapterSelect">
+                <option value="1">Chapter 1</option>
+            </select>
+        </div>
+    </header>
 
-<!-- Scene Broadcaster -->
-<div class="scene-broadcaster-section">
-<h3>🎬 Scene Library & Broadcaster</h3>
-<div style="display: flex; gap: 10px; margin-bottom: 15px;">
-<select class="styled-select" id="sceneBroadcastSelect" style="flex: 1;">
-<option value="">Select Scene...</option>
-</select>
-<button class="header-btn" id="editSceneBtn" style="padding: 8px 12px; background: rgba(165, 94, 234, 0.4);" title="Edit selected scene">✏️</button>
-<button class="header-btn" id="deleteSceneBtn" style="padding: 8px 12px; background: rgba(255, 0, 0, 0.3);" title="Delete selected scene">🗑️</button>
-<button class="header-btn" id="broadcastSceneBtn" style="background: #4CAF50;">Broadcast</button>
-</div>
-<div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-<h4>Current Scene</h4>
-<p id="currentBroadcastScene">None</p>
-<p id="currentSceneDescription" style="color: rgba(255,255,255,0.7); font-size: 0.9em; margin-top: 5px;"></p>
-</div>
-<div class="quick-add-scene">
-<h4>Quick Add Scene (Vignette/Moment)</h4>
-<p style="color: rgba(255,255,255,0.6); font-size: 0.9em; margin: 0 0 10px 0;">Scenes are specific moments, locations, or encounters within a chapter</p>
-<input type="text" id="quickSceneName" class="text-input" placeholder="Scene name (e.g., 'Danny's Comedy Club')" style="margin-bottom: 10px;">
-<textarea id="quickSceneDesc" class="text-input" placeholder="Brief description of this moment/location" rows="2" style="margin-bottom: 10px;"></textarea>
-<button class="header-btn" id="quickAddSceneBtn">+ Add Scene to Current Chapter</button>
-</div>
-</div>
+    <!-- SPOTLIGHT BAR -->
+    <section class="spotlight-bar">
+        <div class="spotlight-label">SPOTLIGHT:</div>
+        <div class="spotlight-players" id="spotlightPlayers">
+            <button class="player-btn add-btn" id="addPlayerBtn">+ Add Player</button>
+        </div>
+    </section>
 
-<!-- Chapter Management -->
-<div class="chapter-management-section" style="margin-top: 20px;">
-<h3>📖 Chapter Library</h3>
-<div id="chaptersListDisplay" style="margin-bottom: 15px; max-height: 200px; overflow-y: auto;">
-<!-- Chapters will be listed here -->
-</div>
-<div style="border-top: 2px solid rgba(255, 215, 0, 0.3); padding-top: 15px; margin-top: 15px;">
-<h4 style="color: #a55eea; margin-bottom: 10px;">Add New Chapter</h4>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 15px;">
-<div>
-<label style="display: block; margin-bottom: 5px;">Chapter #</label>
-<input type="number" id="newChapterNumber" class="text-input" placeholder="1" min="1">
-</div>
-<div>
-<label style="display: block; margin-bottom: 5px;">Chapter Name</label>
-<input type="text" id="newChapterName" class="text-input" placeholder="Chapter Title">
-</div>
-</div>
-<div style="margin-bottom: 15px;">
-<label style="display: block; margin-bottom: 5px;">Chapter Script (Main Story Content)</label>
-<p style="color: rgba(255,255,255,0.6); font-size: 0.85em; margin: 0 0 8px 0;">This is where you put the main narrative, MC notes, and guidance for this chapter</p>
-<textarea id="newChapterScript" class="text-input" placeholder="Enter chapter script, story beats, MC guidance..." rows="6"></textarea>
-</div>
-<button class="header-btn" id="addCampaignChapterBtn">+ Add Chapter to Campaign</button>
-</div>
-</div>
+    <!-- MAIN CONTENT AREA -->
+    <main class="main-content">
+        <!-- BROADCAST PANEL (Full Width) -->
+        <section class="panel broadcast-panel">
+            <div class="panel-header">
+                <h3>🎬 Broadcast to Players</h3>
+                <button class="header-btn broadcast-btn" id="broadcastAllBtn">📡 Broadcast All</button>
+            </div>
+            <div class="broadcast-grid">
+                <!-- Environment -->
+                <div class="broadcast-section">
+                    <h4>🌆 Environment</h4>
+                    <select class="styled-select" id="environmentSelect">
+                        <option value="">Select Environment...</option>
+                        <option data-img="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/cafe-greenwich.jpg" value="cafe-greenwich">Cafe Greenwich</option>
+                        <option data-img="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/theater-district.jpg" value="theater-district">Theater District</option>
+                        <option data-img="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/morettis-comedy-cellar.webp" value="morettis">Moretti's Comedy Cellar</option>
+                    </select>
+                    <div class="broadcast-display" id="environmentDisplay">
+                        <div class="placeholder-text">Select an environment</div>
+                    </div>
+                </div>
 
-<!-- Branch Point Creator -->
-<div class="branch-creator-section" style="margin-top: 20px;">
-<h3>🔀 Create Branch Point</h3>
-<div style="margin-bottom: 15px;">
-<label style="display: block; margin-bottom: 5px;">Choice Question</label>
-<input type="text" id="branchQuestion" class="text-input" placeholder="What do the players decide?">
-</div>
-<div id="branchOptionsContainer" style="margin-bottom: 15px;">
-<div class="branch-option-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
-<input type="text" class="text-input branch-option-text" placeholder="Option 1 text" style="flex: 1;">
-<input type="text" class="text-input branch-option-consequences" placeholder="Tags (comma-separated)" style="flex: 1;">
-</div>
-<div class="branch-option-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
-<input type="text" class="text-input branch-option-text" placeholder="Option 2 text" style="flex: 1;">
-<input type="text" class="text-input branch-option-consequences" placeholder="Tags (comma-separated)" style="flex: 1;">
-</div>
-</div>
-<div style="display: flex; gap: 10px;">
-<button class="header-btn" id="addBranchOptionBtn" style="background: rgba(102, 126, 234, 0.4);">+ Add Option</button>
-<button class="header-btn" id="createBranchPointBtn" style="background: #4CAF50;">Create Branch Point</button>
-</div>
-</div>
-</div>
-</div>
-</div>
+                <!-- NPC Profile -->
+                <div class="broadcast-section">
+                    <h4>👤 NPC Profile</h4>
+                    <select class="styled-select" id="npcSelect">
+                        <option value="">Select NPC...</option>
+                        <option data-img="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/mama-jay-portrait.png" value="mama-jay">Mama Jay Rainbow</option>
+                        <option data-img="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/danny-civilian.png" value="danny-civilian">Danny Carbone</option>
+                        <option data-img="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/danny-justice-knight.png" value="danny-justice">Danny "The Jester"</option>
+                        <option data-img="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/pawn-tough-crowd-general.png" value="pawn">Tough Crowd Pawn</option>
+                    </select>
+                    <div class="broadcast-display" id="npcDisplay">
+                        <div class="placeholder-text">Select an NPC</div>
+                    </div>
+                </div>
 
-<!-- CREATE CAMPAIGN MODAL -->
-<div class="modal hidden" id="createCampaignModal">
-<div class="modal-content">
-<div class="modal-header">
-<h2>Create New Campaign</h2>
-<button class="close-modal-btn" id="closeCreateCampaignBtn">X</button>
-</div>
-<div class="modal-body">
-<form id="createCampaignForm">
-<div style="margin-bottom: 15px;">
-<label style="display: block; margin-bottom: 5px;">Campaign Name</label>
-<input type="text" id="newCampaignNameInput" class="text-input" placeholder="My Campaign" required>
-</div>
-<div style="margin-bottom: 15px;">
-<label style="display: block; margin-bottom: 5px;">Description</label>
-<textarea id="newCampaignDescInput" class="text-input" placeholder="Campaign description..." rows="3"></textarea>
-</div>
-<div style="margin-bottom: 15px;">
-<label style="display: block; margin-bottom: 5px;">Starting Arc</label>
-<input type="text" id="newCampaignArcInput" class="text-input" placeholder="arc-1" value="arc-1">
-</div>
-<button type="submit" class="btn-primary">Create Campaign</button>
-</form>
-<div id="campaignCreatedDisplay" style="display: none; text-align: center; margin-top: 20px;">
-<h3 style="color: #4CAF50;">Campaign Created! 🎉</h3>
-<p>Campaign ID (share with players):</p>
-<input type="text" id="createdCampaignIdInput" class="text-input" readonly style="text-align: center; font-family: monospace; background: rgba(255,255,255,0.1);">
-<button class="header-btn" id="copyCampaignIdBtn" style="margin-top: 10px; background: #2196F3;">Copy ID</button>
-</div>
-</div>
-</div>
-</div>
+                <!-- Music Player -->
+                <div class="broadcast-section">
+                    <h4>🎵 Music</h4>
+                    <select class="styled-select" id="musicSelect">
+                        <option value="">Select Music...</option>
+                        <optgroup label="Locations">
+                            <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/cafe-greenwich-1.mp3">Cafe Greenwich 1</option>
+                            <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/cafe-greenwich-2.mp3">Cafe Greenwich 2</option>
+                            <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/theater-district-investigation-1.mp3">Theater District 1</option>
+                            <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/theater-district-investigation-2.mp3">Theater District 2</option>
+                        </optgroup>
+                        <optgroup label="Boss Battles">
+                            <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/danny-battle-1.mp3">Danny Battle 1</option>
+                            <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/danny-battle-2.mp3">Danny Battle 2</option>
+                        </optgroup>
+                        <optgroup label="Emotional Themes">
+                            <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/emotional-themes/inner-space-theme-1.mp3">Inner Space 1</option>
+                            <option value="https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/emotional-themes/inner-space-theme-2.mp3">Inner Space 2</option>
+                        </optgroup>
+                    </select>
+                    <div class="player-controls">
+                        <button class="control-btn" id="playMusicBtn">▶️</button>
+                        <button class="control-btn" id="pauseMusicBtn">⏸️</button>
+                        <button class="control-btn" id="stopMusicBtn">⏹️</button>
+                        <button class="control-btn" id="loopMusicBtn" title="Loop">🔁</button>
+                        <button class="control-btn" id="addPlaylistBtn" title="Add to Playlist">➕</button>
+                    </div>
+                    <div class="now-playing" id="nowPlaying">No track playing</div>
+                    <div class="playlist hidden" id="playlistContainer">
+                        <h4>Playlist</h4>
+                        <div id="playlistTracks"></div>
+                    </div>
+                    <audio id="audioPlayer"></audio>
+                </div>
+            </div>
+        </section>
 
-<!-- EDIT CAMPAIGN MODAL -->
-<div class="modal hidden" id="editCampaignModal">
-<div class="modal-content">
-<div class="modal-header">
-<h2>Edit Campaign</h2>
-<button class="close-modal-btn" id="closeEditCampaignBtn">X</button>
-</div>
-<div class="modal-body">
-<form id="editCampaignForm">
-<div style="margin-bottom: 15px;">
-<label style="display: block; margin-bottom: 5px;">Campaign Name</label>
-<input type="text" id="editCampaignNameInput" class="text-input" required>
-</div>
-<div style="margin-bottom: 15px;">
-<label style="display: block; margin-bottom: 5px;">Description</label>
-<textarea id="editCampaignDescInput" class="text-input" rows="3"></textarea>
-</div>
-<div style="margin-bottom: 15px;">
-<label style="display: block; margin-bottom: 5px;">Current Arc</label>
-<input type="text" id="editCampaignArcInput" class="text-input">
-</div>
-<div style="margin-bottom: 15px;">
-<label style="display: block; margin-bottom: 5px;">Current Chapter</label>
-<input type="number" id="editCampaignChapterInput" class="text-input" min="1">
-</div>
-<button type="submit" class="btn-primary">Save Changes</button>
-</form>
-</div>
-</div>
-</div>
+        <!-- PLAYER TAG MANAGEMENT PANEL -->
+        <section class="panel">
+            <div class="panel-header">
+                <h3>🏷️ Player Tags</h3>
+                <button class="header-btn" id="playerOverviewBtn">👥 All Players</button>
+            </div>
+            <div id="playerTagsContainer">
+                <p class="placeholder-text">Select a player from the spotlight to manage tags</p>
+            </div>
+        </section>
 
-<!-- EDIT SCENE MODAL -->
-<div class="modal hidden" id="editSceneModal">
-<div class="modal-content">
-<div class="modal-header">
-<h2>Edit Scene (Vignette/Moment)</h2>
-<button class="close-modal-btn" id="closeEditSceneBtn">X</button>
-</div>
-<div class="modal-body">
-<form id="editSceneForm">
-<div style="margin-bottom: 15px;">
-<label style="display: block; margin-bottom: 5px;">Scene Name</label>
-<input type="text" id="editSceneName" class="text-input" placeholder="e.g., 'The Comedy Cellar'" required>
-</div>
-<div style="margin-bottom: 15px;">
-<label style="display: block; margin-bottom: 5px;">Description</label>
-<textarea id="editSceneDesc" class="text-input" rows="3" placeholder="Brief description of this moment/location"></textarea>
-</div>
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-<div>
-<label style="display: block; margin-bottom: 5px;">Chapter #</label>
-<input type="number" id="editSceneChapter" class="text-input" min="1">
-</div>
-<div>
-<label style="display: block; margin-bottom: 5px;">Order</label>
-<input type="number" id="editSceneOrder" class="text-input" min="1">
-</div>
-</div>
-<button type="submit" class="btn-primary">Save Changes</button>
-</form>
-</div>
-</div>
-</div>
+        <!-- CAMPAIGN PROGRESS PANEL -->
+        <section class="panel">
+            <div class="panel-header">
+                <h3>✅ Campaign Progress</h3>
+                <button class="header-btn" id="addCheckpointBtn">+ Add Checkpoint</button>
+            </div>
+            <div class="progress-section" id="progressContainer">
+                <p class="placeholder-text">No checkpoints yet. Add story checkpoints to track progress!</p>
+            </div>
+        </section>
 
-<!-- EDIT CHAPTER MODAL -->
-<div class="modal hidden" id="editChapterModal">
-<div class="modal-content">
-<div class="modal-header">
-<h2>Edit Chapter</h2>
-<button class="close-modal-btn" id="closeEditChapterBtn">X</button>
-</div>
-<div class="modal-body">
-<form id="editChapterForm">
-<div style="margin-bottom: 15px;">
-<label style="display: block; margin-bottom: 5px;">Chapter Number</label>
-<input type="number" id="editChapterNumber" class="text-input" disabled style="background: rgba(255,255,255,0.1);">
-</div>
-<div style="margin-bottom: 15px;">
-<label style="display: block; margin-bottom: 5px;">Chapter Name</label>
-<input type="text" id="editChapterName" class="text-input" placeholder="e.g., 'The Jester's Last Laugh'" required>
-</div>
-<div style="margin-bottom: 15px;">
-<label style="display: block; margin-bottom: 5px;">Chapter Script (Main Story Content)</label>
-<p style="color: rgba(255,255,255,0.6); font-size: 0.85em; margin: 0 0 8px 0;">This is where you put the main narrative, MC notes, and guidance for this chapter</p>
-<textarea id="editChapterScript" class="text-input" rows="10" placeholder="Enter chapter script, story beats, MC guidance..."></textarea>
-</div>
-<button type="submit" class="btn-primary">Save Changes</button>
-</form>
-</div>
-</div>
-</div>
+        <!-- COMBAT ENCOUNTER COUNTERS -->
+        <section class="panel">
+            <div class="panel-header">
+                <h3>⚔️ Encounter Counters</h3>
+            </div>
 
-<!-- Firebase (compat CDN to avoid ES module issues on GitHub Pages) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<!-- Firebase Scripts with Module Support -->
-<script type="module" src="firebase-config.js"></script>
-<script type="module" src="firebase-broadcast.js"></script>
+            <!-- Ignorance Limit Counter -->
+            <div class="counter-section">
+                <div class="counter-header">
+                    <h4>Ignorance Limit</h4>
+                    <button class="counter-btn reset" onclick="resetCounter('ignorance')">Reset</button>
+                </div>
+                <div class="counter-display">
+                    <div class="counter-value" id="ignoranceCounter">0</div>
+                </div>
+                <div class="counter-controls">
+                    <button class="counter-btn decrement" onclick="changeCounter('ignorance', -1)">−</button>
+                    <button class="counter-btn increment" onclick="changeCounter('ignorance', 1)">+</button>
+                </div>
+            </div>
+        </section>
 
-<!-- Campaign Manager Module -->
-<script type="module" src="campaign-manager-mc.js"></script>
+        <!-- DICE ROLLER -->
+        <section class="panel dice-roller">
+            <h4>🎲 Dice Roller</h4>
+            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
+                <label for="powerModifier" style="font-weight: 600;">Power Modifier:</label>
+                <input type="number" id="powerModifier" value="0" min="-5" max="5"
+                       style="width: 80px; padding: 8px; background: rgba(30, 30, 50, 0.8); border: 2px solid rgba(103, 232, 249, 0.3); color: #F5EFE6; border-radius: 8px; font-size: 1.1rem; text-align: center; font-weight: bold;">
+            </div>
+            <button class="roll-btn" id="rollDiceBtn">Roll 2d6</button>
+            <div class="dice-display">
+                <div class="dice-formula">
+                    <div class="die1" id="die1">?</div>
+                    <span style="color: #F5EFE6;">+</span>
+                    <div class="die2" id="die2">?</div>
+                    <span style="color: #F5EFE6;">+</span>
+                    <div id="modDisplay" style="color: #F4D35E; font-size: 1.5rem;">?</div>
+                    <span style="color: #F5EFE6;">=</span>
+                    <div id="totalDisplay" style="color: #4ADE80; font-size: 1.8rem; font-weight: bold;">?</div>
+                </div>
+                <div class="roll-result" id="rollResult"></div>
+            </div>
+        </section>
+    </main>
 
-<!-- Your Existing App Script (NOW ES6 MODULE) -->
-<script type="module" src="app.js?v=4.0"></script>
+    <!-- MOVES BAR -->
+    <section class="moves-bar">
+        <div class="moves-label">Core Moves:</div>
+        <div class="move-icons">
+            <div class="move-icon" title="Be Vulnerable">
+                <img src="images/icons/moves/move-be-vulnerable.png" alt="Be Vulnerable">
+            </div>
+            <div class="move-icon" title="Care">
+                <img src="images/icons/moves/move-care.png" alt="Care">
+            </div>
+            <div class="move-icon" title="Get a Clue">
+                <img src="images/icons/moves/move-get-a-clue.png" alt="Get a Clue">
+            </div>
+            <div class="move-icon" title="Resist">
+                <img src="images/icons/moves/move-resist.png" alt="Resist">
+            </div>
+            <div class="move-icon" title="Slay">
+                <img src="images/icons/moves/move-slay.png" alt="Slay">
+            </div>
+            <div class="move-icon" title="Strike a Pose">
+                <img src="images/icons/moves/move-strike-a-pose.png" alt="Strike a Pose">
+            </div>
+            <div class="move-icon" title="Talk It Out">
+                <img src="images/icons/moves/move-talk-it-out.png" alt="Talk It Out">
+            </div>
+        </div>
+    </section>
 
-<!-- Broadcast Button Handler (NEW) -->
-<script type="module">
-import { broadcast } from './firebase-broadcast.js';
+    <!-- SCRIPT PANEL (Slide-in from right) -->
+    <aside class="side-panel hidden" id="scriptPanel">
+        <div class="panel-header-side">
+            <h3 id="scriptPanelTitle">Campaign Script</h3>
+            <button class="close-panel-btn" id="closeScriptBtn">×</button>
+        </div>
+        <div class="panel-search">
+            <input type="text" class="search-input" id="scriptSearch" placeholder="Search script...">
+        </div>
+        <div class="panel-tabs" id="scriptTabs">
+            <!-- Tabs will be dynamically loaded -->
+        </div>
+        <div class="panel-content" id="scriptContent">
+            <!-- Content will be dynamically loaded -->
+        </div>
+    </aside>
 
-document.addEventListener('DOMContentLoaded', function() {
-    const broadcastBtn = document.getElementById('broadcastBtn');
-    
-    if (broadcastBtn) {
-        broadcastBtn.addEventListener('click', async function() {
-            console.log('🔥 Broadcasting to players...');
-            
-            const locationSelect = document.getElementById('locationSelect');
-            const characterSelect = document.getElementById('characterSelect');
-            const trackSelect = document.getElementById('trackSelect');
-            
-            const payload = {
-                currentScene: {
-                    name: locationSelect?.options[locationSelect.selectedIndex]?.textContent || 'No scene',
-                    imageUrl: locationSelect?.options[locationSelect.selectedIndex]?.dataset?.img || ''
-                },
-                currentMusic: {
-                    name: trackSelect?.options[trackSelect.selectedIndex]?.textContent || 'No music',
-                    url: trackSelect?.value || ''
-                },
-                activeCharacter: {
-                    name: characterSelect?.options[characterSelect.selectedIndex]?.textContent || 'No character',
-                    imageUrl: characterSelect?.options[characterSelect.selectedIndex]?.dataset?.img || ''
+    <!-- MC MOVES PANEL (Slide-in from right) -->
+    <aside class="side-panel hidden" id="mcMovesPanel">
+        <div class="panel-header-side">
+            <h3>MC Moves Reference</h3>
+            <button class="close-panel-btn" id="closeMcMovesBtn">×</button>
+        </div>
+        <div class="panel-content">
+            <div class="moves-section">
+                <h4>Soft Moves</h4>
+                <div class="move-item">
+                    <strong>Show signs of trouble</strong>
+                    <p>Foreshadow danger or complications approaching</p>
+                </div>
+                <div class="move-item">
+                    <strong>Offer an opportunity</strong>
+                    <p>Present a chance with a cost or complication</p>
+                </div>
+                <div class="move-item">
+                    <strong>Tell them the cost</strong>
+                    <p>Make the price clear before they commit</p>
+                </div>
+                <div class="move-item">
+                    <strong>Put someone in a spot</strong>
+                    <p>Force a difficult decision or dilemma</p>
+                </div>
+                <div class="move-item">
+                    <strong>Present Twisted Justice</strong>
+                    <p>Show the villain's narrow-minded worldview</p>
+                </div>
+            </div>
+            <div class="moves-section">
+                <h4>Hard Moves (On 6- or ignored threat)</h4>
+                <div class="move-item">
+                    <strong>Deal harm</strong>
+                    <p>Inflict damage or consequences</p>
+                </div>
+                <div class="move-item">
+                    <strong>Turn their move back on them</strong>
+                    <p>Use their action against them</p>
+                </div>
+                <div class="move-item">
+                    <strong>Separate them</strong>
+                    <p>Split the party or isolate someone</p>
+                </div>
+                <div class="move-item">
+                    <strong>Make a construct move</strong>
+                    <p>Use villain's construct abilities</p>
+                </div>
+                <div class="move-item">
+                    <strong>Take away their stuff</strong>
+                    <p>Remove resources or advantages</p>
+                </div>
+                <div class="move-item">
+                    <strong>Make them buy</strong>
+                    <p>Force them to accept a cost immediately</p>
+                </div>
+                <div class="move-item">
+                    <strong>Give a status</strong>
+                    <p>Apply a negative condition (conforming, shaken, etc.)</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- PLAYER MODAL -->
+    <div class="modal hidden" id="playerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Player to Spotlight</h2>
+                <button class="close-modal-btn" id="closePlayerModalBtn">×</button>
+            </div>
+            <p style="margin-bottom: 15px;">Enter player name:</p>
+            <input type="text" class="text-input" id="playerNameInput" placeholder="Player name...">
+            <div class="modal-buttons">
+                <button class="btn-primary" id="confirmPlayerBtn">Add Player</button>
+                <button class="btn-secondary" id="cancelPlayerBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PLAYER OVERVIEW MODAL -->
+    <div class="modal hidden" id="playerOverviewModal">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h2>Player Overview & Tags</h2>
+                <button class="close-modal-btn" id="closePlayerOverviewBtn">×</button>
+            </div>
+            <div id="playerOverviewContent">
+                <!-- Will be populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CHECKPOINT MODAL -->
+    <div class="modal hidden" id="checkpointModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Story Checkpoint</h2>
+                <button class="close-modal-btn" id="closeCheckpointModalBtn">×</button>
+            </div>
+            <p style="margin-bottom: 10px;">Checkpoint description:</p>
+            <input type="text" class="text-input" id="checkpointInput" placeholder="e.g., Players discovered Moretti's Comedy Cellar">
+            <p style="margin-top: 15px; margin-bottom: 10px;">Next chapter to load (optional):</p>
+            <select class="styled-select" id="checkpointNextChapter" style="width: 100%;">
+                <option value="">Don't change chapter</option>
+                <option value="2">Chapter 2</option>
+                <option value="3">Chapter 3</option>
+                <option value="4">Chapter 4</option>
+                <option value="5">Chapter 5</option>
+            </select>
+            <div class="modal-buttons">
+                <button class="btn-primary" id="confirmCheckpointBtn">Add Checkpoint</button>
+                <button class="btn-secondary" id="cancelCheckpointBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SESSION MANAGEMENT MODAL -->
+    <div class="modal hidden" id="sessionModal">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h2>Session Management</h2>
+                <button class="close-modal-btn" id="closeSessionModalBtn">×</button>
+            </div>
+            <div>
+                <h3 style="color: #F4D35E; margin-bottom: 15px;">Current Session: <span id="currentSessionName">Default Session</span></h3>
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <button class="header-btn" onclick="saveCurrentSession()">💾 Save Session</button>
+                    <button class="header-btn" onclick="saveSessionAs()">📝 Save As New</button>
+                </div>
+                <hr style="border-color: rgba(74, 124, 126, 0.3); margin: 20px 0;">
+                <h3 style="color: #E89B9B; margin-bottom: 15px;">Saved Sessions</h3>
+                <div id="sessionList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CAMPAIGN SETTINGS MODAL -->
+    <div class="modal hidden" id="campaignSettingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Campaign Settings</h2>
+                <button class="close-modal-btn" id="closeCampaignSettingsBtn">×</button>
+            </div>
+            <div>
+                <h3 style="color: #F4D35E; margin-bottom: 15px;">Story Outcomes</h3>
+                <p style="margin-bottom: 15px;">Track major story decisions for future chapters:</p>
+                <div id="outcomesContainer">
+                    <!-- Outcomes will be populated based on current campaign -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Config & Broadcast -->
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="firebase-broadcast.js"></script>
+    <script type="module" src="campaign-manager-mc.js"></script>
+
+    <!-- Main App Script -->
+    <script type="module" src="app.js"></script>
+
+    <!-- Image Display Handlers -->
+    <script>
+        // Handle image display for environment, NPC, and music selects
+        document.addEventListener('DOMContentLoaded', function() {
+            const environmentSelect = document.getElementById('environmentSelect');
+            const npcSelect = document.getElementById('npcSelect');
+            const environmentDisplay = document.getElementById('environmentDisplay');
+            const npcDisplay = document.getElementById('npcDisplay');
+
+            function displayImage(selectElement, displayElement) {
+                const selected = selectElement.options[selectElement.selectedIndex];
+                const imgUrl = selected.dataset.img;
+
+                if (imgUrl) {
+                    displayElement.innerHTML = `<img src="${imgUrl}" alt="${selected.textContent}" style="width: 100%; height: 100%; object-fit: contain;">`;
+                } else {
+                    displayElement.innerHTML = `<div class="placeholder-text">Select ${selectElement.id === 'environmentSelect' ? 'an environment' : 'an NPC'}</div>`;
                 }
-            };
-            
-            console.log('📡 Scene:', payload.currentScene.name);
-            console.log('🎵 Music:', payload.currentMusic.name);
-            console.log('👤 Character:', payload.activeCharacter.name);
-            
-            try {
-                await broadcast(payload);
-                console.log('✅ Broadcast successful!');
-                broadcastBtn.textContent = '✅ Sent!';
-                setTimeout(() => { broadcastBtn.textContent = '📡 Broadcast'; }, 1000);
-            } catch (error) {
-                console.error('❌ Broadcast failed:', error);
-                alert('Broadcast failed: ' + error.message);
             }
+
+            environmentSelect?.addEventListener('change', () => displayImage(environmentSelect, environmentDisplay));
+            npcSelect?.addEventListener('change', () => displayImage(npcSelect, npcDisplay));
         });
-        
-        console.log('✅ Broadcast button wired up');
-    } else {
-        console.warn('⚠️ Broadcast button not found');
-    }
-});
-</script>
-
-<!-- Image Display Handler (MUST come first) -->
-<script>
-// Image display for location and character selectors
-document.addEventListener('DOMContentLoaded', function(){
-  const locSel = document.getElementById('locationSelect');
-  const charSel = document.getElementById('characterSelect');
-  const sceneBox = document.getElementById('sceneDisplay');
-  const charBox  = document.getElementById('characterDisplay');
-  const audio = document.getElementById('audioPlayer');
-
-  function setBoxImage(box, url, alt){
-    if(!box) return;
-    if(!url){ 
-      box.innerHTML = '<div class="placeholder-text">Select a location to display</div>'; 
-      return; 
-    }
-    box.innerHTML = '<img src="'+url+'" alt="'+(alt||'')+'" class="fit-cover" style="width: 100%; height: 100%; object-fit: cover;">';
-  }
-
-  if(locSel){
-    locSel.addEventListener('change', function(){
-      const opt = locSel.options[locSel.selectedIndex];
-      const url = opt && opt.dataset && opt.dataset.img;
-      if(url) setBoxImage(sceneBox, url, opt.textContent.trim());
-    });
-    console.log('✅ Location selector initialized');
-  }
-  
-  if(charSel){
-    charSel.addEventListener('change', function(){
-      const opt = charSel.options[charSel.selectedIndex];
-      const url = opt && opt.dataset && opt.dataset.img;
-      if(url) setBoxImage(charBox, url, opt.textContent.trim());
-    });
-    console.log('✅ Character selector initialized');
-  }
-  
-  const trackSel = document.getElementById('trackSelect');
-  if(trackSel && audio){
-    trackSel.addEventListener('change', function(){
-      const opt = trackSel.options[trackSel.selectedIndex];
-      if(opt && opt.value) { 
-        audio.src = opt.value;
-        console.log('🎵 Audio track changed:', opt.textContent);
-      }
-    });
-    console.log('✅ Music selector initialized');
-  }
-});
-</script>
-
-<!-- Broadcast Button Handler -->
-<script type="module">
-import { broadcast } from './firebase-broadcast.js';
-
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🔥 Initializing broadcast functionality...');
-    
-    const broadcastBtn = document.getElementById('broadcastBtn');
-    
-    if (!broadcastBtn) {
-        console.warn('⚠️ Broadcast button not found - looking for element with id="broadcastBtn"');
-        return;
-    }
-    
-    broadcastBtn.addEventListener('click', async function() {
-        console.log('📡 Broadcast button clicked');
-        
-        // Get current selections
-        const locationSelect = document.getElementById('locationSelect');
-        const characterSelect = document.getElementById('characterSelect');
-        const trackSelect = document.getElementById('trackSelect');
-        
-        // Build payload with current selections
-        const payload = {
-            currentScene: {
-                name: 'No scene selected',
-                imageUrl: ''
-            },
-            currentMusic: {
-                name: 'No music playing',
-                url: ''
-            },
-            activeCharacter: {
-                name: 'No character',
-                imageUrl: ''
-            },
-            timestamp: Date.now()
-        };
-        
-        // Get scene info
-        if (locationSelect && locationSelect.selectedIndex > 0) {
-            const opt = locationSelect.options[locationSelect.selectedIndex];
-            payload.currentScene.name = opt.textContent.trim();
-            payload.currentScene.imageUrl = opt.dataset.img || '';
-            console.log('📍 Scene:', payload.currentScene.name);
-        }
-        
-        // Get music info with playlist and loop settings
-        if (trackSelect && trackSelect.selectedIndex > 0) {
-            const opt = trackSelect.options[trackSelect.selectedIndex];
-            payload.currentMusic.name = opt.textContent.trim();
-            payload.currentMusic.url = opt.value || '';
-
-            // Include loop setting
-            const loopBtn = document.getElementById('loopBtn');
-            payload.currentMusic.isLooping = loopBtn ? loopBtn.classList.contains('active') : false;
-
-            // Include playlist if it exists
-            const playlistTracksDiv = document.getElementById('playlistTracks');
-            if (playlistTracksDiv && playlistTracksDiv.children.length > 0) {
-                payload.currentMusic.playlist = [];
-                Array.from(playlistTracksDiv.children).forEach(item => {
-                    const trackName = item.textContent.replace('▶ ', '').replace('🗑️', '').trim();
-                    const trackUrl = item.dataset.url;
-                    if (trackUrl) {
-                        payload.currentMusic.playlist.push({ name: trackName, url: trackUrl });
-                    }
-                });
-            }
-
-            console.log('🎵 Music:', payload.currentMusic.name, 'Loop:', payload.currentMusic.isLooping);
-        }
-        
-        // Get character info
-        if (characterSelect && characterSelect.selectedIndex > 0) {
-            const opt = characterSelect.options[characterSelect.selectedIndex];
-            payload.activeCharacter.name = opt.textContent.trim();
-            payload.activeCharacter.imageUrl = opt.dataset.img || '';
-            console.log('👤 Character:', payload.activeCharacter.name);
-        }
-        
-        // Send broadcast
-        try {
-            console.log('🚀 Sending broadcast...');
-            await broadcast(payload);
-            console.log('✅ Broadcast successful!');
-            
-            // Visual feedback
-            const originalText = broadcastBtn.textContent;
-            broadcastBtn.textContent = '✅ Sent!';
-            broadcastBtn.style.background = '#4CAF50';
-            
-            setTimeout(() => {
-                broadcastBtn.textContent = originalText;
-                broadcastBtn.style.background = '';
-            }, 1500);
-            
-        } catch (error) {
-            console.error('❌ Broadcast failed:', error);
-            alert('Failed to broadcast: ' + error.message + '\n\nCheck Firebase database rules.');
-        }
-    });
-    
-    console.log('✅ Broadcast button initialized');
-});
-</script>
-
-<\!-- Campaign Manager Integration -->
-<script type="module">
-// Campaign Manager Integration Script
-// To be inserted into index.html
-
-import {
-  createCampaign,
-  addScene,
-  setCurrentScene,
-  addChapter,
-  updateChapter,
-  getMyCampaigns,
-  loadCampaign,
-  listenToCampaign,
-  createBranchPoint,
-  updateCampaignMetadata,
-  deleteCampaign,
-  updateScene,
-  deleteScene,
-  addPlayerToCampaign,
-  removePlayerFromCampaign
-} from './campaign-manager-mc.js';
-
-// Global state for campaign management
-let activeCampaignData = null;
-let activeCampaignId = null;
-let currentEditingSceneId = null;
-
-// Make functions globally available
-window.campaignManager = {
-  activeCampaignId: null,
-  activeCampaignData: null
-};
-
-document.addEventListener('DOMContentLoaded', function() {
-  // Campaign Manager Button
-  const campaignManagerBtn = document.getElementById('campaignManagerBtn');
-  const campaignManagerModal = document.getElementById('campaignManagerModal');
-  const closeCampaignManagerBtn = document.getElementById('closeCampaignManagerBtn');
-
-  if (campaignManagerBtn) {
-    campaignManagerBtn.addEventListener('click', async function() {
-      campaignManagerModal.classList.remove('hidden');
-      await loadMyCampaignsList();
-    });
-  }
-
-  if (closeCampaignManagerBtn) {
-    closeCampaignManagerBtn.addEventListener('click', function() {
-      campaignManagerModal.classList.add('hidden');
-    });
-  }
-
-  // Create Campaign Button
-  const createNewCampaignBtn = document.getElementById('createNewCampaignBtn');
-  const createCampaignModal = document.getElementById('createCampaignModal');
-  const closeCreateCampaignBtn = document.getElementById('closeCreateCampaignBtn');
-
-  if (createNewCampaignBtn) {
-    createNewCampaignBtn.addEventListener('click', function() {
-      createCampaignModal.classList.remove('hidden');
-    });
-  }
-
-  if (closeCreateCampaignBtn) {
-    closeCreateCampaignBtn.addEventListener('click', function() {
-      createCampaignModal.classList.add('hidden');
-      document.getElementById('createCampaignForm').reset();
-      document.getElementById('createCampaignForm').style.display = 'block';
-      document.getElementById('campaignCreatedDisplay').style.display = 'none';
-    });
-  }
-
-  // Create Campaign Form Submit
-  const createCampaignForm = document.getElementById('createCampaignForm');
-  if (createCampaignForm) {
-    createCampaignForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
-
-      const name = document.getElementById('newCampaignNameInput').value;
-      const description = document.getElementById('newCampaignDescInput').value;
-      const startingArc = document.getElementById('newCampaignArcInput').value;
-
-      const campaignId = await createCampaign({ name, description, startingArc });
-
-      if (campaignId) {
-        // Show success message
-        document.getElementById('createCampaignForm').style.display = 'none';
-        document.getElementById('campaignCreatedDisplay').style.display = 'block';
-        document.getElementById('createdCampaignIdInput').value = campaignId;
-
-        // Reload campaigns list in modal
-        await loadMyCampaignsList();
-
-        // Reload campaigns in main dropdown (from app.js)
-        if (window.loadFirebaseCampaigns) {
-          await window.loadFirebaseCampaigns();
-        }
-
-        console.log('✅ Campaign created:', campaignId);
-      }
-    });
-  }
-
-  // Copy Campaign ID
-  const copyCampaignIdBtn = document.getElementById('copyCampaignIdBtn');
-  if (copyCampaignIdBtn) {
-    copyCampaignIdBtn.addEventListener('click', function() {
-      const input = document.getElementById('createdCampaignIdInput');
-      input.select();
-      document.execCommand('copy');
-      copyCampaignIdBtn.textContent = '✅ Copied!';
-      setTimeout(() => {
-        copyCampaignIdBtn.textContent = 'Copy ID';
-      }, 2000);
-    });
-  }
-
-  // Active Campaign Selection
-  const activeCampaignSelect = document.getElementById('activeCampaignSelect');
-  if (activeCampaignSelect) {
-    activeCampaignSelect.addEventListener('change', async function(e) {
-      const campaignId = e.target.value;
-      if (campaignId) {
-        await loadActiveCampaign(campaignId);
-      }
-    });
-  }
-
-  // Edit Campaign Metadata
-  const editCampaignMetadataBtn = document.getElementById('editCampaignMetadataBtn');
-  const editCampaignModal = document.getElementById('editCampaignModal');
-  const closeEditCampaignBtn = document.getElementById('closeEditCampaignBtn');
-
-  if (editCampaignMetadataBtn) {
-    editCampaignMetadataBtn.addEventListener('click', function() {
-      if (!activeCampaignData) return;
-
-      // Populate form with current values
-      document.getElementById('editCampaignNameInput').value = activeCampaignData.metadata.name;
-      document.getElementById('editCampaignDescInput').value = activeCampaignData.metadata.description || '';
-      document.getElementById('editCampaignArcInput').value = activeCampaignData.metadata.currentArc || 'arc-1';
-      document.getElementById('editCampaignChapterInput').value = activeCampaignData.metadata.currentChapter || 1;
-
-      editCampaignModal.classList.remove('hidden');
-    });
-  }
-
-  if (closeEditCampaignBtn) {
-    closeEditCampaignBtn.addEventListener('click', function() {
-      editCampaignModal.classList.add('hidden');
-    });
-  }
-
-  const editCampaignForm = document.getElementById('editCampaignForm');
-  if (editCampaignForm) {
-    editCampaignForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
-
-      const updates = {
-        name: document.getElementById('editCampaignNameInput').value,
-        description: document.getElementById('editCampaignDescInput').value,
-        currentArc: document.getElementById('editCampaignArcInput').value,
-        currentChapter: parseInt(document.getElementById('editCampaignChapterInput').value)
-      };
-
-      const success = await updateCampaignMetadata(activeCampaignId, updates);
-
-      if (success) {
-        editCampaignModal.classList.add('hidden');
-        await loadActiveCampaign(activeCampaignId);
-
-        // Reload campaigns in main dropdown
-        if (window.loadFirebaseCampaigns) {
-          await window.loadFirebaseCampaigns();
-        }
-
-        alert('Campaign updated successfully!');
-      }
-    });
-  }
-
-  // Delete Campaign
-  const deleteCampaignBtn = document.getElementById('deleteCampaignBtn');
-  if (deleteCampaignBtn) {
-    deleteCampaignBtn.addEventListener('click', async function() {
-      if (!activeCampaignId) return;
-
-      if (confirm('Are you sure you want to delete this campaign? This cannot be undone.')) {
-        const success = await deleteCampaign(activeCampaignId);
-        if (success) {
-          activeCampaignId = null;
-          activeCampaignData = null;
-          document.getElementById('campaignInfoDisplay').style.display = 'none';
-          document.getElementById('activeCampaignSelect').value = '';
-          await loadMyCampaignsList();
-
-          // Reload campaigns in main dropdown
-          if (window.loadFirebaseCampaigns) {
-            await window.loadFirebaseCampaigns();
-          }
-
-          alert('Campaign deleted successfully!');
-        }
-      }
-    });
-  }
-
-  // Edit Scene
-  const editSceneBtn = document.getElementById('editSceneBtn');
-  const editSceneModal = document.getElementById('editSceneModal');
-  const closeEditSceneBtn = document.getElementById('closeEditSceneBtn');
-
-  if (editSceneBtn) {
-    editSceneBtn.addEventListener('click', function() {
-      const sceneSelect = document.getElementById('sceneBroadcastSelect');
-      currentEditingSceneId = sceneSelect.value;
-
-      if (!currentEditingSceneId || !activeCampaignData) {
-        alert('Please select a scene to edit');
-        return;
-      }
-
-      const scene = activeCampaignData.scenes[currentEditingSceneId];
-      if (!scene) return;
-
-      // Populate form
-      document.getElementById('editSceneName').value = scene.name;
-      document.getElementById('editSceneDesc').value = scene.description || '';
-      document.getElementById('editSceneChapter').value = scene.chapterId || 1;
-      document.getElementById('editSceneOrder').value = scene.order || 1;
-
-      editSceneModal.classList.remove('hidden');
-    });
-  }
-
-  if (closeEditSceneBtn) {
-    closeEditSceneBtn.addEventListener('click', function() {
-      editSceneModal.classList.add('hidden');
-      currentEditingSceneId = null;
-    });
-  }
-
-  const editSceneForm = document.getElementById('editSceneForm');
-  if (editSceneForm) {
-    editSceneForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
-
-      if (!currentEditingSceneId) return;
-
-      const updates = {
-        name: document.getElementById('editSceneName').value,
-        description: document.getElementById('editSceneDesc').value,
-        chapterId: parseInt(document.getElementById('editSceneChapter').value),
-        order: parseInt(document.getElementById('editSceneOrder').value)
-      };
-
-      const success = await updateScene(activeCampaignId, currentEditingSceneId, updates);
-
-      if (success) {
-        editSceneModal.classList.add('hidden');
-        currentEditingSceneId = null;
-        await loadActiveCampaign(activeCampaignId);
-        alert('Scene updated successfully!');
-      }
-    });
-  }
-
-  // Delete Scene
-  const deleteSceneBtn = document.getElementById('deleteSceneBtn');
-  if (deleteSceneBtn) {
-    deleteSceneBtn.addEventListener('click', async function() {
-      const sceneSelect = document.getElementById('sceneBroadcastSelect');
-      const sceneId = sceneSelect.value;
-
-      if (!sceneId || !activeCampaignData) {
-        alert('Please select a scene to delete');
-        return;
-      }
-
-      const scene = activeCampaignData.scenes[sceneId];
-      if (confirm(`Are you sure you want to delete scene "${scene.name}"?`)) {
-        const success = await deleteScene(activeCampaignId, sceneId);
-        if (success) {
-          await loadActiveCampaign(activeCampaignId);
-          alert('Scene deleted successfully!');
-        }
-      }
-    });
-  }
-
-  // Quick Add Scene
-  const quickAddSceneBtn = document.getElementById('quickAddSceneBtn');
-  if (quickAddSceneBtn) {
-    quickAddSceneBtn.addEventListener('click', async function() {
-      const name = document.getElementById('quickSceneName').value;
-      const description = document.getElementById('quickSceneDesc').value;
-
-      if (!name || !activeCampaignId) {
-        alert('Please select a campaign and enter a scene name');
-        return;
-      }
-
-      const sceneId = await addScene(activeCampaignId, {
-        name: name,
-        description: description,
-        chapterId: activeCampaignData?.metadata?.currentChapter || 1,
-        arcId: activeCampaignData?.metadata?.currentArc || 'arc-1'
-      });
-
-      if (sceneId) {
-        document.getElementById('quickSceneName').value = '';
-        document.getElementById('quickSceneDesc').value = '';
-        await loadActiveCampaign(activeCampaignId);
-        alert('Scene added successfully!');
-      }
-    });
-  }
-
-  // Broadcast Scene
-  const broadcastSceneBtn = document.getElementById('broadcastSceneBtn');
-  if (broadcastSceneBtn) {
-    broadcastSceneBtn.addEventListener('click', async function() {
-      const sceneId = document.getElementById('sceneBroadcastSelect').value;
-      if (!sceneId || !activeCampaignId) {
-        alert('Please select a scene');
-        return;
-      }
-
-      const success = await setCurrentScene(activeCampaignId, sceneId);
-      if (success && activeCampaignData.scenes[sceneId]) {
-        const scene = activeCampaignData.scenes[sceneId];
-        document.getElementById('currentBroadcastScene').textContent = scene.name;
-        document.getElementById('currentSceneDescription').textContent = scene.description || '';
-        console.log('✅ Scene broadcast:', scene.name);
-      }
-    });
-  }
-
-  // Add Chapter
-  const addCampaignChapterBtn = document.getElementById('addCampaignChapterBtn');
-  if (addCampaignChapterBtn) {
-    addCampaignChapterBtn.addEventListener('click', async function() {
-      const number = parseInt(document.getElementById('newChapterNumber').value);
-      const name = document.getElementById('newChapterName').value;
-      const script = document.getElementById('newChapterScript').value;
-
-      if (!number || !name || !activeCampaignId) {
-        alert('Please fill in chapter number and name');
-        return;
-      }
-
-      const chapterId = await addChapter(activeCampaignId, { number, name, script });
-
-      if (chapterId) {
-        document.getElementById('newChapterNumber').value = '';
-        document.getElementById('newChapterName').value = '';
-        document.getElementById('newChapterScript').value = '';
-        await loadActiveCampaign(activeCampaignId);
-        alert(`Chapter ${number} added successfully!`);
-      }
-    });
-  }
-
-  // Add Branch Option
-  const addBranchOptionBtn = document.getElementById('addBranchOptionBtn');
-  if (addBranchOptionBtn) {
-    addBranchOptionBtn.addEventListener('click', function() {
-      const container = document.getElementById('branchOptionsContainer');
-      const optionRow = document.createElement('div');
-      optionRow.className = 'branch-option-row';
-      optionRow.style.cssText = 'display: flex; gap: 10px; margin-bottom: 10px;';
-      optionRow.innerHTML = `
-        <input type="text" class="text-input branch-option-text" placeholder="Option text" style="flex: 1;">
-        <input type="text" class="text-input branch-option-consequences" placeholder="Tags (comma-separated)" style="flex: 1;">
-        <button class="header-btn remove-option-btn" style="padding: 8px 12px; background: rgba(255,0,0,0.3);">×</button>
-      `;
-      container.appendChild(optionRow);
-
-      // Add remove handler
-      optionRow.querySelector('.remove-option-btn').addEventListener('click', function() {
-        optionRow.remove();
-      });
-    });
-  }
-
-  // Create Branch Point
-  const createBranchPointBtn = document.getElementById('createBranchPointBtn');
-  if (createBranchPointBtn) {
-    createBranchPointBtn.addEventListener('click', async function() {
-      const question = document.getElementById('branchQuestion').value;
-      const sceneSelect = document.getElementById('sceneBroadcastSelect');
-      const sceneId = sceneSelect.value;
-
-      if (!question || !sceneId || !activeCampaignId) {
-        alert('Please enter a question and select a scene');
-        return;
-      }
-
-      // Collect options
-      const optionRows = document.querySelectorAll('.branch-option-row');
-      const options = [];
-
-      optionRows.forEach((row, index) => {
-        const text = row.querySelector('.branch-option-text').value;
-        const consequencesText = row.querySelector('.branch-option-consequences').value;
-
-        if (text) {
-          options.push({
-            id: `option-${index + 1}`,
-            text: text,
-            consequences: consequencesText ? consequencesText.split(',').map(c => c.trim()) : []
-          });
-        }
-      });
-
-      if (options.length < 2) {
-        alert('Please add at least 2 options');
-        return;
-      }
-
-      const branchId = await createBranchPoint(activeCampaignId, sceneId, {
-        question: question,
-        options: options,
-        votingEnabled: true
-      });
-
-      if (branchId) {
-        document.getElementById('branchQuestion').value = '';
-        // Reset to just 2 option rows
-        document.getElementById('branchOptionsContainer').innerHTML = `
-          <div class="branch-option-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
-            <input type="text" class="text-input branch-option-text" placeholder="Option 1 text" style="flex: 1;">
-            <input type="text" class="text-input branch-option-consequences" placeholder="Tags (comma-separated)" style="flex: 1;">
-          </div>
-          <div class="branch-option-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
-            <input type="text" class="text-input branch-option-text" placeholder="Option 2 text" style="flex: 1;">
-            <input type="text" class="text-input branch-option-consequences" placeholder="Tags (comma-separated)" style="flex: 1;">
-          </div>
-        `;
-        alert('Branch point created successfully!');
-      }
-    });
-  }
-
-  console.log('✅ Campaign Manager integration loaded');
-});
-
-// Helper Functions
-async function loadMyCampaignsList() {
-  const campaigns = await getMyCampaigns();
-  const select = document.getElementById('activeCampaignSelect');
-
-  select.innerHTML = '<option value="">Select Campaign...</option>';
-
-  campaigns.forEach(campaign => {
-    const option = document.createElement('option');
-    option.value = campaign.id;
-    option.textContent = `${campaign.name} (Ch.${campaign.currentChapter})`;
-    select.appendChild(option);
-  });
-
-  console.log(`✅ Loaded ${campaigns.length} campaigns`);
-}
-
-async function loadActiveCampaign(campaignId) {
-  activeCampaignId = campaignId;
-  activeCampaignData = await loadCampaign(campaignId);
-
-  window.campaignManager.activeCampaignId = campaignId;
-  window.campaignManager.activeCampaignData = activeCampaignData;
-
-  if (!activeCampaignData) {
-    alert('Failed to load campaign');
-    return;
-  }
-
-  // Update campaign info display
-  document.getElementById('campaignInfoDisplay').style.display = 'block';
-  document.getElementById('selectedCampaignName').textContent = activeCampaignData.metadata.name;
-  document.getElementById('selectedCampaignDesc').textContent = activeCampaignData.metadata.description || '';
-  document.getElementById('selectedCampaignId').textContent = campaignId;
-  document.getElementById('selectedCampaignChapter').textContent = activeCampaignData.metadata.currentChapter || 1;
-  document.getElementById('selectedCampaignArc').textContent = activeCampaignData.metadata.currentArc || '-';
-  document.getElementById('selectedCampaignPlayers').textContent = activeCampaignData.players ? Object.keys(activeCampaignData.players).length : 0;
-  document.getElementById('selectedCampaignScenes').textContent = activeCampaignData.scenes ? Object.keys(activeCampaignData.scenes).length : 0;
-  document.getElementById('selectedCampaignChaptersCount').textContent = activeCampaignData.chapters ? Object.keys(activeCampaignData.chapters).length : 0;
-
-  // Load scenes into selector
-  const sceneSelect = document.getElementById('sceneBroadcastSelect');
-  sceneSelect.innerHTML = '<option value="">Select Scene...</option>';
-
-  if (activeCampaignData.scenes) {
-    Object.entries(activeCampaignData.scenes).forEach(([id, scene]) => {
-      const option = document.createElement('option');
-      option.value = id;
-      option.textContent = `${scene.name} (Ch.${scene.chapterId || '?'})`;
-      sceneSelect.appendChild(option);
-    });
-  }
-
-  // Display chapters list
-  displayChapters();
-
-  // Display player management section
-  document.getElementById('playerManagementSection').style.display = 'block';
-  displayCampaignPlayers();
-
-  console.log('✅ Active campaign loaded:', activeCampaignData.metadata.name);
-
-  // Setup real-time listener
-  listenToCampaign(campaignId, (updatedCampaign) => {
-    activeCampaignData = updatedCampaign;
-    window.campaignManager.activeCampaignData = updatedCampaign;
-    document.getElementById('selectedCampaignChapter').textContent = updatedCampaign.metadata.currentChapter || 1;
-    document.getElementById('selectedCampaignPlayers').textContent = updatedCampaign.players ? Object.keys(updatedCampaign.players).length : 0;
-    document.getElementById('selectedCampaignScenes').textContent = updatedCampaign.scenes ? Object.keys(updatedCampaign.scenes).length : 0;
-    document.getElementById('selectedCampaignChaptersCount').textContent = updatedCampaign.chapters ? Object.keys(updatedCampaign.chapters).length : 0;
-    displayChapters();
-    displayCampaignPlayers();
-  });
-}
-
-// Edit Chapter Modal Setup
-const editChapterModal = document.getElementById('editChapterModal');
-const closeEditChapterBtn = document.getElementById('closeEditChapterBtn');
-const editChapterForm = document.getElementById('editChapterForm');
-
-if (closeEditChapterBtn) {
-  closeEditChapterBtn.addEventListener('click', function() {
-    editChapterModal.classList.add('hidden');
-  });
-}
-
-// Global function for editing chapters (called from displayChapters)
-window.editChapter = async function(chapterNumber) {
-  if (!activeCampaignData || !activeCampaignData.chapters) {
-    alert('No campaign loaded');
-    return;
-  }
-
-  const chapter = activeCampaignData.chapters[chapterNumber];
-  if (!chapter) {
-    alert('Chapter not found');
-    return;
-  }
-
-  // Populate form
-  document.getElementById('editChapterNumber').value = chapterNumber;
-  document.getElementById('editChapterName').value = chapter.name;
-  document.getElementById('editChapterScript').value = chapter.script || '';
-
-  editChapterModal.classList.remove('hidden');
-};
-
-if (editChapterForm) {
-  editChapterForm.addEventListener('submit', async function(e) {
-    e.preventDefault();
-
-    const chapterNumber = parseInt(document.getElementById('editChapterNumber').value);
-    const updates = {
-      name: document.getElementById('editChapterName').value,
-      script: document.getElementById('editChapterScript').value
-    };
-
-    const success = await updateChapter(activeCampaignId, chapterNumber, updates);
-
-    if (success) {
-      editChapterModal.classList.add('hidden');
-      await loadActiveCampaign(activeCampaignId);
-
-      // Reload campaigns in main dropdown if we're editing the active campaign
-      if (window.loadFirebaseCampaigns) {
-        await window.loadFirebaseCampaigns();
-      }
-
-      alert('Chapter updated successfully!');
-    } else {
-      alert('Failed to update chapter');
-    }
-  });
-}
-
-function displayChapters() {
-  const container = document.getElementById('chaptersListDisplay');
-
-  if (!activeCampaignData || !activeCampaignData.chapters || Object.keys(activeCampaignData.chapters).length === 0) {
-    container.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 20px;">No chapters yet. Add one below!</p>';
-    return;
-  }
-
-  const chapters = Object.entries(activeCampaignData.chapters).sort((a, b) => a[1].number - b[1].number);
-
-  container.innerHTML = chapters.map(([id, chapter]) => `
-    <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid ${chapter.number === activeCampaignData.metadata.currentChapter ? '#ffd700' : 'rgba(102, 126, 234, 0.4)'};">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div style="flex: 1;">
-          <strong style="color: #ffd700;">Chapter ${chapter.number}</strong>: ${chapter.name}
-          ${chapter.number === activeCampaignData.metadata.currentChapter ? '<span style="background: rgba(255,215,0,0.3); padding: 2px 8px; border-radius: 4px; font-size: 0.8em; margin-left: 8px;">Current</span>' : ''}
-        </div>
-        <div style="display: flex; gap: 8px; align-items: center;">
-          <span style="color: rgba(255,255,255,0.5); font-size: 0.9em;">${chapter.scenes?.length || 0} scenes</span>
-          <button class="header-btn" onclick="editChapter(${chapter.number})" style="padding: 6px 10px; font-size: 0.85em; background: rgba(165, 94, 234, 0.4);">✏️ Edit</button>
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function displayCampaignPlayers() {
-  const container = document.getElementById('campaignPlayersList');
-
-  if (!activeCampaignData || !activeCampaignData.players || Object.keys(activeCampaignData.players).length === 0) {
-    container.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 10px;">No players yet. Add players to this campaign below!</p>';
-    return;
-  }
-
-  container.innerHTML = Object.entries(activeCampaignData.players).map(([playerId, playerData]) => `
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: rgba(255,255,255,0.05); border-radius: 5px; margin-bottom: 5px;">
-      <span>${playerData.name || playerId}</span>
-      <button onclick="removePlayerFromCampaignUI('${playerId}')" style="background: rgba(255,0,0,0.3); border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer;">✕</button>
-    </div>
-  `).join('');
-}
-
-// Global function for removing player (called from displayCampaignPlayers)
-window.removePlayerFromCampaignUI = async function(playerId) {
-  if (!activeCampaignId) return;
-
-  if (confirm('Remove this player from the campaign?')) {
-    const success = await removePlayerFromCampaign(activeCampaignId, playerId);
-    if (success) {
-      await loadActiveCampaign(activeCampaignId);
-    }
-  }
-};
-
-// Add Player to Campaign Button
-const addPlayerToCampaignBtn = document.getElementById('addPlayerToCampaignBtn');
-if (addPlayerToCampaignBtn) {
-  addPlayerToCampaignBtn.addEventListener('click', async function() {
-    const playerName = document.getElementById('addPlayerNameInput').value.trim();
-
-    if (!playerName || !activeCampaignId) {
-      alert('Please enter a player name');
-      return;
-    }
-
-    const playerId = await addPlayerToCampaign(activeCampaignId, { name: playerName });
-    if (playerId) {
-      document.getElementById('addPlayerNameInput').value = '';
-      await loadActiveCampaign(activeCampaignId);
-      console.log('✅ Player added:', playerName);
-    }
-  });
-}
-</script>
-
+    </script>
 </body>
 </html>
