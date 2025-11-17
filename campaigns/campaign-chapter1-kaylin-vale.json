@@ -281,7 +281,7 @@
       "id": "mama-jay",
       "name": "Mama Jay Rainbow",
       "role": "ally",
-      "imageUrl": "https://drive.google.com/uc?export=view&id=1ajj4lmmoEpxtMvXO61W1956z1oTrVM0_",
+      "imageUrl": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/mama-jay-portrait.png",
       "description": "Founder of House Rainbow and owner of Café Greenwich. Wise, warm, and deeply concerned about Kaylin. Acts as mentor and mission giver.",
       "motivations": ["Protect the community", "Help Kaylin heal", "Guide the player"],
       "backstory": "Mama Jay has seen many people fall to Ignorance. She founded House Rainbow as a safe haven and has a special connection to The Lighthouse, having helped establish it years ago."
@@ -290,7 +290,7 @@
       "id": "kaylin-civilian",
       "name": "Kaylin Vale",
       "role": "villain-redeemable",
-      "imageUrl": "https://drive.google.com/uc?export=view&id=[KAYLIN-CIVILIAN-IMAGE-ID]",
+      "imageUrl": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/kaylin-vale-civilian.png",
       "description": "Beloved community organizer in green dress with blonde wavy hair and blue eyes. Carries a brown messenger bag marked 'JC'. Was once the heart of the community, now lost to Earned Love philosophy.",
       "motivations": ["Protect herself from abandonment", "Prove her worth", "Make love make sense", "Never be a doormat again"],
       "backstory": "Kaylin's mother left when she was 12. Her father told her it was because they weren't good enough. She learned love must be earned through achievement and service. Burned out from community organizing, she was recruited by the Ignorant Seven at her lowest point."
@@ -299,7 +299,7 @@
       "id": "kaylin-keeper",
       "name": "The Keeper (Kaylin Vale - Justice Knight)",
       "role": "villain",
-      "imageUrl": "https://drive.google.com/uc?export=view&id=[KAYLIN-JUSTICE-KNIGHT-IMAGE-ID]",
+      "imageUrl": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/kaylin-justice-knight.png",
       "description": "Justice Knight form with geometric gold/black visor (Star of Ignorance), flowing blonde hair with golden highlights, striped black/white bodysuit, green drapery like binding vines, tan coat flowing like cape. Surrounded by floating golden ledger pages.",
       "motivations": ["Prove Earned Love is correct", "Protect herself through control", "Make others understand her philosophy", "Never be abandoned again"],
       "backstory": "The corruption of Kaylin Vale. The Ignorant Seven found her at 2am in The Lighthouse, crying and exhausted. They offered her a philosophy that made sense: if love is transactional, you can control it.",
@@ -320,7 +320,7 @@
       "id": "devon",
       "name": "Devon",
       "role": "ally",
-      "imageUrl": "https://drive.google.com/uc?export=view&id=[DEVON-IMAGE-ID]",
+      "imageUrl": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/devon-portrait.png",
       "description": "She/they, late 20s, purple undercut, perpetually has dirt under nails. Former roommate and best friend of Kaylin. Works at community garden. Heartbroken but willing to help.",
       "motivations": ["Understand what happened to Kaylin", "Protect herself from further hurt", "Help if possible"],
       "backstory": "Best friends with Kaylin for 3 years until getting a girlfriend and needing more space. Kaylin presented her with a 'ledger' of everything she'd done and demanded 'recommitment to reciprocity.' Devon moved out."
@@ -329,7 +329,7 @@
       "id": "marcus",
       "name": "Marcus",
       "role": "ally",
-      "imageUrl": "https://drive.google.com/uc?export=view&id=[MARCUS-IMAGE-ID]",
+      "imageUrl": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/marcus-portrait.png",
       "description": "He/him, 50s, kind eyes, flour-covered apron. Co-founded Jade Community with Kaylin. Runs the free community kitchen. Refuses to implement Kaylin's point system.",
       "motivations": ["Uphold true mutual aid principles", "Help Kaylin if she'll accept it", "Protect vulnerable community members"],
       "backstory": "Former unhoused person, now stable and giving back. Started Jade Community with Kaylin as true mutual aid. Saw the Ignorant Seven approach her. Tried to stop the corruption but was rejected."
@@ -338,7 +338,7 @@
       "id": "indebted-pawns",
       "name": "The Indebted (Pawns)",
       "role": "minion",
-      "imageUrl": "https://drive.google.com/uc?export=view&id=[INDEBTED-IMAGE-ID]",
+      "imageUrl": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/pawn-ambush.png",
       "description": "Burned-out community members wearing green 'JE' armbands, carrying tablets tracking credits. Not evil - just exhausted people who found relief in Kaylin's system.",
       "motivations": ["Find structure in chaos", "Protect themselves from being used", "Support Kaylin who helped them"],
       "backstory": "People who were taken advantage of in the past. Kaylin's philosophy offered them permission to set boundaries, but corrupted into walls instead. Can be reached with genuine care."
@@ -418,7 +418,7 @@
     {
       "id": "contemplative-indie",
       "name": "Contemplative Indie Folk",
-      "url": "https://[YOUR-MUSIC-URL]/contemplative-indie.mp3",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/contemplative-indie-folk-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/contemplative-indie-folk-2.mp3",
       "category": "emotional",
       "mood": "contemplative",
       "description": "Soft acoustic guitar, gentle piano, searching melody. For investigation and reflection."
@@ -426,7 +426,7 @@
     {
       "id": "melancholic-acoustic",
       "name": "Melancholic Acoustic",
-      "url": "https://[YOUR-MUSIC-URL]/melancholic-acoustic.mp3",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/melancholic-acoustic-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/melancholic-acoustic-2.mp3",
       "category": "emotional",
       "mood": "sad",
       "description": "Devon's theme. Garden sounds, soft guitar, underlying sadness."
@@ -434,7 +434,7 @@
     {
       "id": "warm-ambient",
       "name": "Warm Ambient",
-      "url": "https://[YOUR-MUSIC-URL]/warm-ambient.mp3",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/warm-ambient-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/warm-ambient-2.mp3",
       "category": "location",
       "mood": "peaceful",
       "description": "Community kitchen and café vibes. Welcoming, nourishing."
@@ -442,7 +442,7 @@
     {
       "id": "ominous-quiet",
       "name": "Ominous Quiet",
-      "url": "https://[YOUR-MUSIC-URL]/ominous-quiet.mp3",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/ominous-quiet-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/ominous-quiet-2.mp3",
       "category": "location",
       "mood": "tense",
       "description": "Something wrong. Loss of warmth. For Lighthouse exterior."
@@ -450,7 +450,7 @@
     {
       "id": "building-tension",
       "name": "Building Tension",
-      "url": "https://[YOUR-MUSIC-URL]/building-tension.mp3",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/building-tension-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/building-tension-2.mp3",
       "category": "combat",
       "mood": "tense",
       "description": "Electronic elements, rising intensity. Confrontation music."
