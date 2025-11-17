@@ -356,7 +356,7 @@
       "id": "distressed-youth",
       "name": "Distressed Youth",
       "role": "neutral",
-      "imageUrl": "",
+      "imageUrl": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/distressed-youth.png",
       "description": "19-year-old with Progress Pride flag pin. Needed help from Kaylin but was given list of requirements instead. Represents the harm Jade Exchange causes.",
       "motivations": ["Find housing", "Get help without judgment"],
       "backstory": "Part of the queer community, in housing crisis, approached Kaylin for help and was met with demands to 'earn' assistance."
