@@ -918,6 +918,19 @@ function addCheckpoint(description, nextChapter = null) {
     saveToLocalStorage();
 }
 
+window.clearAllCheckpoints = function() {
+    if (checkpoints.length === 0) {
+        alert('No checkpoints to clear');
+        return;
+    }
+
+    if (confirm('Clear all checkpoints? This cannot be undone.')) {
+        checkpoints = [];
+        renderCheckpoints();
+        saveToLocalStorage();
+    }
+};
+
 // ===================================
 // COUNTER MANAGEMENT
 // ===================================
@@ -1090,7 +1103,8 @@ async function broadcastTagsOnly() {
         const payload = {
             players: players.map(p => ({
                 name: p.name,
-                tags: p.tags
+                storyTags: p.tags.story || [],
+                currentStatuses: p.tags.status || []
             })),
             counters: counters,
             timestamp: Date.now(),
@@ -1127,7 +1141,8 @@ async function broadcastToPlayers() {
             },
             players: players.map(p => ({
                 name: p.name,
-                tags: p.tags
+                storyTags: p.tags.story || [],
+                currentStatuses: p.tags.status || []
             })),
             counters: counters,
             timestamp: Date.now()
@@ -1314,6 +1329,7 @@ function setupEventListeners() {
 
     // Checkpoint management
     const addCheckpointBtn = document.getElementById('addCheckpointBtn');
+    const clearCheckpointsBtn = document.getElementById('clearCheckpointsBtn');
     const checkpointModal = document.getElementById('checkpointModal');
     const closeCheckpointModalBtn = document.getElementById('closeCheckpointModalBtn');
     const cancelCheckpointBtn = document.getElementById('cancelCheckpointBtn');
@@ -1324,6 +1340,8 @@ function setupEventListeners() {
         const input = document.getElementById('checkpointInput');
         if (input) input.value = '';
     });
+
+    clearCheckpointsBtn?.addEventListener('click', clearAllCheckpoints);
 
     closeCheckpointModalBtn?.addEventListener('click', () => checkpointModal?.classList.add('hidden'));
     cancelCheckpointBtn?.addEventListener('click', () => checkpointModal?.classList.add('hidden'));
