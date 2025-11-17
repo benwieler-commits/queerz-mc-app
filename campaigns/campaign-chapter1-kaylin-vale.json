@@ -375,7 +375,7 @@
     {
       "id": "community-garden",
       "name": "Community Garden",
-      "imageUrl": "https://drive.google.com/uc?export=view&id=[GARDEN-IMAGE-ID]",
+      "imageUrl": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/community-garden.jpg",
       "description": "Small urban garden with raised beds full of tomatoes and herbs, butterfly garden, wooden benches. Devon's workspace. Green and alive but tinged with sadness.",
       "atmosphere": "Peaceful but melancholic. Growing things while processing grief.",
       "musicSuggestions": ["melancholic-acoustic-1", "melancholic-acoustic-2"]
