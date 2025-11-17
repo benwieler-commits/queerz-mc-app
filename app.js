@@ -321,6 +321,106 @@ function loadCampaignScript(campaignId) {
     displayScriptTab(chapter, 'overview');
 }
 
+// Populate environment dropdown from campaign data
+function populateEnvironmentSelect(campaignId) {
+    const campaign = campaigns[campaignId];
+    const environmentSelect = document.getElementById('environmentSelect');
+
+    if (!campaign || !environmentSelect) return;
+
+    // Clear existing options except the first placeholder
+    environmentSelect.innerHTML = '<option value="">Select Environment...</option>';
+
+    // Add locations from campaign data
+    if (campaign.locations && Array.isArray(campaign.locations)) {
+        campaign.locations.forEach(location => {
+            const option = document.createElement('option');
+            option.value = location.id;
+            option.textContent = location.name;
+            option.dataset.img = location.imageUrl;
+            environmentSelect.appendChild(option);
+        });
+    }
+}
+
+// Populate NPC dropdown from campaign data
+function populateNpcSelect(campaignId) {
+    const campaign = campaigns[campaignId];
+    const npcSelect = document.getElementById('npcSelect');
+
+    if (!campaign || !npcSelect) return;
+
+    // Clear existing options except the first placeholder
+    npcSelect.innerHTML = '<option value="">Select NPC...</option>';
+
+    // Add NPCs from campaign data
+    if (campaign.npcs && Array.isArray(campaign.npcs)) {
+        campaign.npcs.forEach(npc => {
+            // Skip NPCs without images
+            if (!npc.imageUrl) return;
+
+            const option = document.createElement('option');
+            option.value = npc.id;
+            option.textContent = npc.name;
+            option.dataset.img = npc.imageUrl;
+            npcSelect.appendChild(option);
+        });
+    }
+}
+
+// Populate music dropdown from campaign data
+function populateMusicSelect(campaignId) {
+    const campaign = campaigns[campaignId];
+    const musicSelect = document.getElementById('musicSelect');
+
+    if (!campaign || !musicSelect) return;
+
+    // Clear existing options except the first placeholder
+    musicSelect.innerHTML = '<option value="">Select Music...</option>';
+
+    // Add music from campaign data, organized by category
+    if (campaign.music && Array.isArray(campaign.music)) {
+        const categories = {};
+
+        // Group music by category
+        campaign.music.forEach(track => {
+            if (!categories[track.category]) {
+                categories[track.category] = [];
+            }
+            categories[track.category].push(track);
+        });
+
+        // Create optgroups for each category
+        Object.keys(categories).forEach(category => {
+            const optgroup = document.createElement('optgroup');
+            optgroup.label = category.charAt(0).toUpperCase() + category.slice(1);
+
+            categories[category].forEach(track => {
+                // Handle multiple URLs (comma-separated)
+                const urls = track.url.split(',').map(u => u.trim());
+
+                // Create an option for each URL variant
+                urls.forEach((url, index) => {
+                    // Skip placeholder URLs
+                    if (url.includes('[YOUR-MUSIC-URL]') || url.includes('[') || !url.startsWith('http')) {
+                        return;
+                    }
+
+                    const option = document.createElement('option');
+                    option.value = url;
+                    const suffix = urls.length > 1 ? ` ${index + 1}` : '';
+                    option.textContent = track.name + suffix;
+                    optgroup.appendChild(option);
+                });
+            });
+
+            if (optgroup.children.length > 0) {
+                musicSelect.appendChild(optgroup);
+            }
+        });
+    }
+}
+
 // Helper function to render counter bubbles
 function renderCounterBubbles(type, limit, sceneId) {
     const stateKey = `${type}-${sceneId}`;
@@ -1324,6 +1424,10 @@ function setupEventListeners() {
         currentCampaignId = e.target.value;
         if (currentCampaignId && campaigns[currentCampaignId]) {
             loadCampaignScript(currentCampaignId);
+            // Populate asset dropdowns with campaign-specific assets
+            populateEnvironmentSelect(currentCampaignId);
+            populateNpcSelect(currentCampaignId);
+            populateMusicSelect(currentCampaignId);
         }
     });
 
