@@ -367,10 +367,10 @@
     {
       "id": "cafe-greenwich",
       "name": "Café Greenwich",
-      "imageUrl": "https://drive.google.com/uc?export=view&id=1SD9HFWYbxEBXrnd6z-780QDXHO-UidlX",
+      "imageUrl": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/cafe-greenwich.jpg",
       "description": "Warm, welcoming café with rainbow flag in window, mismatched furniture, walls covered in community art and event flyers. Smells like coffee and acceptance. Mama Jay's domain.",
       "atmosphere": "Safe, warm, home-like. The heart of the queer community.",
-      "musicSuggestions": ["warm-ambient", "cafe-jazz"]
+      "musicSuggestions": ["warm-ambient-1", "warm-ambient-2"]
     },
     {
       "id": "community-garden",
@@ -378,7 +378,7 @@
       "imageUrl": "https://drive.google.com/uc?export=view&id=[GARDEN-IMAGE-ID]",
       "description": "Small urban garden with raised beds full of tomatoes and herbs, butterfly garden, wooden benches. Devon's workspace. Green and alive but tinged with sadness.",
       "atmosphere": "Peaceful but melancholic. Growing things while processing grief.",
-      "musicSuggestions": ["melancholic-acoustic", "nature-ambient"]
+      "musicSuggestions": ["melancholic-acoustic-1", "melancholic-acoustic-2"]
     },
     {
       "id": "community-kitchen",
@@ -386,7 +386,7 @@
       "imageUrl": "https://drive.google.com/uc?export=view&id=[KITCHEN-IMAGE-ID]",
       "description": "Busy kitchen serving free meals. Industrial but warm. Smell of soup and bread. Marcus's domain. 'All Welcome' sign prominent on wall.",
       "atmosphere": "Busy, warm, nourishing. True mutual aid in action.",
-      "musicSuggestions": ["warm-ambient", "cooking-sounds"]
+      "musicSuggestions": ["warm-ambient-1", "warm-ambient-2"]
     },
     {
       "id": "lighthouse-exterior",
@@ -394,7 +394,7 @@
       "imageUrl": "https://drive.google.com/uc?export=view&id=[LIGHTHOUSE-EXTERIOR-IMAGE-ID]",
       "description": "Three-story brick building with colorful murals showing diverse hands reaching toward a lighthouse beam. 'All Are Welcome' painted in rainbow letters - now partially covered by new signage about Jade Exchange.",
       "atmosphere": "What was once welcoming now feels conditional. The warmth is gone.",
-      "musicSuggestions": ["ominous-quiet", "loss-theme"]
+      "musicSuggestions": ["ominous-quiet-1", "ominous-quiet-2"]
     },
     {
       "id": "lighthouse-main-hall",
@@ -402,7 +402,7 @@
       "imageUrl": "https://drive.google.com/uc?export=view&id=1-4fvxguaEyCEYY9aWqVKpiE3AGIsqZIV",
       "description": "Transformed former community space. Desks in rows, filing cabinets, giant whiteboard with names and credit scores. Rainbow murals covered with charts and graphs. Office-like and cold where it was once cozy.",
       "atmosphere": "Sterile, transactional, oppressive. A place that measures worth.",
-      "musicSuggestions": ["building-tension", "ominous-corporate"]
+      "musicSuggestions": ["building-tension-1", "building-tension-2"]
     },
     {
       "id": "inner-space-kitchen",
