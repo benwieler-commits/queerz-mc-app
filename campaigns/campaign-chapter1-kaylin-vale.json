@@ -416,76 +416,68 @@
   
   "music": [
     {
-      "id": "contemplative-indie",
-      "name": "Contemplative Indie Folk",
-      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/contemplative-indie-folk-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/contemplative-indie-folk-2.mp3",
-      "category": "emotional",
-      "mood": "contemplative",
-      "description": "Soft acoustic guitar, gentle piano, searching melody. For investigation and reflection."
-    },
-    {
-      "id": "melancholic-acoustic",
-      "name": "Melancholic Acoustic",
-      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/melancholic-acoustic-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/melancholic-acoustic-2.mp3",
-      "category": "emotional",
-      "mood": "sad",
-      "description": "Devon's theme. Garden sounds, soft guitar, underlying sadness."
-    },
-    {
-      "id": "warm-ambient",
-      "name": "Warm Ambient",
-      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/warm-ambient-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/warm-ambient-2.mp3",
+      "id": "cafe-greenwich",
+      "name": "Café Greenwich",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/cafe-greenwich-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/cafe-greenwich-2.mp3",
       "category": "location",
       "mood": "peaceful",
-      "description": "Community kitchen and café vibes. Welcoming, nourishing."
+      "description": "Warm, welcoming café atmosphere. Community kitchen and café vibes. Welcoming, nourishing."
     },
     {
-      "id": "ominous-quiet",
-      "name": "Ominous Quiet",
-      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/ominous-quiet-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/ominous-quiet-2.mp3",
+      "id": "theater-district",
+      "name": "Theater District Investigation",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/theater-district-investigation-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/theater-district-investigation-2.mp3",
       "category": "location",
-      "mood": "tense",
-      "description": "Something wrong. Loss of warmth. For Lighthouse exterior."
+      "mood": "contemplative",
+      "description": "Contemplative investigation music. For reflection and exploration."
     },
     {
-      "id": "building-tension",
-      "name": "Building Tension",
-      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/building-tension-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/building-tension-2.mp3",
-      "category": "combat",
-      "mood": "tense",
-      "description": "Electronic elements, rising intensity. Confrontation music."
-    },
-    {
-      "id": "music-box-haunting",
-      "name": "Music Box - Haunting",
-      "url": "https://[YOUR-MUSIC-URL]/music-box-haunting.mp3",
-      "category": "emotional",
-      "mood": "haunting",
-      "description": "Childlike but eerie. Inner Space theme. Innocence twisted."
+      "id": "university",
+      "name": "University",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/university-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/university-2.mp3",
+      "category": "location",
+      "mood": "atmospheric",
+      "description": "University location atmosphere."
     },
     {
       "id": "inner-space-theme",
       "name": "Inner Space Journey",
-      "url": "https://[YOUR-MUSIC-URL]/inner-space-journey.mp3",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/emotional-themes/inner-space-theme-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/emotional-themes/inner-space-theme-2.mp3",
       "category": "emotional",
       "mood": "intimate",
-      "description": "Stripped back, intimate, emotional. Healing music."
+      "description": "Stripped back, intimate, emotional. Healing music for Inner Space sequences."
     },
     {
-      "id": "resolution-hopeful",
-      "name": "Resolution - Hopeful",
-      "url": "https://[YOUR-MUSIC-URL]/resolution-hopeful.mp3",
+      "id": "tough-crowd-pawn",
+      "name": "Tough Crowd (Pawn Attack)",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/pawn-attack/tough-crowd-work-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/pawn-attack/tough-crowd-work-2.mp3",
+      "category": "combat",
+      "mood": "tense",
+      "description": "Pawn/minion battle music. The Indebted confrontation."
+    },
+    {
+      "id": "keeper-kaylin-battle",
+      "name": "The Keeper Battle (Kaylin)",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/danny-battle-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/danny-battle-2.mp3",
+      "category": "combat",
+      "mood": "intense",
+      "description": "Justice Knight boss battle music for The Keeper (Kaylin Vale)."
+    },
+    {
+      "id": "hero-rises",
+      "name": "The New House Rises",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/hero-time/the-new-house-rises.mp3",
+      "category": "heroic",
+      "mood": "triumphant",
+      "description": "Heroic moment music. When the players turn the tide."
+    },
+    {
+      "id": "tide-turns",
+      "name": "The Tide Turns",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/hero-time/the-tide-turns.mp3",
       "category": "heroic",
       "mood": "hopeful",
-      "description": "If Kaylin is saved. Gentle, warm, acoustic. New beginning."
-    },
-    {
-      "id": "resolution-somber",
-      "name": "Resolution - Somber",
-      "url": "https://[YOUR-MUSIC-URL]/resolution-somber.mp3",
-      "category": "emotional",
-      "mood": "sad",
-      "description": "If Kaylin is lost. Unresolved chords, lingering sadness."
+      "description": "Victory and breakthrough music. Triumphant hero moments."
     }
   ],
   
