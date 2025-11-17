@@ -820,6 +820,8 @@ function setActivePlayer(index) {
     activePlayerIndex = index;
     renderPlayers();
     updatePlayerTagsDisplay();
+    // Broadcast spotlight change to Player App
+    broadcastTagsOnly();
 }
 
 // ===================================
@@ -844,6 +846,7 @@ function updatePlayerTagsDisplay() {
             <div class="tags-display" id="storyTagsDisplay">
                 ${renderTags(player.tags.story, 'story')}
                 <button class="add-tag-btn" onclick="showAddTagDialog('story')">+ Add Story Tag</button>
+                <button class="add-tag-btn" onclick="showBroadcastTagDialog('story')" style="background: rgba(232, 155, 155, 0.3); margin-left: 5px;" title="Apply tag to all players">📢 Broadcast Tag</button>
             </div>
         </div>
 
@@ -852,6 +855,7 @@ function updatePlayerTagsDisplay() {
             <div class="tags-display" id="statusTagsDisplay">
                 ${renderTags(player.tags.status, 'status')}
                 <button class="add-tag-btn" onclick="showAddTagDialog('status')">+ Add Status Tag</button>
+                <button class="add-tag-btn" onclick="showBroadcastTagDialog('status')" style="background: rgba(232, 155, 155, 0.3); margin-left: 5px;" title="Apply tag to all players">📢 Broadcast Tag</button>
             </div>
         </div>
     `;
@@ -966,6 +970,86 @@ window.removeTag = function(type, tag) {
         // Automatically broadcast just tags without resetting layout/audio
         broadcastTagsOnly();
     }
+};
+
+// Broadcast tag to all players
+window.showBroadcastTagDialog = function(tagType) {
+    if (players.length === 0) {
+        alert('No players to broadcast to');
+        return;
+    }
+
+    const dialogHTML = `
+        <div style="max-height: 400px; overflow-y: auto;">
+            <p style="margin-bottom: 15px; color: #E89B9B;">
+                This tag will be added to <strong>ALL ${players.length} player(s)</strong> in the session.
+                <br><br>
+                Use this for group-wide effects like Justice Knight debuffs or environmental tags.
+            </p>
+            <input type="text" id="broadcastTagInput" class="text-input" placeholder="Tag name (e.g., 'Keeper's Judgment')" autofocus>
+            <button class="header-btn" style="margin-top: 10px; width: 100%;" onclick="addBroadcastTag('${tagType}')">📢 Add to All Players</button>
+        </div>
+    `;
+
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.id = 'broadcastTagDialog';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📢 Broadcast ${tagType === 'story' ? 'Story' : 'Status'} Tag to All</h2>
+                <button class="close-modal-btn" onclick="closeBroadcastTagDialog()">×</button>
+            </div>
+            ${dialogHTML}
+        </div>
+    `;
+
+    // Remove existing modal if present
+    const existing = document.getElementById('broadcastTagDialog');
+    if (existing) existing.remove();
+
+    document.body.appendChild(modal);
+
+    // Focus input after a short delay
+    setTimeout(() => {
+        const input = document.getElementById('broadcastTagInput');
+        input?.focus();
+    }, 100);
+};
+
+window.addBroadcastTag = function(type) {
+    const input = document.getElementById('broadcastTagInput');
+    if (!input || !input.value.trim()) {
+        alert('Please enter a tag name');
+        return;
+    }
+
+    const tag = input.value.trim();
+    let addedCount = 0;
+
+    // Add tag to all players
+    players.forEach(player => {
+        if (!player.tags[type].includes(tag)) {
+            player.tags[type].push(tag);
+            addedCount++;
+        }
+    });
+
+    if (addedCount > 0) {
+        updatePlayerTagsDisplay();
+        saveToLocalStorage();
+        broadcastTagsOnly();
+        alert(`Tag "${tag}" added to ${addedCount} player(s)`);
+    } else {
+        alert('All players already have this tag');
+    }
+
+    closeBroadcastTagDialog();
+};
+
+window.closeBroadcastTagDialog = function() {
+    const modal = document.getElementById('broadcastTagDialog');
+    if (modal) modal.remove();
 };
 
 // ===================================
@@ -1206,6 +1290,7 @@ async function broadcastTagsOnly() {
                 storyTags: p.tags.story || [],
                 currentStatuses: p.tags.status || []
             })),
+            spotlightedPlayer: activePlayerIndex >= 0 ? players[activePlayerIndex]?.name : null,
             counters: counters,
             timestamp: Date.now(),
             tagsOnly: true  // Flag to indicate this is a tags-only update
@@ -1244,6 +1329,7 @@ async function broadcastToPlayers() {
                 storyTags: p.tags.story || [],
                 currentStatuses: p.tags.status || []
             })),
+            spotlightedPlayer: activePlayerIndex >= 0 ? players[activePlayerIndex]?.name : null,
             counters: counters,
             timestamp: Date.now()
         };
@@ -1415,6 +1501,19 @@ function setupEventListeners() {
             playerModal?.classList.add('hidden');
         } else {
             alert('Please enter a player name');
+        }
+    });
+
+    // Click spotlight bar blank area to un-spotlight player
+    const spotlightBar = document.querySelector('.spotlight-bar');
+    spotlightBar?.addEventListener('click', (e) => {
+        // Only un-spotlight if clicking on the bar itself, not buttons
+        if (e.target.classList.contains('spotlight-bar') ||
+            e.target.classList.contains('spotlight-players') ||
+            e.target.classList.contains('spotlight-label')) {
+            if (activePlayerIndex !== -1) {
+                setActivePlayer(-1);
+            }
         }
     });
 
