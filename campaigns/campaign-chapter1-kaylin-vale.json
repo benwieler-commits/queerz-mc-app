@@ -488,8 +488,8 @@
       "description": "Electronic elements, rising intensity. Confrontation music."
     },
     {
-      "id": "building-tension",
-      "name": "Building Tension",
+      "id": "building-tension-2",
+      "name": "Building Tension 2",
       "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/building-tension-2.mp3",
       "category": "combat",
       "mood": "tense",
@@ -498,7 +498,7 @@
     {
       "id": "keeper-kaylin-battle",
       "name": "The Keeper Battle (Kaylin)",
-      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/danny-battle-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/danny-battle-2.mp3",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/the-keeper-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/the-keeper-2.mp3",
       "category": "combat",
       "mood": "intense",
       "description": "Justice Knight boss battle music for The Keeper (Kaylin Vale)."
@@ -523,16 +523,16 @@
   
   "storyTags": {
     "beneficial": [
-      "Mama Jay's Blessing",
-      "Community Trust",
-      "Understanding Kaylin's Pain",
-      "Lighthouse Connection",
-      "Devon's Support",
-      "Marcus's Wisdom",
-      "Unconditional Care Demonstrated",
-      "Core Wound Revealed",
-      "Genuine Connection Made",
-      "Helped The Indebted"
+      "mama-jays-blessing (+1 Temporary)",
+      "community-trust (+1 Temporary)",
+      "understanding-kaylins-pain (+2 Temporary)",
+      "lighthouse-connection (+1 Temporary)",
+      "devons-support (+1 Ongoing)",
+      "marcuss-wisdom (+1 Ongoing)",
+      "unconditional-care-demonstrated (+3 Temporary)",
+      "core-wound-revealed (+2 Temporary)",
+      "genuine-connection-made (+2 Ongoing)",
+      "helped-the-indebted (+1 Ongoing)"
     ],
     "harmful": [
       "The Keeper's Judgment",
