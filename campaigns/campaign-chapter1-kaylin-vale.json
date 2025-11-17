@@ -418,7 +418,7 @@
     {
       "id": "contemplative-indie",
       "name": "Contemplative Indie Folk",
-      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/contemplative-indie-folk-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/contemplative-indie-folk-2.mp3",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/contemplative-indie-folk-1.mp3", "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/contemplative-indie-folk-2.mp3",
       "category": "emotional",
       "mood": "contemplative",
       "description": "Soft acoustic guitar, gentle piano, searching melody. For investigation and reflection."
@@ -426,7 +426,7 @@
     {
       "id": "melancholic-acoustic",
       "name": "Melancholic Acoustic",
-      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/melancholic-acoustic-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/melancholic-acoustic-2.mp3",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/melancholic-acoustic-1.mp3", "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/melancholic-acoustic-2.mp3",
       "category": "emotional",
       "mood": "sad",
       "description": "Devon's theme. Garden sounds, soft guitar, underlying sadness."
@@ -434,7 +434,7 @@
     {
       "id": "warm-ambient",
       "name": "Warm Ambient",
-      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/warm-ambient-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/warm-ambient-2.mp3",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/warm-ambient-1.mp3", "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/warm-ambient-2.mp3",
       "category": "location",
       "mood": "peaceful",
       "description": "Community kitchen and café vibes. Welcoming, nourishing."
@@ -442,7 +442,7 @@
     {
       "id": "ominous-quiet",
       "name": "Ominous Quiet",
-      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/ominous-quiet-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/ominous-quiet-2.mp3",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/ominous-quiet-1.mp3", "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/ominous-quiet-2.mp3",
       "category": "location",
       "mood": "tense",
       "description": "Something wrong. Loss of warmth. For Lighthouse exterior."
@@ -450,7 +450,7 @@
     {
       "id": "building-tension",
       "name": "Building Tension",
-      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/building-tension-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/building-tension-2.mp3",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/building-tension-1.mp3", "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/building-tension-2.mp3",
       "category": "combat",
       "mood": "tense",
       "description": "Electronic elements, rising intensity. Confrontation music."
