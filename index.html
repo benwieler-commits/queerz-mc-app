@@ -168,34 +168,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- DICE ROLLER -->
-        <section class="panel dice-roller">
-            <h4>🎲 Dice Roller</h4>
-            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
-                <label for="moveName" style="font-weight: 600;">Move:</label>
-                <input type="text" id="moveName" placeholder="Enter move name (optional)"
-                       style="flex: 1; padding: 8px; background: rgba(30, 30, 50, 0.8); border: 2px solid rgba(103, 232, 249, 0.3); color: #F5EFE6; border-radius: 8px; font-size: 1rem;">
-            </div>
-            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
-                <label for="powerModifier" style="font-weight: 600;">Power Modifier:</label>
-                <input type="number" id="powerModifier" value="0" min="-5" max="5"
-                       style="width: 80px; padding: 8px; background: rgba(30, 30, 50, 0.8); border: 2px solid rgba(103, 232, 249, 0.3); color: #F5EFE6; border-radius: 8px; font-size: 1.1rem; text-align: center; font-weight: bold;">
-            </div>
-            <button class="roll-btn" id="rollDiceBtn">Roll 2d6</button>
-            <div class="dice-display">
-                <div class="dice-formula">
-                    <div class="die1" id="die1">?</div>
-                    <span style="color: #F5EFE6;">+</span>
-                    <div class="die2" id="die2">?</div>
-                    <span style="color: #F5EFE6;">+</span>
-                    <div id="modDisplay" style="color: #F4D35E; font-size: 1.5rem;">?</div>
-                    <span style="color: #F5EFE6;">=</span>
-                    <div id="totalDisplay" style="color: #4ADE80; font-size: 1.8rem; font-weight: bold;">?</div>
-                </div>
-                <div class="roll-result" id="rollResult"></div>
-            </div>
-        </section>
     </main>
 
     <!-- MOVES BAR -->
