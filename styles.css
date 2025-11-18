@@ -375,6 +375,23 @@ body {
     color: #67E8F9;
 }
 
+.tag-badge.burnt-tag {
+    background: rgba(255, 140, 0, 0.3);
+    border-color: #FF8C00;
+    color: #FFB84D;
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.4);
+    animation: burntGlow 2s ease-in-out infinite;
+}
+
+@keyframes burntGlow {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(255, 140, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 140, 0, 0.6);
+    }
+}
+
 .tag-badge .remove-tag {
     cursor: pointer;
     font-weight: bold;
