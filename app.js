@@ -104,11 +104,14 @@ function setupPlayerListener() {
                     tags: {
                         story: [],
                         status: []
-                    }
+                    },
+                    rolls: []
                 };
                 players.push(player);
                 console.log(`✅ Added new player from Player App: ${playerName}`);
             } else {
+                // Ensure rolls array exists for existing players
+                if (!player.rolls) player.rolls = [];
                 // Update existing player data
                 if (data.pronouns) player.pronouns = data.pronouns;
                 if (data.portraitUrl) player.portraitUrl = data.portraitUrl;
@@ -795,7 +798,8 @@ function addPlayer(name) {
         tags: {
             story: [],
             status: []
-        }
+        },
+        rolls: []
     };
 
     players.push(newPlayer);
@@ -869,11 +873,20 @@ function renderTags(tags, type) {
     }
 
     return tags.map(tag => {
+        // Handle both string tags and object tags with a name property
+        const tagName = typeof tag === 'object' ? (tag.name || 'Unnamed Tag') : tag;
+        const tagIsBurnt = typeof tag === 'object' && tag.burnt;
         const tagType = getTagType(tag, type);
+        const burntClass = tagIsBurnt ? 'burnt-tag' : '';
+        const burntIndicator = tagIsBurnt ? '🔥 ' : '';
+
+        // Escape tag name for onclick handler
+        const escapedTag = typeof tag === 'object' ? JSON.stringify(tag).replace(/"/g, '&quot;') : tag.replace(/'/g, "\\'");
+
         return `
-            <div class="tag-badge ${tagType}">
-                ${tag}
-                <span class="remove-tag" onclick="removeTag('${type}', '${tag}')">×</span>
+            <div class="tag-badge ${tagType} ${burntClass}">
+                ${burntIndicator}${tagName}
+                <span class="remove-tag" onclick="removeTag('${type}', '${escapedTag}')">×</span>
             </div>
         `;
     }).join('');
@@ -962,7 +975,25 @@ window.removeTag = function(type, tag) {
     if (activePlayerIndex === -1) return;
 
     const player = players[activePlayerIndex];
-    const index = player.tags[type].indexOf(tag);
+
+    // Handle both string tags and object tags
+    let tagToRemove;
+    try {
+        // Try to parse as JSON (for object tags)
+        tagToRemove = JSON.parse(tag.replace(/&quot;/g, '"'));
+    } catch (e) {
+        // If parsing fails, treat as string
+        tagToRemove = tag.replace(/\\'/g, "'");
+    }
+
+    // Find and remove the tag
+    const index = player.tags[type].findIndex(t => {
+        if (typeof t === 'object' && typeof tagToRemove === 'object') {
+            return JSON.stringify(t) === JSON.stringify(tagToRemove);
+        }
+        return t === tagToRemove;
+    });
+
     if (index > -1) {
         player.tags[type].splice(index, 1);
         updatePlayerTagsDisplay();
@@ -1151,6 +1182,7 @@ function rollDice() {
     const die1 = Math.floor(Math.random() * 6) + 1;
     const die2 = Math.floor(Math.random() * 6) + 1;
     const modifier = parseInt(document.getElementById('powerModifier').value) || 0;
+    const moveName = document.getElementById('moveName')?.value.trim() || 'Dice Roll';
     const total = die1 + die2 + modifier;
 
     document.getElementById('die1').textContent = die1;
@@ -1159,21 +1191,82 @@ function rollDice() {
     document.getElementById('totalDisplay').textContent = total;
 
     const resultElement = document.getElementById('rollResult');
-    let resultText, resultColor;
+    const diceDisplay = document.querySelector('.dice-display');
+    let resultText, resultColor, resultType, borderColor;
 
     if (total <= 6) {
         resultText = 'MISS (6-) - MC makes a move';
         resultColor = '#ff6b6b';
+        resultType = 'miss';
+        borderColor = 'rgba(255, 107, 107, 0.6)';
     } else if (total <= 9) {
         resultText = 'PARTIAL HIT (7-9) - Success with cost';
         resultColor = '#F4D35E';
+        resultType = 'partial';
+        borderColor = 'rgba(244, 211, 94, 0.6)';
     } else {
         resultText = 'FULL HIT (10+) - Success!';
         resultColor = '#4ADE80';
+        resultType = 'full';
+        borderColor = 'rgba(74, 222, 128, 0.6)';
     }
 
     resultElement.textContent = resultText;
     resultElement.style.color = resultColor;
+
+    // Add color-coded border to dice display
+    if (diceDisplay) {
+        diceDisplay.style.border = `3px solid ${borderColor}`;
+        diceDisplay.style.boxShadow = `0 0 15px ${borderColor}`;
+    }
+
+    // Track roll for active player
+    if (activePlayerIndex >= 0 && players[activePlayerIndex]) {
+        const player = players[activePlayerIndex];
+
+        // Ensure rolls array exists
+        if (!player.rolls) player.rolls = [];
+
+        // Check for burnt tags that guarantee hits
+        const hasBurntTag = player.tags.status.some(tag =>
+            typeof tag === 'object' && tag.burnt === true
+        );
+
+        let finalResultType = resultType;
+        let finalResultText = resultText;
+
+        if (hasBurntTag && resultType === 'miss') {
+            finalResultType = 'partial';
+            finalResultText = 'PARTIAL HIT (7-9) - Upgraded by burnt tag! 🔥';
+            resultElement.textContent = finalResultText;
+            resultElement.style.color = '#F4D35E';
+            if (diceDisplay) {
+                diceDisplay.style.border = '3px solid rgba(244, 211, 94, 0.6)';
+                diceDisplay.style.boxShadow = '0 0 15px rgba(244, 211, 94, 0.6)';
+            }
+        }
+
+        const rollData = {
+            timestamp: new Date().toISOString(),
+            move: moveName,
+            dice: [die1, die2],
+            power: modifier,
+            total: total,
+            result: finalResultText,
+            resultType: finalResultType,
+            burntTagUsed: hasBurntTag && resultType === 'miss'
+        };
+
+        player.rolls.push(rollData);
+
+        // Keep only last 10 rolls per player
+        if (player.rolls.length > 10) {
+            player.rolls = player.rolls.slice(-10);
+        }
+
+        saveToLocalStorage();
+        renderPlayerOverview();
+    }
 }
 
 // ===================================
@@ -1650,25 +1743,69 @@ function renderPlayerOverview() {
         return;
     }
 
-    container.innerHTML = players.map((player, index) => `
-        <div style="background: rgba(74, 124, 126, 0.2); padding: 20px; margin: 15px 0; border-radius: 15px; border: 2px solid rgba(74, 124, 126, 0.4);">
-            <h3 style="color: #F4D35E; margin-bottom: 15px;">${player.name}</h3>
+    container.innerHTML = players.map((player, index) => {
+        // Ensure rolls array exists
+        if (!player.rolls) player.rolls = [];
 
-            <div style="margin-bottom: 15px;">
-                <h4 style="color: #E89B9B; margin-bottom: 10px;">Story Tags</h4>
-                <div class="tags-display">
-                    ${renderTags(player.tags.story, 'story')}
+        const rollsHTML = player.rolls.length > 0
+            ? player.rolls.slice().reverse().map(roll => {
+                const borderColor = roll.resultType === 'miss'
+                    ? 'rgba(255, 107, 107, 0.6)'
+                    : roll.resultType === 'partial'
+                    ? 'rgba(244, 211, 94, 0.6)'
+                    : 'rgba(74, 222, 128, 0.6)';
+
+                const bgColor = roll.resultType === 'miss'
+                    ? 'rgba(255, 107, 107, 0.1)'
+                    : roll.resultType === 'partial'
+                    ? 'rgba(244, 211, 94, 0.1)'
+                    : 'rgba(74, 222, 128, 0.1)';
+
+                const timestamp = new Date(roll.timestamp).toLocaleTimeString();
+
+                return `
+                    <div style="background: ${bgColor}; border: 2px solid ${borderColor}; border-radius: 10px; padding: 10px; margin: 5px 0; font-size: 0.9rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <strong style="color: #F4D35E;">${roll.move}</strong>
+                            <span style="color: #E89B9B; font-size: 0.8rem;">${timestamp}</span>
+                        </div>
+                        <div style="color: #F5EFE6;">
+                            🎲 Dice: ${roll.dice[0]} + ${roll.dice[1]} ${roll.power >= 0 ? '+' : ''}${roll.power} = <strong>${roll.total}</strong>
+                            ${roll.burntTagUsed ? ' 🔥' : ''}
+                        </div>
+                        <div style="color: ${roll.resultType === 'miss' ? '#ff6b6b' : roll.resultType === 'partial' ? '#F4D35E' : '#4ADE80'}; font-weight: bold; margin-top: 5px;">
+                            ${roll.result}
+                        </div>
+                    </div>
+                `;
+            }).join('')
+            : '<p style="color: #888; font-size: 0.9rem; font-style: italic;">No rolls yet</p>';
+
+        return `
+            <div style="background: rgba(74, 124, 126, 0.2); padding: 20px; margin: 15px 0; border-radius: 15px; border: 2px solid rgba(74, 124, 126, 0.4);">
+                <h3 style="color: #F4D35E; margin-bottom: 15px;">${player.name}</h3>
+
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: #E89B9B; margin-bottom: 10px;">Story Tags</h4>
+                    <div class="tags-display">
+                        ${renderTags(player.tags.story, 'story')}
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: #E89B9B; margin-bottom: 10px;">Status Tags</h4>
+                    <div class="tags-display">
+                        ${renderTags(player.tags.status, 'status')}
+                    </div>
+                </div>
+
+                <div>
+                    <h4 style="color: #E89B9B; margin-bottom: 10px;">Recent Rolls</h4>
+                    ${rollsHTML}
                 </div>
             </div>
-
-            <div>
-                <h4 style="color: #E89B9B; margin-bottom: 10px;">Status Tags</h4>
-                <div class="tags-display">
-                    ${renderTags(player.tags.status, 'status')}
-                </div>
-            </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 // ===================================
