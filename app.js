@@ -62,6 +62,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderCheckpoints();
     updateCounterDisplays();
 
+    // Initialize Inner Space clocks
+    initInnerSpace();
+
     // Listen for player data from Player App
     setupPlayerListener();
 
@@ -852,6 +855,7 @@ function updatePlayerTagsDisplay() {
                 <button class="add-tag-btn" onclick="showAddTagDialog('story')">+ Add Story Tag</button>
                 <button class="add-tag-btn" onclick="showBroadcastTagDialog('story')" style="background: rgba(232, 155, 155, 0.3); margin-left: 5px;" title="Apply tag to all players">📢 Broadcast Tag</button>
             </div>
+            ${renderQuickStoryTagButtons()}
         </div>
 
         <div class="tag-section">
@@ -865,6 +869,29 @@ function updatePlayerTagsDisplay() {
     `;
 
     container.innerHTML = html;
+}
+
+// Render quick story tag award buttons
+function renderQuickStoryTagButtons() {
+    const commonTags = [
+        "Mama Jay's Blessing",
+        "Community Concern",
+        "Former Best Friend's Testimony",
+        "Childhood Trauma Insight",
+        "The Lighthouse Saved Her Once",
+        "Mutual Aid Philosophy Corrupted",
+        "She's Acting From Pain, Not Malice",
+        "The Real Kaylin Is Still In There"
+    ];
+
+    return `
+        <div class="story-tag-buttons">
+            <h5>Quick Award Story Tags</h5>
+            <div class="quick-tags-grid">
+                ${commonTags.map(tag => `<button class="award-tag-btn" onclick="awardStoryTag('${tag.replace(/'/g, "\\'")}')">${tag}</button>`).join('')}
+            </div>
+        </div>
+    `;
 }
 
 function renderTags(tags, type) {
@@ -950,15 +977,41 @@ window.closeTagDialog = function() {
 window.addTag = function(type, tag) {
     if (activePlayerIndex === -1) return;
 
+    // Clean tag: remove any trailing numbers (e.g., "Community Concern-2" → "Community Concern")
+    const cleanTag = typeof tag === 'string' ? tag.replace(/-\d+$/, '').trim() : tag;
+
     const player = players[activePlayerIndex];
-    if (!player.tags[type].includes(tag)) {
-        player.tags[type].push(tag);
+    if (!player.tags[type].includes(cleanTag)) {
+        player.tags[type].push(cleanTag);
         updatePlayerTagsDisplay();
         saveToLocalStorage();
         // Automatically broadcast just tags without resetting layout/audio
         broadcastTagsOnly();
+        showNotification(`${type === 'story' ? 'Story' : 'Status'} tag awarded: ${cleanTag}`);
     }
 };
+
+// Quick award story tag to active player
+window.awardStoryTag = function(tagName) {
+    if (activePlayerIndex === -1) {
+        alert('Please select a player first');
+        return;
+    }
+    addTag('story', tagName);
+};
+
+// Show notification toast
+function showNotification(message) {
+    const existing = document.querySelector('.notification-toast');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.className = 'notification-toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => toast.remove(), 3000);
+}
 
 window.addCustomTag = function(type) {
     const input = document.getElementById('customTagInput');
@@ -1806,6 +1859,175 @@ function renderPlayerOverview() {
             </div>
         `;
     }).join('');
+}
+
+// ===================================
+// INNER SPACE CLOCK SYSTEM (Chapter 1)
+// ===================================
+
+const innerSpaceClocks = {
+    youAreEnough: 0,
+    proveYourWorth: 0,
+    active: false
+};
+
+function renderInnerSpaceClocks() {
+    if (!innerSpaceClocks.active) {
+        return `
+            <div class="inner-space-toggle">
+                <button onclick="activateInnerSpace()" class="activate-btn">
+                    🌌 Activate Inner Space Clocks (Chapter 1)
+                </button>
+            </div>
+        `;
+    }
+
+    return `
+        <div class="inner-space-clocks">
+            <div class="clocks-header">
+                <h2>🌌 Inner Space: The Childhood Kitchen</h2>
+                <button onclick="deactivateInnerSpace()" class="deactivate-btn">Close Inner Space</button>
+            </div>
+
+            <div class="clocks-container">
+                <div class="clock you-are-enough">
+                    <h3>You Are Enough</h3>
+                    <div class="clock-description">
+                        Showing Kaylin she's valuable WITHOUT earning it
+                    </div>
+                    <div class="clock-track">
+                        ${renderClockBoxes(innerSpaceClocks.youAreEnough, 7, 'success')}
+                    </div>
+                    <div class="clock-total">${innerSpaceClocks.youAreEnough} / 7</div>
+                    <div class="clock-controls">
+                        <button onclick="adjustClock('youAreEnough', 1)">+1</button>
+                        <button onclick="adjustClock('youAreEnough', 2)">+2</button>
+                        <button onclick="adjustClock('youAreEnough', 3)">+3</button>
+                        <button onclick="adjustClock('youAreEnough', -1)" class="minus">-1</button>
+                    </div>
+                    <div class="point-guide">
+                        <strong>+3:</strong> Core wound addressed<br>
+                        <strong>+2:</strong> Significant progress<br>
+                        <strong>+1:</strong> Small step forward
+                    </div>
+                </div>
+
+                <div class="clock prove-your-worth">
+                    <h3>Prove Your Worth</h3>
+                    <div class="clock-description">
+                        Kaylin's Ignorance fighting back
+                    </div>
+                    <div class="clock-track">
+                        ${renderClockBoxes(innerSpaceClocks.proveYourWorth, 6, 'danger')}
+                    </div>
+                    <div class="clock-total">${innerSpaceClocks.proveYourWorth} / 6</div>
+                    <div class="clock-controls">
+                        <button onclick="adjustClock('proveYourWorth', 1)">+1</button>
+                        <button onclick="adjustClock('proveYourWorth', 2)">+2</button>
+                        <button onclick="adjustClock('proveYourWorth', -1)" class="minus">-1</button>
+                    </div>
+                    <div class="point-guide">
+                        <strong>+2:</strong> Major setback<br>
+                        <strong>+1:</strong> Minor setback
+                    </div>
+                </div>
+            </div>
+
+            ${checkInnerSpaceOutcome()}
+        </div>
+    `;
+}
+
+window.activateInnerSpace = function() {
+    innerSpaceClocks.active = true;
+    innerSpaceClocks.youAreEnough = 0;
+    innerSpaceClocks.proveYourWorth = 0;
+    updateInnerSpaceDisplay();
+    showNotification('Inner Space clocks activated!');
+};
+
+window.deactivateInnerSpace = function() {
+    if (confirm("Close Inner Space? This will reset both clocks.")) {
+        innerSpaceClocks.active = false;
+        innerSpaceClocks.youAreEnough = 0;
+        innerSpaceClocks.proveYourWorth = 0;
+        updateInnerSpaceDisplay();
+    }
+};
+
+window.adjustClock = function(clockName, amount) {
+    innerSpaceClocks[clockName] = Math.max(0, innerSpaceClocks[clockName] + amount);
+
+    // Check max values
+    if (clockName === 'youAreEnough') {
+        innerSpaceClocks.youAreEnough = Math.min(7, innerSpaceClocks.youAreEnough);
+    } else {
+        innerSpaceClocks.proveYourWorth = Math.min(6, innerSpaceClocks.proveYourWorth);
+    }
+
+    updateInnerSpaceDisplay();
+
+    // Show notification
+    const clockLabel = clockName === 'youAreEnough' ? 'You Are Enough' : 'Prove Your Worth';
+    showNotification(`${clockLabel}: ${amount > 0 ? '+' : ''}${amount}`);
+};
+
+function renderClockBoxes(filled, total, type) {
+    let boxes = '';
+    for (let i = 0; i < total; i++) {
+        boxes += `<span class="clock-box ${type} ${i < filled ? 'filled' : ''}">
+            ${i < filled ? '▣' : '▢'}
+        </span>`;
+    }
+    return boxes;
+}
+
+function checkInnerSpaceOutcome() {
+    if (innerSpaceClocks.youAreEnough >= 7) {
+        return `
+            <div class="outcome success">
+                <div class="outcome-icon">🎉</div>
+                <div class="outcome-title">KAYLIN SAVED!</div>
+                <div class="outcome-text">
+                    You Are Enough reached 7. Kaylin has broken through her core wound.
+                    She remembers she doesn't have to earn love.
+                </div>
+                <button onclick="resetInnerSpace()" class="outcome-btn">Complete & Reset</button>
+            </div>
+        `;
+    } else if (innerSpaceClocks.proveYourWorth >= 6) {
+        return `
+            <div class="outcome failure">
+                <div class="outcome-icon">💔</div>
+                <div class="outcome-title">KAYLIN LOST</div>
+                <div class="outcome-text">
+                    Prove Your Worth reached 6. The Keeper remains in control.
+                    Kaylin is deeper in Ignorance. Redemption possible in future, but much harder.
+                </div>
+                <button onclick="resetInnerSpace()" class="outcome-btn">Complete & Reset</button>
+            </div>
+        `;
+    }
+    return '';
+}
+
+window.resetInnerSpace = function() {
+    innerSpaceClocks.youAreEnough = 0;
+    innerSpaceClocks.proveYourWorth = 0;
+    updateInnerSpaceDisplay();
+    showNotification("Inner Space clocks reset");
+};
+
+function updateInnerSpaceDisplay() {
+    const container = document.getElementById('inner-space-container');
+    if (container) {
+        container.innerHTML = renderInnerSpaceClocks();
+    }
+}
+
+// Initialize Inner Space display on load
+function initInnerSpace() {
+    updateInnerSpaceDisplay();
 }
 
 // ===================================

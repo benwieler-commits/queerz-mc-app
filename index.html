@@ -170,11 +170,15 @@
                 <h3>⚔️ Encounter Counters</h3>
             </div>
 
-            <!-- Ignorance Limit Counter -->
-            <div class="counter-section">
+            <!-- Ignorance Limit Counter with Enhanced Display -->
+            <div class="counter-section ignorance-tracker">
                 <div class="counter-header">
                     <h4>Ignorance Limit</h4>
                     <button class="counter-btn reset" onclick="resetCounter('ignorance')">Reset</button>
+                </div>
+                <div class="ignorance-help-text">
+                    💡 <strong>Remember:</strong> ANY move can create statuses that count toward Ignorance!
+                    Not just Slay - Talk It Out, Be Vulnerable, Strike A Pose, Care, Resist, and Get A Clue can all chip away.
                 </div>
                 <div class="counter-display">
                     <div class="counter-value" id="ignoranceCounter">0</div>
@@ -183,6 +187,16 @@
                     <button class="counter-btn decrement" onclick="changeCounter('ignorance', -1)">−</button>
                     <button class="counter-btn increment" onclick="changeCounter('ignorance', 1)">+</button>
                 </div>
+            </div>
+        </section>
+
+        <!-- INNER SPACE CLOCKS (Chapter 1) -->
+        <section class="panel">
+            <div class="panel-header">
+                <h3>🌌 Inner Space Clocks</h3>
+            </div>
+            <div id="inner-space-container">
+                <!-- Inner Space clocks will render here -->
             </div>
         </section>
     </main>
