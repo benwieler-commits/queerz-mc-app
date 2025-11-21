@@ -1,13 +1,13 @@
 const CACHE_NAME = 'queerz-mc-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/app.js',
-  '/styles.css',
-  '/campaign-manager-mc.js',
-  '/firebase-config.js',
-  '/firebase-broadcast.js',
-  '/manifest.json'
+  './',
+  './index.html',
+  './app.js',
+  './styles.css',
+  './campaign-manager-mc.js',
+  './firebase-config.js',
+  './firebase-broadcast.js',
+  './manifest.json'
 ];
 
 // Install event - cache resources
@@ -66,7 +66,7 @@ self.addEventListener('fetch', (event) => {
           return response;
         }).catch(() => {
           // Network request failed, try to return cached version
-          return caches.match('/index.html');
+          return caches.match('./index.html');
         });
       })
   );
