@@ -1824,3 +1824,228 @@ input[type="radio"] {
     color: #333;
     font-style: italic;
 }
+
+/* === ENCOUNTER DETAILS PANEL === */
+.encounter-panel {
+    margin-top: 20px;
+    border: 2px solid #ef4444;
+    border-radius: 8px;
+    background-color: #fef2f2;
+    padding: 15px;
+}
+
+.encounter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ef4444;
+}
+
+.encounter-header h3 {
+    margin: 0;
+    color: #dc2626;
+    font-size: 18px;
+}
+
+.encounter-content {
+    display: block;
+}
+
+.enemy-card {
+    background: white;
+    border: 1px solid #fca5a5;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 15px;
+}
+
+.enemy-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.enemy-header h4 {
+    margin: 0;
+    color: #dc2626;
+}
+
+.enemy-type {
+    background: #dc2626;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.ignorance-tracker {
+    margin: 10px 0;
+}
+
+.ignorance-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #dc2626;
+}
+
+.ignorance-bar {
+    display: flex;
+    gap: 4px;
+}
+
+.ignorance-segment {
+    flex: 1;
+    height: 20px;
+    border: 2px solid #dc2626;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ignorance-segment.empty {
+    background: white;
+}
+
+.ignorance-segment.filled {
+    background: #dc2626;
+}
+
+.ignorance-segment:hover {
+    transform: scale(1.1);
+}
+
+.moves-section {
+    margin: 10px 0;
+}
+
+.moves-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 5px 0;
+}
+
+.move-item {
+    padding: 5px 0;
+    border-bottom: 1px solid #fca5a5;
+}
+
+.move-name {
+    font-weight: bold;
+    color: #dc2626;
+}
+
+.status-applied {
+    font-style: italic;
+    color: #666;
+}
+
+.enemy-weaknesses, .enemy-notes {
+    margin: 8px 0;
+    padding: 8px;
+    background: #fef2f2;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.env-tags-section, .quick-status-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #fca5a5;
+}
+
+.env-tags-section h4, .quick-status-section h4 {
+    color: #dc2626;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.env-tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.env-tag {
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.quick-status-group {
+    margin: 8px 0;
+}
+
+.quick-status-btn {
+    margin: 5px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 2px solid;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.quick-status-btn.helpful {
+    background: #d1fae5;
+    border-color: #10b981;
+    color: #065f46;
+}
+
+.quick-status-btn.helpful:hover {
+    background: #10b981;
+    color: white;
+}
+
+.quick-status-btn.harmful {
+    background: #fee2e2;
+    border-color: #ef4444;
+    color: #991b1b;
+}
+
+.quick-status-btn.harmful:hover {
+    background: #ef4444;
+    color: white;
+}
+
+.quick-status-btn.applied {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px currentColor;
+}
+
+.feedback-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    z-index: 9999;
+    animation: slideInFeedback 0.3s ease-out;
+}
+
+.feedback-message.success {
+    background: #10b981;
+    color: white;
+}
+
+.feedback-message.warning {
+    background: #f59e0b;
+    color: white;
+}
+
+@keyframes slideInFeedback {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
