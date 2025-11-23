@@ -1,0 +1,16 @@
+{
+  "name": "queerz-mc-app",
+  "version": "1.0.0",
+  "description": "QUEERZ! MC Companion App",
+  "author": "benwieler-commits",
+  "scripts": {
+    "build": "node build.js",
+    "android": "npm run build && npx cap sync android && npx cap open android",
+    "sync": "npm run build && npx cap sync"
+  },
+  "dependencies": {
+    "@capacitor/android": "latest",
+    "@capacitor/core": "latest",
+    "@capacitor/cli": "latest"
+  }
+}

@@ -1310,3 +1310,429 @@ input[type="radio"] {
         margin: 10px 0 !important;
     }
 }
+
+/* === STORY TAG AWARD BUTTONS === */
+.story-tag-buttons {
+    background: rgba(76, 175, 80, 0.1);
+    padding: 15px;
+    border-radius: 12px;
+    margin: 15px 0;
+    border: 2px solid #4CAF50;
+}
+
+.story-tag-buttons h5 {
+    color: #4CAF50;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+}
+
+.quick-tags-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.award-tag-btn {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85em;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.award-tag-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+.award-tag-btn:active {
+    transform: translateY(0);
+}
+
+/* === NOTIFICATION TOAST === */
+.notification-toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+    z-index: 5000;
+    animation: toastSlideIn 0.3s ease, toastFadeOut 0.3s ease 2.7s forwards;
+}
+
+@keyframes toastSlideIn {
+    from {
+        transform: translateX(-50%) translateY(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes toastFadeOut {
+    to {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+    }
+}
+
+/* === IGNORANCE TRACKER ENHANCED === */
+.ignorance-tracker {
+    background: rgba(143, 115, 153, 0.1);
+    border: 2px solid #8F7399;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.ignorance-tracker h3 {
+    color: #8F7399;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+.ignorance-help-text {
+    background: rgba(76, 175, 80, 0.15);
+    border-left: 4px solid #4CAF50;
+    padding: 12px;
+    margin: 15px 0;
+    font-size: 0.9em;
+    line-height: 1.6;
+    border-radius: 0 8px 8px 0;
+}
+
+.ignorance-current-total {
+    font-size: 1.2em;
+    margin: 15px 0;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.ignorance-current-total strong {
+    color: #8F7399;
+    font-size: 1.4em;
+}
+
+.status-list {
+    list-style: none;
+    padding: 0;
+}
+
+.status-list li {
+    padding: 8px 12px;
+    margin: 5px 0;
+    background: rgba(143, 115, 153, 0.1);
+    border-radius: 6px;
+    border-left: 3px solid #8F7399;
+}
+
+.limit-reached {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #333;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-top: 15px;
+    animation: pulse-success 2s infinite;
+}
+
+@keyframes pulse-success {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    }
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+    }
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 30px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    overflow: hidden;
+    margin-top: 15px;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #8F7399, #5C4A66);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    transition: width 0.5s ease;
+}
+
+/* === INNER SPACE CLOCKS === */
+.inner-space-toggle {
+    text-align: center;
+    padding: 20px;
+}
+
+.activate-btn {
+    background: linear-gradient(135deg, #8F7399, #5C4A66);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.1em;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(143, 115, 153, 0.3);
+    transition: all 0.3s ease;
+}
+
+.activate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(143, 115, 153, 0.4);
+}
+
+.inner-space-clocks {
+    background: linear-gradient(135deg, rgba(143, 115, 153, 0.1), rgba(92, 74, 102, 0.1));
+    border: 3px solid #8F7399;
+    border-radius: 15px;
+    padding: 25px;
+    margin: 20px 0;
+}
+
+.clocks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #8F7399;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.clocks-header h2 {
+    color: #8F7399;
+    margin: 0;
+}
+
+.deactivate-btn {
+    background: rgba(255, 69, 0, 0.8);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.deactivate-btn:hover {
+    background: rgba(255, 69, 0, 1);
+}
+
+.clocks-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+    .clocks-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.clock {
+    background: rgba(30, 30, 50, 0.8);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.clock.you-are-enough {
+    border: 3px solid #4CAF50;
+}
+
+.clock.prove-your-worth {
+    border: 3px solid #FF6B6B;
+}
+
+.clock h3 {
+    margin-top: 0;
+    font-size: 1.3em;
+}
+
+.you-are-enough h3 {
+    color: #4CAF50;
+}
+
+.prove-your-worth h3 {
+    color: #FF6B6B;
+}
+
+.clock-description {
+    font-size: 0.9em;
+    color: rgba(245, 239, 230, 0.7);
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+.clock-track {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.clock-box {
+    font-size: 2em;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.clock-box.success.filled {
+    color: #4CAF50;
+    text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+.clock-box.danger.filled {
+    color: #FF6B6B;
+    text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+}
+
+.clock-total {
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.you-are-enough .clock-total {
+    color: #4CAF50;
+}
+
+.prove-your-worth .clock-total {
+    color: #FF6B6B;
+}
+
+.clock-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 15px 0;
+    flex-wrap: wrap;
+}
+
+.clock-controls button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+.you-are-enough .clock-controls button {
+    background: #4CAF50;
+    color: white;
+}
+
+.prove-your-worth .clock-controls button {
+    background: #FF6B6B;
+    color: white;
+}
+
+.clock-controls button.minus {
+    background: #666 !important;
+}
+
+.clock-controls button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.point-guide {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.85em;
+    line-height: 1.8;
+    margin-top: 15px;
+}
+
+.outcome {
+    grid-column: 1 / -1;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.outcome.success {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(129, 199, 132, 0.2));
+    border: 4px solid #4CAF50;
+}
+
+.outcome.failure {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(239, 83, 80, 0.2));
+    border: 4px solid #FF6B6B;
+}
+
+.outcome-icon {
+    font-size: 4em;
+    margin-bottom: 15px;
+}
+
+.outcome-title {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.outcome.success .outcome-title {
+    color: #4CAF50;
+}
+
+.outcome.failure .outcome-title {
+    color: #FF6B6B;
+}
+
+.outcome-text {
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.outcome-btn {
+    background: rgba(74, 124, 126, 0.6);
+    color: white;
+    border: 2px solid #4A7C7E;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.outcome-btn:hover {
+    background: rgba(74, 124, 126, 0.9);
+    transform: translateY(-2px);
+}

@@ -1,0 +1,19 @@
+# Capacitor build directories
+www/
+android/
+ios/
+
+# Node modules
+node_modules/
+
+# Package lock files
+package-lock.json
+yarn.lock
+
+# Build artifacts
+*.apk
+*.aab
+
+# OS files
+.DS_Store
+Thumbs.db
