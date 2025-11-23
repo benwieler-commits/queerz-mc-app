@@ -25,6 +25,8 @@ body {
     color: #F5EFE6;
     min-height: 100vh;
     overflow-x: hidden;
+       /* Add safe area padding for bottom nav bars and rounded corners */
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* === APP HEADER === */
@@ -32,6 +34,10 @@ body {
     background: rgba(30, 30, 50, 0.95);
     backdrop-filter: blur(15px);
     padding: 15px 30px;
+   /* Add safe area padding for notches/status bars */
+    padding-top: max(15px, env(safe-area-inset-top));
+    padding-left: max(30px, env(safe-area-inset-left));
+    padding-right: max(30px, env(safe-area-inset-right));
     border-bottom: 3px solid #4A7C7E;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     position: sticky;
