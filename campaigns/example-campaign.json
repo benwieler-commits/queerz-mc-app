@@ -35,7 +35,21 @@
           "music": "danny-battle-1",
           "content": "The abandoned comedy club where Danny once performed. Players find his journal and confront him with 2-4 Tough Crowd Pawns. Can be resolved through combat or diplomacy.",
           "npcs": ["danny-jester", "pawn-tough-crowd"],
-          "tags": ["Danny's History", "Motivation: Bitterness"]
+          "tags": ["Danny's History", "Motivation: Bitterness"],
+          "mcGuide": {
+            "stuckPoints": [
+              {
+                "trigger": "Players only use combat/SLAY approach",
+                "suggestion": "Have a Tough Crowd Pawn break down crying - 'He promised we'd matter again!' This shows there's a human underneath."
+              },
+              {
+                "trigger": "Players dismiss Danny's pain entirely",
+                "suggestion": "Danny responds: 'You don't even care why I'm doing this?' Prompt with CARE or TALK IT OUT to explore his motivations."
+              }
+            ],
+            "importantNPCNotes": "Danny wants to be understood before he can change. He's testing if the players truly care about redemption or just want to win. Watch for moments where he drops the 'Jester' persona - those are openings.",
+            "pacingTips": "This scene works best at 60-90 minutes. Don't rush the combat if it happens - let players get creative. If they go straight to Inner Space, that's great! The confrontation is the gateway, not the whole story."
+          }
         }
       ],
       "innerSpace": {
