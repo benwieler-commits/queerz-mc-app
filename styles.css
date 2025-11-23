@@ -1742,3 +1742,85 @@ input[type="radio"] {
     background: rgba(74, 124, 126, 0.9);
     transform: translateY(-2px);
 }
+
+/* === MC PERSONAL GUIDE STYLES === */
+.mc-guide-panel {
+    margin-top: 20px;
+    border: 2px solid #f4a261;
+    border-radius: 8px;
+    background-color: #fff9e6;
+    padding: 15px;
+}
+
+.mc-guide-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f4a261;
+}
+
+.mc-guide-header h3 {
+    margin: 0;
+    color: #d97706;
+    font-size: 18px;
+}
+
+.toggle-btn {
+    background: #f4a261;
+    border: none;
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    cursor: pointer;
+    color: white;
+}
+
+.toggle-btn:hover {
+    background: #d97706;
+}
+
+.mc-guide-content {
+    display: block;
+}
+
+.guide-section {
+    margin-bottom: 15px;
+}
+
+.guide-section h4 {
+    color: #d97706;
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.stuck-point {
+    background: white;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 4px;
+    border-left: 3px solid #f4a261;
+}
+
+.trigger {
+    font-style: italic;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.suggestion {
+    color: #333;
+    padding-left: 10px;
+}
+
+.guide-notes {
+    background: white;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 5px 0;
+    color: #333;
+    font-style: italic;
+}

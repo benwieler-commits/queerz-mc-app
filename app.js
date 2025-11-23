@@ -521,6 +521,12 @@ function displayScriptTab(chapter, tabId, sceneData = null) {
         `;
 
         scriptContent.innerHTML = html;
+
+        // Add MC Guide if present in scene data
+        if (sceneData.mcGuide) {
+            renderMCGuide(sceneData.mcGuide);
+        }
+
         attachCounterListeners();
         return;
     }
@@ -738,6 +744,91 @@ function attachCounterListeners() {
 
             saveToLocalStorage();
         });
+    });
+}
+
+// Render MC Personal Guide panel
+function renderMCGuide(mcGuide) {
+    const scriptContent = document.getElementById('scriptContent');
+    if (!scriptContent) return;
+
+    // Remove any existing guide first
+    const existingGuide = document.getElementById('mc-guide-container');
+    if (existingGuide) {
+        existingGuide.remove();
+    }
+
+    // Create guide container
+    const guideContainer = document.createElement('div');
+    guideContainer.id = 'mc-guide-container';
+    guideContainer.className = 'mc-guide-panel';
+
+    // Create header with toggle button
+    const header = document.createElement('div');
+    header.className = 'mc-guide-header';
+    header.innerHTML = `
+        <h3>📋 MC Personal Guide</h3>
+        <button id="mc-guide-toggle" class="toggle-btn">−</button>
+    `;
+
+    // Create content area
+    const content = document.createElement('div');
+    content.id = 'mc-guide-content';
+    content.className = 'mc-guide-content';
+
+    // Add stuck points if they exist
+    if (mcGuide.stuckPoints && mcGuide.stuckPoints.length > 0) {
+        const stuckSection = document.createElement('div');
+        stuckSection.className = 'guide-section';
+        stuckSection.innerHTML = '<h4>When Players Get Stuck:</h4>';
+
+        mcGuide.stuckPoints.forEach(point => {
+            const pointDiv = document.createElement('div');
+            pointDiv.className = 'stuck-point';
+            pointDiv.innerHTML = `
+                <div class="trigger">→ "${point.trigger}"</div>
+                <div class="suggestion">💡 ${point.suggestion}</div>
+            `;
+            stuckSection.appendChild(pointDiv);
+        });
+
+        content.appendChild(stuckSection);
+    }
+
+    // Add NPC notes if they exist
+    if (mcGuide.importantNPCNotes) {
+        const notesSection = document.createElement('div');
+        notesSection.className = 'guide-section';
+        notesSection.innerHTML = `
+            <h4>Important NPC Notes:</h4>
+            <p class="guide-notes">${mcGuide.importantNPCNotes}</p>
+        `;
+        content.appendChild(notesSection);
+    }
+
+    // Add pacing tips if they exist
+    if (mcGuide.pacingTips) {
+        const pacingSection = document.createElement('div');
+        pacingSection.className = 'guide-section';
+        pacingSection.innerHTML = `
+            <h4>Pacing Tips:</h4>
+            <p class="guide-notes">${mcGuide.pacingTips}</p>
+        `;
+        content.appendChild(pacingSection);
+    }
+
+    // Assemble and append
+    guideContainer.appendChild(header);
+    guideContainer.appendChild(content);
+    scriptContent.appendChild(guideContainer);
+
+    // Add toggle functionality
+    const toggleBtn = document.getElementById('mc-guide-toggle');
+    toggleBtn.addEventListener('click', () => {
+        const content = document.getElementById('mc-guide-content');
+        const isHidden = content.style.display === 'none';
+        content.style.display = isHidden ? 'block' : 'none';
+        toggleBtn.textContent = isHidden ? '−' : '+';
     });
 }
 
