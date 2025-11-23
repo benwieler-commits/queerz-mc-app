@@ -500,9 +500,6 @@ function displayScriptTab(chapter, tabId, sceneData = null) {
                 ${sceneData.npcs && sceneData.npcs.length > 0 ? `
                     <p style="margin-top: 15px; color: #4A7C7E;"><strong>NPCs:</strong> ${sceneData.npcs.join(', ')}</p>
                 ` : ''}
-                ${sceneData.tags && sceneData.tags.length > 0 ? `
-                    <p style="margin-top: 10px; color: #4A7C7E;"><strong>Tags:</strong> ${sceneData.tags.join(', ')}</p>
-                ` : ''}
 
                 ${sceneData.branches ? `
                     <div class="scene-branches" style="margin-top: 30px; padding: 20px; background: rgba(74, 124, 126, 0.15); border-radius: 10px;">
@@ -521,6 +518,11 @@ function displayScriptTab(chapter, tabId, sceneData = null) {
         `;
 
         scriptContent.innerHTML = html;
+
+        // Render scene tags if present (at top)
+        if (sceneData.tags && sceneData.tags.length > 0) {
+            renderSceneTags(sceneData.tags, sceneData.number);
+        }
 
         // Add MC Guide if present in scene data
         if (sceneData.mcGuide) {
@@ -1120,6 +1122,152 @@ function showFeedback(message, type) {
     document.body.appendChild(feedback);
 
     setTimeout(() => feedback.remove(), 2000);
+}
+
+// Track used tags across scenes
+let usedTags = {};
+
+// Render Scene Tags Panel
+function renderSceneTags(tags, sceneNumber) {
+    const scriptContent = document.getElementById('scriptContent');
+    if (!scriptContent) return;
+
+    // Remove any existing scene tags first
+    const existingTags = document.getElementById('scene-tags-container');
+    if (existingTags) {
+        existingTags.remove();
+    }
+
+    // Initialize used tags for this scene if not exists
+    if (!usedTags[sceneNumber]) {
+        usedTags[sceneNumber] = [];
+    }
+
+    // Create tags container
+    const tagsContainer = document.createElement('div');
+    tagsContainer.id = 'scene-tags-container';
+    tagsContainer.className = 'scene-tags-panel';
+
+    // Create header
+    const header = document.createElement('div');
+    header.className = 'scene-tags-header';
+    header.innerHTML = `
+        <h3>🏷️ Available Scene Tags</h3>
+        <span class="tags-info">(Click to apply to selected player)</span>
+    `;
+
+    // Create tags list
+    const tagsList = document.createElement('div');
+    tagsList.className = 'tags-list';
+
+    tags.forEach(tagId => {
+        const tagBtn = createTagButton(tagId, sceneNumber);
+        tagsList.appendChild(tagBtn);
+    });
+
+    tagsContainer.appendChild(header);
+    tagsContainer.appendChild(tagsList);
+
+    // Insert at top of script content
+    scriptContent.insertBefore(tagsContainer, scriptContent.firstChild);
+}
+
+function createTagButton(tagId, sceneNumber) {
+    const btn = document.createElement('button');
+    btn.className = 'scene-tag-btn';
+    btn.dataset.tagId = tagId;
+    btn.dataset.scene = sceneNumber;
+
+    // Format tag name for display (convert kebab-case to Title Case)
+    const displayName = formatTagName(tagId);
+
+    btn.textContent = displayName;
+
+    // Check if already used
+    if (usedTags[sceneNumber] && usedTags[sceneNumber].includes(tagId)) {
+        btn.classList.add('used');
+        btn.innerHTML = `${displayName} <span class="checkmark">✓</span>`;
+    }
+
+    // Add click handler
+    btn.addEventListener('click', () => {
+        applySceneTag(tagId, displayName, sceneNumber, btn);
+    });
+
+    return btn;
+}
+
+function formatTagName(tagId) {
+    // Convert "mama-jays-blessing" to "Mama Jay's Blessing"
+    // Handle possessives and special cases
+    return tagId
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ')
+        .replace(/\sS\s/g, "'s ");
+}
+
+function applySceneTag(tagId, displayName, sceneNumber, btnElement) {
+    // Get selected player
+    const selectedPlayer = getSelectedPlayer();
+
+    if (!selectedPlayer) {
+        showFeedback('Please select a player first!', 'warning');
+        highlightSpotlightBar();
+        return;
+    }
+
+    // Check if already used
+    if (usedTags[sceneNumber] && usedTags[sceneNumber].includes(tagId)) {
+        // Allow "un-using" a tag if MC made a mistake
+        const confirmUnuse = confirm(`This tag was already applied. Remove it from ${selectedPlayer.name}?`);
+        if (confirmUnuse) {
+            removeSceneTagFromPlayer(selectedPlayer, displayName);
+            usedTags[sceneNumber] = usedTags[sceneNumber].filter(t => t !== tagId);
+            btnElement.classList.remove('used');
+            btnElement.innerHTML = displayName;
+            showFeedback(`Removed "${displayName}" from ${selectedPlayer.name}`, 'success');
+        }
+        return;
+    }
+
+    // Apply tag to player's story tags
+    if (!selectedPlayer.tags.story.includes(displayName)) {
+        selectedPlayer.tags.story.push(displayName);
+        updatePlayerTagsDisplay();
+        saveToLocalStorage();
+        broadcastTagsOnly();
+    }
+
+    // Mark as used
+    usedTags[sceneNumber].push(tagId);
+    btnElement.classList.add('used');
+    btnElement.innerHTML = `${displayName} <span class="checkmark">✓</span>`;
+
+    // Visual feedback
+    btnElement.classList.add('applied-animation');
+    setTimeout(() => btnElement.classList.remove('applied-animation'), 500);
+
+    showFeedback(`Applied "${displayName}" to ${selectedPlayer.name}`, 'success');
+}
+
+function removeSceneTagFromPlayer(player, displayName) {
+    // Remove from player's story tags array
+    if (player.tags.story) {
+        player.tags.story = player.tags.story.filter(t => t !== displayName);
+        updatePlayerTagsDisplay();
+        saveToLocalStorage();
+        broadcastTagsOnly();
+    }
+}
+
+function highlightSpotlightBar() {
+    // Temporarily highlight the spotlight bar to draw attention
+    const spotlightBar = document.querySelector('.spotlight-bar');
+    if (spotlightBar) {
+        spotlightBar.classList.add('highlight-prompt');
+        setTimeout(() => spotlightBar.classList.remove('highlight-prompt'), 1500);
+    }
 }
 
 // Handle branch selection in scenes
