@@ -49,6 +49,59 @@
             ],
             "importantNPCNotes": "Danny wants to be understood before he can change. He's testing if the players truly care about redemption or just want to win. Watch for moments where he drops the 'Jester' persona - those are openings.",
             "pacingTips": "This scene works best at 60-90 minutes. Don't rush the combat if it happens - let players get creative. If they go straight to Inner Space, that's great! The confrontation is the gateway, not the whole story."
+          },
+          "encounter": {
+            "type": "combat",
+            "enemies": [
+              {
+                "name": "Danny 'The Jester'",
+                "type": "Justice Knight",
+                "ignoranceLimit": 5,
+                "signatureMoves": [
+                  {
+                    "name": "Hurtful Punchline",
+                    "effect": "Deal emotional harm with cutting jokes aimed at player insecurities",
+                    "statusApplied": ["Shaken (-1 Ongoing)", "Wounded"]
+                  },
+                  {
+                    "name": "Rally the Crowd",
+                    "effect": "Summon or empower Tough Crowd Pawns with nostalgic rhetoric",
+                    "statusApplied": ["Enhanced"]
+                  },
+                  {
+                    "name": "That's Not Funny Anymore",
+                    "effect": "Counter player moves by invoking shame and cancel culture fears",
+                    "statusApplied": ["Conforming (-1 to Resist)"]
+                  }
+                ],
+                "weaknesses": "Genuine understanding of his pain; showing him he can still matter without hurting others",
+                "notes": "Any move can affect Ignorance, not just Slay! TALK IT OUT and CARE are especially effective."
+              },
+              {
+                "name": "Tough Crowd Pawn",
+                "type": "Pawn",
+                "ignoranceLimit": 3,
+                "signatureMoves": [
+                  {
+                    "name": "Heckling Barrage",
+                    "effect": "Disrupt player concentration with mean-spirited jokes",
+                    "statusApplied": ["Shaken (-1 Ongoing)"]
+                  }
+                ],
+                "weaknesses": "Showing them they're being used; offering genuine community",
+                "notes": "Pawns can be redeemed! If freed from Ignorance, they may help against Danny."
+              }
+            ],
+            "environmentalTags": [
+              "Moretti's Stage - Echo of Glory Days-2",
+              "Dusty Comedy Memorabilia-1",
+              "Faded 90s Posters-1",
+              "Spotlight on The Jester-2"
+            ],
+            "quickStatusEffects": {
+              "helpful": ["Inspired-2", "Confident-3", "Protected-2", "+1 Forward"],
+              "harmful": ["Shaken (-1 Ongoing)", "Conforming (-1 to Resist)", "Wounded", "Marked"]
+            }
           }
         }
       ],

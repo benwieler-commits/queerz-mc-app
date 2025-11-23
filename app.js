@@ -527,6 +527,11 @@ function displayScriptTab(chapter, tabId, sceneData = null) {
             renderMCGuide(sceneData.mcGuide);
         }
 
+        // Add Encounter Details if present in scene data
+        if (sceneData.encounter) {
+            renderEncounterDetails(sceneData.encounter);
+        }
+
         attachCounterListeners();
         return;
     }
@@ -830,6 +835,291 @@ function renderMCGuide(mcGuide) {
         content.style.display = isHidden ? 'block' : 'none';
         toggleBtn.textContent = isHidden ? '−' : '+';
     });
+}
+
+// Render Encounter Details panel
+function renderEncounterDetails(encounter) {
+    const scriptContent = document.getElementById('scriptContent');
+    if (!scriptContent) return;
+
+    // Remove any existing encounter first
+    const existingEncounter = document.getElementById('encounter-container');
+    if (existingEncounter) {
+        existingEncounter.remove();
+    }
+
+    // Create encounter container
+    const encounterContainer = document.createElement('div');
+    encounterContainer.id = 'encounter-container';
+    encounterContainer.className = 'encounter-panel';
+
+    // Create header with toggle
+    const header = document.createElement('div');
+    header.className = 'encounter-header';
+    header.innerHTML = `
+        <h3>⚔️ Encounter Details</h3>
+        <button id="encounter-toggle" class="toggle-btn">−</button>
+    `;
+
+    // Create content area
+    const content = document.createElement('div');
+    content.id = 'encounter-content';
+    content.className = 'encounter-content';
+
+    // Render enemies
+    if (encounter.enemies && encounter.enemies.length > 0) {
+        encounter.enemies.forEach(enemy => {
+            const enemyDiv = renderEnemy(enemy);
+            content.appendChild(enemyDiv);
+        });
+    }
+
+    // Render environmental tags
+    if (encounter.environmentalTags && encounter.environmentalTags.length > 0) {
+        const envSection = document.createElement('div');
+        envSection.className = 'env-tags-section';
+        envSection.innerHTML = '<h4>Environmental Tags:</h4>';
+
+        const tagList = document.createElement('div');
+        tagList.className = 'env-tag-list';
+        encounter.environmentalTags.forEach(tag => {
+            const tagSpan = document.createElement('span');
+            tagSpan.className = 'env-tag';
+            tagSpan.textContent = tag;
+            tagList.appendChild(tagSpan);
+        });
+
+        envSection.appendChild(tagList);
+        content.appendChild(envSection);
+    }
+
+    // Render quick status buttons
+    if (encounter.quickStatusEffects) {
+        const quickSection = document.createElement('div');
+        quickSection.className = 'quick-status-section';
+        quickSection.innerHTML = '<h4>Quick Status Effects (click to apply):</h4>';
+
+        if (encounter.quickStatusEffects.helpful) {
+            const helpfulDiv = document.createElement('div');
+            helpfulDiv.className = 'quick-status-group';
+            helpfulDiv.innerHTML = '<strong>Helpful:</strong> ';
+            encounter.quickStatusEffects.helpful.forEach(status => {
+                const btn = createQuickStatusButton(status, 'helpful');
+                helpfulDiv.appendChild(btn);
+            });
+            quickSection.appendChild(helpfulDiv);
+        }
+
+        if (encounter.quickStatusEffects.harmful) {
+            const harmfulDiv = document.createElement('div');
+            harmfulDiv.className = 'quick-status-group';
+            harmfulDiv.innerHTML = '<strong>Harmful:</strong> ';
+            encounter.quickStatusEffects.harmful.forEach(status => {
+                const btn = createQuickStatusButton(status, 'harmful');
+                harmfulDiv.appendChild(btn);
+            });
+            quickSection.appendChild(harmfulDiv);
+        }
+
+        content.appendChild(quickSection);
+    }
+
+    // Assemble and append
+    encounterContainer.appendChild(header);
+    encounterContainer.appendChild(content);
+    scriptContent.appendChild(encounterContainer);
+
+    // Add toggle functionality
+    const toggleBtn = document.getElementById('encounter-toggle');
+    toggleBtn.addEventListener('click', () => {
+        const content = document.getElementById('encounter-content');
+        const isHidden = content.style.display === 'none';
+        content.style.display = isHidden ? 'block' : 'none';
+        toggleBtn.textContent = isHidden ? '−' : '+';
+    });
+}
+
+function renderEnemy(enemy) {
+    const enemyDiv = document.createElement('div');
+    enemyDiv.className = 'enemy-card';
+
+    // Enemy header with name and type
+    const enemyHeader = document.createElement('div');
+    enemyHeader.className = 'enemy-header';
+    enemyHeader.innerHTML = `
+        <h4>${enemy.name}</h4>
+        <span class="enemy-type">${enemy.type}</span>
+    `;
+    enemyDiv.appendChild(enemyHeader);
+
+    // Ignorance tracker if applicable
+    if (enemy.ignoranceLimit) {
+        const ignoranceDiv = document.createElement('div');
+        ignoranceDiv.className = 'ignorance-tracker';
+        ignoranceDiv.id = `ignorance-${enemy.name.replace(/\s/g, '-')}`;
+
+        // Create visual tracker
+        const trackerBar = document.createElement('div');
+        trackerBar.className = 'ignorance-bar';
+
+        for (let i = 0; i < enemy.ignoranceLimit; i++) {
+            const segment = document.createElement('div');
+            segment.className = 'ignorance-segment empty';
+            segment.dataset.index = i;
+            segment.dataset.enemyName = enemy.name;
+            segment.dataset.limit = enemy.ignoranceLimit;
+
+            // Add click handler
+            segment.addEventListener('click', function() {
+                const index = parseInt(this.dataset.index);
+                const enemyName = this.dataset.enemyName;
+                const limit = parseInt(this.dataset.limit);
+                updateIgnoranceTracker(enemyName, index + 1, limit);
+            });
+
+            trackerBar.appendChild(segment);
+        }
+
+        const trackerLabel = document.createElement('div');
+        trackerLabel.className = 'ignorance-label';
+        trackerLabel.textContent = `Ignorance: 0/${enemy.ignoranceLimit}`;
+
+        ignoranceDiv.appendChild(trackerLabel);
+        ignoranceDiv.appendChild(trackerBar);
+
+        enemyDiv.appendChild(ignoranceDiv);
+    }
+
+    // Signature moves if present
+    if (enemy.signatureMoves && enemy.signatureMoves.length > 0) {
+        const movesSection = document.createElement('div');
+        movesSection.className = 'moves-section';
+        movesSection.innerHTML = '<strong>Signature Moves:</strong>';
+
+        const movesList = document.createElement('ul');
+        movesList.className = 'moves-list';
+
+        enemy.signatureMoves.forEach(move => {
+            const moveItem = document.createElement('li');
+            moveItem.className = 'move-item';
+
+            let moveHTML = `<span class="move-name">${move.name}</span>: ${move.effect}`;
+
+            if (move.statusApplied && move.statusApplied.length > 0) {
+                moveHTML += ` <span class="status-applied">→ ${move.statusApplied.join(', ')}</span>`;
+            }
+
+            moveItem.innerHTML = moveHTML;
+            movesList.appendChild(moveItem);
+        });
+
+        movesSection.appendChild(movesList);
+        enemyDiv.appendChild(movesSection);
+    }
+
+    // Weaknesses if present
+    if (enemy.weaknesses) {
+        const weakDiv = document.createElement('div');
+        weakDiv.className = 'enemy-weaknesses';
+        weakDiv.innerHTML = `<strong>Weaknesses:</strong> ${enemy.weaknesses}`;
+        enemyDiv.appendChild(weakDiv);
+    }
+
+    // Notes if present
+    if (enemy.notes) {
+        const notesDiv = document.createElement('div');
+        notesDiv.className = 'enemy-notes';
+        notesDiv.innerHTML = `<em>💡 ${enemy.notes}</em>`;
+        enemyDiv.appendChild(notesDiv);
+    }
+
+    return enemyDiv;
+}
+
+function updateIgnoranceTracker(enemyName, newValue, limit) {
+    const trackerId = `ignorance-${enemyName.replace(/\s/g, '-')}`;
+    const tracker = document.getElementById(trackerId);
+    if (!tracker) return;
+
+    const segments = tracker.querySelectorAll('.ignorance-segment');
+    const label = tracker.querySelector('.ignorance-label');
+
+    segments.forEach((segment, index) => {
+        if (index < newValue) {
+            segment.classList.remove('empty');
+            segment.classList.add('filled');
+        } else {
+            segment.classList.remove('filled');
+            segment.classList.add('empty');
+        }
+    });
+
+    label.textContent = `Ignorance: ${newValue}/${limit}`;
+
+    // Visual feedback if limit reached
+    if (newValue >= limit) {
+        label.style.color = '#ef4444';
+        label.textContent += ' - LIMIT REACHED!';
+    } else {
+        label.style.color = '#dc2626';
+    }
+}
+
+function createQuickStatusButton(status, type) {
+    const btn = document.createElement('button');
+    btn.className = `quick-status-btn ${type}`;
+    btn.textContent = status;
+
+    btn.addEventListener('click', () => {
+        const selectedPlayer = getSelectedPlayer();
+
+        if (!selectedPlayer) {
+            showFeedback('Select a player first!', 'warning');
+            return;
+        }
+
+        applyStatusToPlayer(selectedPlayer, status);
+
+        // Visual feedback
+        btn.classList.add('applied');
+        setTimeout(() => btn.classList.remove('applied'), 500);
+
+        showFeedback(`Applied ${status} to ${selectedPlayer.name}`, 'success');
+    });
+
+    return btn;
+}
+
+function getSelectedPlayer() {
+    if (activePlayerIndex === -1 || !players[activePlayerIndex]) {
+        return null;
+    }
+    return players[activePlayerIndex];
+}
+
+function applyStatusToPlayer(player, status) {
+    // Add status to player's status tags if not already present
+    if (!player.tags.status.includes(status)) {
+        player.tags.status.push(status);
+        updatePlayerTagsDisplay();
+        saveToLocalStorage();
+        // Broadcast the updated tags
+        broadcastTagsOnly();
+    }
+}
+
+function showFeedback(message, type) {
+    // Remove existing feedback if any
+    const existing = document.querySelector('.feedback-message');
+    if (existing) existing.remove();
+
+    // Create feedback message
+    const feedback = document.createElement('div');
+    feedback.className = `feedback-message ${type}`;
+    feedback.textContent = message;
+    document.body.appendChild(feedback);
+
+    setTimeout(() => feedback.remove(), 2000);
 }
 
 // Handle branch selection in scenes
