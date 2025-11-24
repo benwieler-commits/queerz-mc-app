@@ -1,0 +1,305 @@
+{
+  "id": "campaign-id-here",
+  "name": "Campaign Name",
+  "description": "Brief campaign description here.",
+  "arc": "Arc Name",
+  "currentChapter": 1,
+  "theme": "Core campaign theme",
+  
+  "chapters": [
+    {
+      "number": 1,
+      "name": "Chapter Name",
+      "overview": "Detailed overview of what happens in this chapter.",
+      
+      "scenes": [
+        {
+          "number": 1,
+          "name": "Scene Name",
+          "location": "location-id",
+          "music": ["music-track-1", "music-track-2"],
+          "content": "Full script content...",
+          "npcs": ["npc-id-1", "npc-id-2"],
+          "tags": ["story-tag-1", "story-tag-2"],
+          
+          "mcGuide": {
+            "stuckPoints": [
+              {
+                "trigger": "When player might get stuck",
+                "suggestion": "What MC can do to help"
+              }
+            ],
+            "importantNPCNotes": "Key NPC personality traits",
+            "pacingTips": "Timing guidance"
+          }
+        },
+        
+        {
+          "number": 2,
+          "name": "Combat Scene",
+          "location": "location-id",
+          "music": ["combat-music"],
+          "content": "Combat scene content...",
+          "npcs": ["enemy-id"],
+          "tags": ["combat-tag"],
+          
+          "mcGuide": {
+            "stuckPoints": [
+              {"trigger": "Combat stuck", "suggestion": "Try emotional approach"}
+            ],
+            "importantNPCNotes": "Enemy vulnerabilities",
+            "pacingTips": "30-45 minutes"
+          },
+          
+          "encounter": {
+            "type": "combat",
+            "enemies": [
+              {
+                "name": "Enemy Name",
+                "type": "Justice Knight",
+                "ignoranceLimit": 5,
+                "signatureMoves": [
+                  {
+                    "name": "Move Name",
+                    "effect": "What it does",
+                    "statusApplied": ["Status-2"]
+                  }
+                ],
+                "weaknesses": "What enemy is vulnerable to",
+                "notes": "Important reminders"
+              }
+            ],
+            "environmentalTags": ["Tag-1", "Tag-2"],
+            "quickStatusEffects": {
+              "helpful": ["Supported-2"],
+              "harmful": ["Guilty-2"]
+            }
+          }
+        }
+      ],
+      
+      "innerSpace": {
+        "description": "Inner Space description",
+        "coreWounds": [
+          {
+            "name": "Core Wound Name",
+            "description": "Wound explanation",
+            "approaches": {
+              "talkItOut": "How to address with Talk It Out",
+              "care": "How to address with Care",
+              "slay": "How to address with Slay"
+            },
+            "tags": ["wound-tag"]
+          }
+        ],
+        "counters": {
+          "youAreEnough": {
+            "description": "Healing counter description",
+            "triggers": ["+3 for X", "+2 for Y", "+1 for Z"]
+          },
+          "proveYourWorth": {
+            "description": "Ignorance counter description",
+            "triggers": ["+2 for major setback", "+1 for minor"]
+          }
+        }
+      },
+      
+      "aftermath": {
+        "outcomes": [
+          {
+            "condition": "best",
+            "description": "Full redemption outcome",
+            "consequences": ["Effect 1", "Effect 2"],
+            "nextChapterImpact": "How this affects future",
+            "resolution": "Final scene description"
+          },
+          {
+            "condition": "worst",
+            "description": "Loss outcome",
+            "consequences": ["Negative effect 1"],
+            "nextChapterImpact": "Darker future",
+            "resolution": "Tragic ending"
+          }
+        ]
+      },
+      
+      "consequences": {
+        "description": "Chapter-level consequences",
+        "rippleEffects": [
+          "Effect on community",
+          "Effect on future chapters"
+        ]
+      },
+      
+      "scalingAndPacing": {
+        "partySize": {
+          "1": {
+            "ignoranceLimit": 4,
+            "pawns": 0,
+            "difficulty": "Solo",
+            "adjustments": "How to adjust for 1 player"
+          },
+          "2-3": {
+            "ignoranceLimit": 5,
+            "pawns": 2,
+            "difficulty": "Standard",
+            "adjustments": "Run as written"
+          },
+          "4-7": {
+            "ignoranceLimit": 6,
+            "pawns": 4,
+            "difficulty": "Epic",
+            "adjustments": "More enemies and complexity"
+          }
+        },
+        "sessionLength": {
+          "oneShot": "3-4 hours - streamlined",
+          "twoSession": "Split at midpoint",
+          "epic": "3 sessions for maximum depth"
+        },
+        "difficultyAdjustments": {
+          "easier": {
+            "ignoranceLimitModifier": -1,
+            "additionalTags": 3,
+            "note": "For first-time players"
+          },
+          "harder": {
+            "ignoranceLimitModifier": 2,
+            "additionalPawns": 2,
+            "note": "For experienced players"
+          }
+        }
+      },
+      
+      "combatEncounters": [
+        {
+          "name": "Encounter Name",
+          "type": "combat",
+          "location": "location-id",
+          "ignoranceLimit": 5,
+          "pawns": 2,
+          "description": "Encounter description",
+          "specialMechanics": [
+            "Special rule 1",
+            "Special rule 2"
+          ],
+          "weaknesses": [
+            "Vulnerability 1",
+            "Vulnerability 2"
+          ],
+          "victoryCondition": "How to win"
+        }
+      ]
+    }
+  ],
+  
+  "npcs": [
+    {
+      "id": "npc-id",
+      "name": "NPC Name",
+      "role": "ally",
+      "imageUrl": "https://your-url-here/npc-image.png",
+      "description": "Physical description and personality",
+      "motivations": ["Motivation 1", "Motivation 2"],
+      "backstory": "NPC background story"
+    },
+    {
+      "id": "enemy-id",
+      "name": "Enemy Name",
+      "role": "villain",
+      "imageUrl": "https://your-url-here/enemy-image.png",
+      "description": "Enemy appearance",
+      "motivations": ["What they want"],
+      "backstory": "How they fell to Ignorance",
+      "justiceKnight": {
+        "isJusticeKnight": true,
+        "construct": "Philosophy name",
+        "ignoranceLimit": 5,
+        "moves": [
+          "Signature Move 1",
+          "Signature Move 2"
+        ]
+      }
+    }
+  ],
+  
+  "locations": [
+    {
+      "id": "location-id",
+      "name": "Location Name",
+      "imageUrl": "https://your-url-here/location.jpg",
+      "description": "Visual description of location",
+      "atmosphere": "How it feels emotionally",
+      "musicSuggestions": ["music-id-1", "music-id-2"]
+    }
+  ],
+  
+  "music": [
+    {
+      "id": "music-id",
+      "name": "Track Name",
+      "url": "https://your-url-here/track.mp3",
+      "category": "emotional",
+      "mood": "contemplative",
+      "description": "When to use this track"
+    },
+    {
+      "id": "combat-music",
+      "name": "Boss Battle Track",
+      "url": "https://your-url-here/boss-battle.mp3, https://your-url-here/boss-battle-alt.mp3",
+      "category": "combat",
+      "mood": "intense",
+      "description": "Justice Knight battle music (multiple URLs separated by commas)"
+    }
+  ],
+  
+  "storyTags": {
+    "beneficial": [
+      "helpful-tag-name (+1 Temporary)",
+      "ongoing-support (+2 Ongoing)"
+    ],
+    "harmful": [
+      "negative-tag-name",
+      "harmful-effect"
+    ],
+    "investigation": [
+      "Investigation Tag 1",
+      "Evidence Tag 2"
+    ],
+    "emotional": [
+      "Emotional Tag 1",
+      "Breakthrough Tag 2"
+    ]
+  },
+  
+  "statusTags": {
+    "beneficial": [
+      "+1 Forward",
+      "+1 Ongoing",
+      "Inspired",
+      "Protected",
+      "Supported"
+    ],
+    "harmful": [
+      "Negative-Status-2",
+      "Another-Harmful-3",
+      "Minor-Problem-1"
+    ]
+  },
+  
+  "checkpoints": [
+    {
+      "description": "First major checkpoint",
+      "optional": false
+    },
+    {
+      "description": "Optional side quest",
+      "optional": true
+    },
+    {
+      "description": "Final checkpoint",
+      "optional": false,
+      "triggersChapter": 2
+    }
+  ]
+}
