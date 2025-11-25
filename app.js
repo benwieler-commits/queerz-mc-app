@@ -13,6 +13,56 @@ import {
 } from './campaign-manager-mc.js';
 
 // ===================================
+// CORE MOVES REFERENCE
+// ===================================
+
+const CORE_MOVES_REFERENCE = {
+    'strike-a-pose': {
+        name: 'Strike a Pose',
+        trigger: 'Give self/ally positive status or make an impression',
+        hardMove: 'HARD MOVE:\n• They don\'t buy it - impose negative status (tier 2-3)\n• Their reaction backfires - create major complication\n• Draw unwanted attention - introduce new threat\n• Expose vulnerability - take away protective tag',
+        softMove: 'SOFT MOVE (7-9 issues):\n• Limited Juice gain (reduce effectiveness)\n• Offer tough choice for upgrades\n• Status is temporary - will fade soon\n• Create minor complication or cost'
+    },
+    'slay': {
+        name: 'Slay',
+        trigger: 'Give opponent status or overcome Ignorance Limit',
+        hardMove: 'HARD MOVE:\n• Enemy counterattacks - deal damage/status (tier 2-3)\n• You\'re vulnerable - lose defensive tag\n• Enemy reinforcements arrive\n• Collateral damage - hurt ally or environment\n• Your attack misses entirely',
+        softMove: 'SOFT MOVE (7-9):\n• Choose only ONE upgrade (already handled by move)\n• Enemy makes partial counter - minor status (tier 1)\n• You must make concession\n• Create complication in environment'
+    },
+    'get-a-clue': {
+        name: 'Get a Clue',
+        trigger: 'Investigate, research, gather information',
+        hardMove: 'HARD MOVE:\n• False lead - waste time, miss opportunity\n• Dangerous discovery - impose status (tier 2-3)\n• You\'re spotted - alert enemies\n• Evidence destroyed or lost\n• Misleading information',
+        softMove: 'SOFT MOVE (7-9):\n• MC asks counter question\n• Side effect - tier-1 status, cannot Resist (concerned, tired, saddened)\n• Create drama - complicate relationships'
+    },
+    'talk-it-out': {
+        name: 'Talk It Out',
+        trigger: 'De-escalate or negotiate in good faith',
+        hardMove: 'HARD MOVE:\n• They put up walls - impose status (guarded-2, hostile-3)\n• Misunderstanding escalates - create major conflict\n• They manipulate you - negative relationship status\n• Deal falls apart completely\n• Trust is broken',
+        softMove: 'SOFT MOVE (7-9):\n• MC/target picks: Condition/Price OR Show Understanding OR Get Attached\n• Create minor complication in negotiation\n• Time pressure increases\n• Small sacrifice required'
+    },
+    'care': {
+        name: 'Care',
+        trigger: 'Help with emotional/physical needs',
+        hardMove: 'HARD MOVE:\n• Care backfires - make things worse\n• You\'re overwhelmed - impose status (drained-3, exhausted-2)\n• They reject your help - damage relationship\n• You can\'t help - they suffer more\n• Create new problem while solving old one',
+        softMove: 'SOFT MOVE (7-9):\n• Give tier-1 negative status (concerned, tired, saddened, dirty, drained) - cannot Resist\n• Partial success - remove less than expected\n• Create minor cost or complication'
+    },
+    'resist': {
+        name: 'Resist',
+        trigger: 'Avoid status being imposed on you',
+        hardMove: 'HARD MOVE (6-):\n• Take full status as intended\n• Status is worse than expected - increase tier by 1\n• You resist but something else breaks - lose protective tag\n• Create collateral damage\n• Ongoing effect - status continues',
+        softMove: 'SOFT MOVE (7-9):\n• Take status with one less tier (already handled by move)\n• Choose: Take reduced status OR minor complication\n• Resistance has a cost'
+    },
+    'be-vulnerable': {
+        name: 'Be Vulnerable',
+        trigger: 'Put yourself on the line - action that could end badly',
+        hardMove: 'HARD MOVE (6-):\n• You fail completely\n• OR you succeed BUT hard move happens:\n  - Severe status (tier 2-3), cannot Resist\n  - Multiple tags burnt\n  - Major drama/consequence\n  - Permanent change',
+        softMove: 'SOFT MOVE (7-9):\n• MC picks ONE:\n  - Side Effects: negative status, cannot Resist (exhausted, exposed, shaken)\n  - Burnout: one tag burnt\n  - Drama: create complication'
+    }
+};
+
+
+// ===================================
 // GLOBAL STATE
 // ===================================
 
@@ -1272,30 +1322,52 @@ function showRollNotification(playerName, rollData) {
     
     console.log('🎯 Roll result detected:', rollResult);
     
-    // Determine result color and MC move prompt
+        // Determine result color and MC move prompt
     let resultColor, mcMovePrompt, notificationClass;
+
+    // Get move-specific prompts from Core Moves Reference
+    const moveKey = rollData.move || rollData.moveId;
+    const moveReference = CORE_MOVES_REFERENCE[moveKey];
 
     // Check for miss/failure (6 or less)
     if (rollResult.includes('miss') || rollResult.includes('fail') || rollData.total <= 6) {
         resultColor = '#ff6b6b';
-        mcMovePrompt = '⚠️ HARD MOVE: Make a harsh, direct consequence';
         notificationClass = 'miss';
+
+        // Use move-specific hard move if available
+        if (moveReference) {
+            mcMovePrompt = `<strong>❌ ${moveReference.name} - MISS</strong><br/><br/>${moveReference.hardMove.replace(/\n/g, '<br/>')}`;
+        } else {
+            mcMovePrompt = '⚠️ HARD MOVE: Make a harsh, direct consequence (deal harm, separate them, turn move back, make construct move, take their stuff, make them buy, give status)';
+        }
         console.log('💥 MISS detected - Hard Move required');
-    } 
+    }
     // Check for partial success (7-9)
     else if (rollResult.includes('partial') || (rollData.total >= 7 && rollData.total <= 9)) {
         resultColor = '#F4D35E';
-        mcMovePrompt = '⚡ SOFT MOVE: Offer a cost, complication, or hard choice';
         notificationClass = 'partial';
+
+        // Use move-specific soft move if available
+        if (moveReference) {
+            mcMovePrompt = `<strong>⚡ ${moveReference.name} - PARTIAL (7-9)</strong><br/><br/>${moveReference.softMove.replace(/\n/g, '<br/>')}`;
+        } else {
+            mcMovePrompt = '⚡ SOFT MOVE: Offer a cost, complication, or hard choice';
+        }
         console.log('⚡ PARTIAL SUCCESS detected - Soft Move required');
-    } 
+    }
     // Success (10+)
     else {
         resultColor = '#4ADE80';
-        mcMovePrompt = '✓ Success! Player gets what they want';
         notificationClass = 'hit';
+
+        if (moveReference) {
+            mcMovePrompt = `<strong>✅ ${moveReference.name} - SUCCESS!</strong><br/><br/><em>Trigger: ${moveReference.trigger}</em><br/><br/>Player gets what they want! Move resolves as written.`;
+        } else {
+            mcMovePrompt = '✓ Success! Player gets what they want';
+        }
         console.log('✨ SUCCESS detected - Player succeeds!');
     }
+
 
     notification.innerHTML = `
         <div class="roll-notif-header ${notificationClass}">
@@ -1342,28 +1414,52 @@ function renderDiceRolls() {
         return;
     }
 
-    container.innerHTML = recentRolls.map(roll => {
+        container.innerHTML = recentRolls.map(roll => {
         // Determine styling based on result type
         let borderColor, bgColor, resultColor, mcMovePrompt, moveIcon;
 
-        if (roll.resultType === 'miss') {
+        // Get move-specific prompts from Core Moves Reference
+        const moveKey = roll.move || roll.moveId;
+        const moveReference = CORE_MOVES_REFERENCE[moveKey];
+
+        // Determine result type from roll data
+        const rollResult = (roll.result || roll.resultType || '').toLowerCase();
+
+        if (rollResult.includes('miss') || rollResult.includes('fail') || roll.total <= 6) {
             borderColor = 'rgba(255, 107, 107, 0.8)';
             bgColor = 'rgba(255, 107, 107, 0.15)';
             resultColor = '#ff6b6b';
-            mcMovePrompt = '⚠️ HARD MOVE: Make a harsh, direct consequence (deal harm, separate them, turn move back, make construct move, take their stuff, make them buy, give status)';
             moveIcon = '💥';
-        } else if (roll.resultType === 'partial') {
+
+            // Use move-specific hard move if available
+            if (moveReference) {
+                mcMovePrompt = `<strong>❌ ${moveReference.name} - MISS</strong><br/><br/>${moveReference.hardMove.replace(/\n/g, '<br/>')}`;
+            } else {
+                mcMovePrompt = '⚠️ HARD MOVE: Make a harsh, direct consequence (deal harm, separate them, turn move back, make construct move, take their stuff, make them buy, give status)';
+            }
+        } else if (rollResult.includes('partial') || (roll.total >= 7 && roll.total <= 9)) {
             borderColor = 'rgba(244, 211, 94, 0.8)';
             bgColor = 'rgba(244, 211, 94, 0.15)';
             resultColor = '#F4D35E';
-            mcMovePrompt = '⚡ SOFT MOVE: Offer a cost, complication, or hard choice (show signs of trouble, offer opportunity with cost, tell the cost, put in a spot, present Twisted Justice)';
             moveIcon = '⚠️';
+
+            // Use move-specific soft move if available
+            if (moveReference) {
+                mcMovePrompt = `<strong>⚡ ${moveReference.name} - PARTIAL (7-9)</strong><br/><br/>${moveReference.softMove.replace(/\n/g, '<br/>')}`;
+            } else {
+                mcMovePrompt = '⚡ SOFT MOVE: Offer a cost, complication, or hard choice (show signs of trouble, offer opportunity with cost, tell the cost, put in a spot, present Twisted Justice)';
+            }
         } else {
             borderColor = 'rgba(74, 222, 128, 0.8)';
             bgColor = 'rgba(74, 222, 128, 0.15)';
             resultColor = '#4ADE80';
-            mcMovePrompt = '✓ SUCCESS: Player gets what they want!';
             moveIcon = '✨';
+
+            if (moveReference) {
+                mcMovePrompt = `<strong>✅ ${moveReference.name} - SUCCESS!</strong><br/><br/><em>Trigger: ${moveReference.trigger}</em><br/><br/>Player gets what they want! Move resolves as written.`;
+            } else {
+                mcMovePrompt = '✓ SUCCESS: Player gets what they want!';
+            }
         }
 
         const timestamp = new Date(roll.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
