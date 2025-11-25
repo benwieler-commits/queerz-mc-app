@@ -1248,8 +1248,15 @@ function showFeedback(message, type) {
     setTimeout(() => feedback.remove(), 2000);
 }
 
+// ===================================
+// FIX: Roll Notification Function
+// Handles both "result" and "resultType" fields
+// ===================================
+
 // Show roll notification with MC move prompt
 function showRollNotification(playerName, rollData) {
+    console.log('🎲 showRollNotification called for:', playerName, rollData);
+    
     // Remove existing roll notification if any
     const existing = document.querySelector('.roll-notification');
     if (existing) existing.remove();
@@ -1258,50 +1265,68 @@ function showRollNotification(playerName, rollData) {
     const notification = document.createElement('div');
     notification.className = 'roll-notification';
 
+    // ===================================
+    // FIX: Handle both "result" and "resultType"
+    // ===================================
+    const rollResult = (rollData.result || rollData.resultType || '').toLowerCase();
+    
+    console.log('🎯 Roll result detected:', rollResult);
+    
     // Determine result color and MC move prompt
     let resultColor, mcMovePrompt, notificationClass;
 
-    if (rollData.resultType === 'miss') {
+    // Check for miss/failure (6 or less)
+    if (rollResult.includes('miss') || rollResult.includes('fail') || rollData.total <= 6) {
         resultColor = '#ff6b6b';
         mcMovePrompt = '⚠️ HARD MOVE: Make a harsh, direct consequence';
         notificationClass = 'miss';
-    } else if (rollData.resultType === 'partial') {
+        console.log('💥 MISS detected - Hard Move required');
+    } 
+    // Check for partial success (7-9)
+    else if (rollResult.includes('partial') || (rollData.total >= 7 && rollData.total <= 9)) {
         resultColor = '#F4D35E';
         mcMovePrompt = '⚡ SOFT MOVE: Offer a cost, complication, or hard choice';
         notificationClass = 'partial';
-    } else {
+        console.log('⚡ PARTIAL SUCCESS detected - Soft Move required');
+    } 
+    // Success (10+)
+    else {
         resultColor = '#4ADE80';
         mcMovePrompt = '✓ Success! Player gets what they want';
         notificationClass = 'hit';
+        console.log('✨ SUCCESS detected - Player succeeds!');
     }
 
     notification.innerHTML = `
         <div class="roll-notif-header ${notificationClass}">
-            <h3>🎲 ${playerName} rolled ${rollData.move}</h3>
+            <h3>🎲 ${playerName} rolled ${rollData.moveName || rollData.move}</h3>
             <button class="close-notif-btn" onclick="this.parentElement.parentElement.remove()">×</button>
         </div>
         <div class="roll-notif-body">
             <div class="roll-result" style="color: ${resultColor};">
                 <strong>Roll:</strong> ${rollData.dice[0]} + ${rollData.dice[1]} ${rollData.power >= 0 ? '+' : ''}${rollData.power} = ${rollData.total}
-                ${rollData.burntTagUsed ? ' 🔥' : ''}
+                ${rollData.burntTagUsed ? ' 🔥 (Burnt Tag)' : ''}
             </div>
-            <div class="roll-outcome" style="color: ${resultColor}; font-weight: bold;">
-                ${rollData.result}
+            <div class="roll-outcome" style="color: ${resultColor}; font-weight: bold; font-size: 1.2rem; margin: 8px 0;">
+                ${rollData.resultText || rollData.result || 'Roll Complete'}
             </div>
-            <div class="mc-move-prompt">
+            <div class="mc-move-prompt" style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; margin-top: 8px;">
                 ${mcMovePrompt}
             </div>
         </div>
     `;
 
     document.body.appendChild(notification);
+    
+    console.log('✅ Roll notification displayed on screen');
 
-    // Auto-dismiss after 10 seconds
+    // Auto-dismiss after 15 seconds (increased from 10)
     setTimeout(() => {
         if (notification.parentElement) {
             notification.remove();
+            console.log('🕒 Roll notification auto-dismissed after 15 seconds');
         }
-    }, 10000);
+    }, 15000);
 
     // Play sound or visual effect
     notification.classList.add('slide-in');
