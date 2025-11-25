@@ -32,6 +32,9 @@ let playlist = [];
 let isLooping = false;
 let currentPlaylistIndex = 0;
 
+// Recent dice rolls tracking (keep last 10 rolls across all players)
+let recentRolls = [];
+
 // Session state
 let currentSession = {
     name: 'Default Session',
@@ -60,6 +63,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize UI
     renderPlayers();
     renderCheckpoints();
+    renderDiceRolls();
     updateCounterDisplays();
 
     // Initialize Inner Space clocks
@@ -198,11 +202,23 @@ function setupRollsListener() {
                     player.rolls = player.rolls.slice(-10);
                 }
 
+                // Add to recent rolls for main panel display
+                recentRolls.unshift({
+                    playerName: playerName,
+                    ...rollData
+                });
+
+                // Keep only last 10 recent rolls
+                if (recentRolls.length > 10) {
+                    recentRolls = recentRolls.slice(0, 10);
+                }
+
                 // Show notification
                 showRollNotification(playerName, rollData);
 
                 // Update UI
                 renderPlayerOverview();
+                renderDiceRolls();
                 saveToLocalStorage();
             }
         });
@@ -237,6 +253,9 @@ function loadFromLocalStorage() {
             counters = currentSession.counters || {ignorance: {current: 0}, acceptance: {current: 0}, rejection: {current: 0}};
         }
 
+        const savedRecentRolls = localStorage.getItem('mcApp_recentRolls');
+        if (savedRecentRolls) recentRolls = JSON.parse(savedRecentRolls);
+
         console.log('✅ Loaded from localStorage');
     } catch (error) {
         console.error('❌ Error loading from localStorage:', error);
@@ -254,6 +273,7 @@ function saveToLocalStorage() {
         localStorage.setItem('mcApp_counters', JSON.stringify(counters));
         localStorage.setItem('mcApp_currentSession_v2', JSON.stringify(currentSession));
         localStorage.setItem('mcApp_sessions_v2', JSON.stringify(savedSessions));
+        localStorage.setItem('mcApp_recentRolls', JSON.stringify(recentRolls));
     } catch (error) {
         console.error('❌ Error saving to localStorage:', error);
     }
@@ -1285,6 +1305,73 @@ function showRollNotification(playerName, rollData) {
 
     // Play sound or visual effect
     notification.classList.add('slide-in');
+}
+
+// Render Dice Rolls Panel
+function renderDiceRolls() {
+    const container = document.getElementById('diceRollsContainer');
+    if (!container) return;
+
+    if (recentRolls.length === 0) {
+        container.innerHTML = '<p class="placeholder-text">Waiting for players to roll dice...</p>';
+        return;
+    }
+
+    container.innerHTML = recentRolls.map(roll => {
+        // Determine styling based on result type
+        let borderColor, bgColor, resultColor, mcMovePrompt, moveIcon;
+
+        if (roll.resultType === 'miss') {
+            borderColor = 'rgba(255, 107, 107, 0.8)';
+            bgColor = 'rgba(255, 107, 107, 0.15)';
+            resultColor = '#ff6b6b';
+            mcMovePrompt = '⚠️ HARD MOVE: Make a harsh, direct consequence (deal harm, separate them, turn move back, make construct move, take their stuff, make them buy, give status)';
+            moveIcon = '💥';
+        } else if (roll.resultType === 'partial') {
+            borderColor = 'rgba(244, 211, 94, 0.8)';
+            bgColor = 'rgba(244, 211, 94, 0.15)';
+            resultColor = '#F4D35E';
+            mcMovePrompt = '⚡ SOFT MOVE: Offer a cost, complication, or hard choice (show signs of trouble, offer opportunity with cost, tell the cost, put in a spot, present Twisted Justice)';
+            moveIcon = '⚠️';
+        } else {
+            borderColor = 'rgba(74, 222, 128, 0.8)';
+            bgColor = 'rgba(74, 222, 128, 0.15)';
+            resultColor = '#4ADE80';
+            mcMovePrompt = '✓ SUCCESS: Player gets what they want!';
+            moveIcon = '✨';
+        }
+
+        const timestamp = new Date(roll.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        return `
+            <div class="dice-roll-card" style="background: ${bgColor}; border: 2px solid ${borderColor};">
+                <div class="roll-card-header">
+                    <div class="roll-player-info">
+                        <strong style="color: #F4D35E; font-size: 1.1rem;">${roll.playerName}</strong>
+                        <span style="color: #E89B9B; font-size: 0.9rem; margin-left: 10px;">${roll.move}</span>
+                    </div>
+                    <span style="color: #888; font-size: 0.85rem;">${timestamp}</span>
+                </div>
+                <div class="roll-card-result">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <span style="font-size: 1.5rem;">${moveIcon}</span>
+                        <span style="color: #F5EFE6; font-size: 1rem;">
+                            🎲 ${roll.dice[0]} + ${roll.dice[1]} ${roll.power >= 0 ? '+' : ''}${roll.power} = <strong style="color: ${resultColor}; font-size: 1.2rem;">${roll.total}</strong>
+                            ${roll.burntTagUsed ? ' 🔥' : ''}
+                        </span>
+                    </div>
+                    <div style="color: ${resultColor}; font-weight: bold; font-size: 0.95rem; margin-bottom: 8px;">
+                        ${roll.result}
+                    </div>
+                </div>
+                <div class="mc-move-suggestion" style="background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 6px; border-left: 3px solid ${borderColor};">
+                    <div style="color: #F5EFE6; font-size: 0.9rem; line-height: 1.4;">
+                        ${mcMovePrompt}
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
 }
 
 // Track used tags across scenes
@@ -2388,6 +2475,16 @@ function setupEventListeners() {
     });
 
     clearCheckpointsBtn?.addEventListener('click', clearAllCheckpoints);
+
+    // Dice rolls management
+    const clearRollsBtn = document.getElementById('clearRollsBtn');
+    clearRollsBtn?.addEventListener('click', () => {
+        if (confirm('Clear all dice rolls?')) {
+            recentRolls = [];
+            renderDiceRolls();
+            saveToLocalStorage();
+        }
+    });
 
     closeCheckpointModalBtn?.addEventListener('click', () => checkpointModal?.classList.add('hidden'));
     cancelCheckpointBtn?.addEventListener('click', () => checkpointModal?.classList.add('hidden'));
