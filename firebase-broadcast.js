@@ -256,9 +256,7 @@ export function listenToPlayerRolls(callback) {
       if (!rollData || !rollData.result) return;
       
       const result = rollData.result.toLowerCase();
-      const characterName = rollData.characterName || 
-                            (await resolvePlayerNameFromUid(userId)) || 
-                            'Unknown Player';
+      const characterName = rollData.characterName || 'Unknown Player';
       const move = rollData.move || 'Unknown Move';
       const roll = rollData.roll || 0;
       
