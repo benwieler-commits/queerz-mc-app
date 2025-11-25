@@ -2155,3 +2155,115 @@ input[type="radio"] {
         box-shadow: 0 0 20px 10px rgba(102, 126, 234, 0.6);
     }
 }
+
+/* === ROLL NOTIFICATION === */
+.roll-notification {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 400px;
+    background: rgba(30, 30, 50, 0.98);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    animation: slideInNotif 0.4s ease-out;
+    backdrop-filter: blur(10px);
+}
+
+.roll-notif-header {
+    padding: 15px 20px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid;
+}
+
+.roll-notif-header.miss {
+    background: linear-gradient(135deg, #ff6b6b 0%, #c92a2a 100%);
+    border-bottom-color: #ff6b6b;
+}
+
+.roll-notif-header.partial {
+    background: linear-gradient(135deg, #F4D35E 0%, #d4a037 100%);
+    border-bottom-color: #F4D35E;
+}
+
+.roll-notif-header.hit {
+    background: linear-gradient(135deg, #4ADE80 0%, #2f9e44 100%);
+    border-bottom-color: #4ADE80;
+}
+
+.roll-notif-header h3 {
+    margin: 0;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.close-notif-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.close-notif-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.roll-notif-body {
+    padding: 20px;
+}
+
+.roll-result {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.roll-outcome {
+    font-size: 18px;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    text-align: center;
+}
+
+.mc-move-prompt {
+    background: linear-gradient(135deg, rgba(74, 124, 126, 0.3) 0%, rgba(167, 139, 250, 0.3) 100%);
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #E89B9B;
+    color: #F5EFE6;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+@keyframes slideInNotif {
+    from {
+        transform: translateX(500px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .roll-notification {
+        width: calc(100% - 40px);
+        right: 20px;
+        bottom: 20px;
+    }
+}
