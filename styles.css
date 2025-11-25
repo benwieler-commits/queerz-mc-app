@@ -1949,6 +1949,7 @@ input[type="radio"] {
     background: #fef2f2;
     border-radius: 4px;
     font-size: 14px;
+    color: #333;
 }
 
 .env-tags-section, .quick-status-section {
