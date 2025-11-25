@@ -100,7 +100,7 @@ export function broadcastMusic(musicData) {
  * Broadcast tags (status and story) to players
  * @param {Object} tagData - { status: [], story: [] }
  */
-export function broadcastTags(tagData) {
+
 /**
  * FIXED: Broadcast tags using the `players[]` structure that Player App actually reads
  */
@@ -149,42 +149,6 @@ export function broadcastTags(tagData, targetPlayerName = null) {
   };
 
   console.log('Broadcasting FIXED tags → players array:', payload);
-  return broadcast(payload);
-}
-  
-  // Format status tags with modifiers
-  if (tagData.status && Array.isArray(tagData.status)) {
-    payload.tags.status = tagData.status.map(tag => {
-      if (typeof tag === 'string') {
-        // Parse tag format: "text-text-number"
-        const parts = tag.split('-');
-        const modifier = parseInt(parts[parts.length - 1]);
-        
-        if (!isNaN(modifier)) {
-          // Has modifier
-          return {
-            text: tag,
-            modifier: -modifier // Negative in game mechanics
-          };
-        }
-        
-        // No modifier
-        return {
-          text: tag,
-          modifier: 0
-        };
-      }
-      return tag;
-    });
-  }
-  
-  // Format story tags
-  if (tagData.story && Array.isArray(tagData.story)) {
-    payload.tags.story = tagData.story;
-  }
-  
-  console.log('🏷️ Broadcasting tags:', payload.tags);
-  
   return broadcast(payload);
 }
 
