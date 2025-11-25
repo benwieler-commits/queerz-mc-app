@@ -97,6 +97,11 @@ export function broadcastMusic(musicData) {
 }
 
 /**
+ * Broadcast tags (status and story) to players
+ * @param {Object} tagData - { status: [], story: [] }
+ */
+export function broadcastTags(tagData) {
+/**
  * FIXED: Broadcast tags using the `players[]` structure that Player App actually reads
  */
 export function broadcastTags(tagData, targetPlayerName = null) {
@@ -108,12 +113,11 @@ export function broadcastTags(tagData, targetPlayerName = null) {
   const playersPayload = [];
 
   if (targetPlayerName) {
-    // Specific player
     playersPayload.push({
       name: targetPlayerName,
       storyTags: tagData.story || [],
       currentStatuses: (tagData.status || []).map(status => {
-        // Use your existing formatStatusForBroadcast if it exists, otherwise fallback
+        // Use your existing formatStatusForBroadcast if it exists
         if (typeof window.formatStatusForBroadcast === 'function') {
           return window.formatStatusForBroadcast(status);
         }
@@ -124,7 +128,6 @@ export function broadcastTags(tagData, targetPlayerName = null) {
       })
     });
   } else {
-    // Global effect — Player App will apply if its character name is in the list
     playersPayload.push({
       name: "ALL_PLAYERS",
       storyTags: tagData.story || [],
@@ -182,7 +185,7 @@ export function broadcastTags(tagData, targetPlayerName = null) {
   
   console.log('🏷️ Broadcasting tags:', payload.tags);
   
-  return broadcast(payload);{
+  return broadcast(payload);
 }
 
 /**
@@ -475,13 +478,15 @@ window.createStoryTag = createStoryTag;
 window.parseStatusTag = parseStatusTag;
 
 /**
- * Helper: Get player name from UID (for dice rolls)
+ * Helper: Resolve player name from UID (used for dice rolls)
  */
 async function resolvePlayerNameFromUid(uid) {
   try {
+    const { get } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js');
     const snap = await get(ref(db, `playerCharacters/${uid}/name`));
     return snap.val();
   } catch (e) {
+    console.warn('Could not resolve player name for UID:', uid);
     return null;
   }
 }
