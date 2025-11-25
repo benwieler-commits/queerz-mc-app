@@ -1160,14 +1160,46 @@ function getSelectedPlayer() {
     return players[activePlayerIndex];
 }
 
+// Parse status tag and format for Player App
+// Converts "Shaken (-1 Ongoing)" → "shaken-1"
+// Converts "Wounded" → "wounded-2" (default penalty)
+function formatStatusForBroadcast(status) {
+    // Extract the tag name (before any parentheses)
+    const tagName = status.split('(')[0].trim();
+
+    // Convert to kebab-case (lowercase with hyphens)
+    const kebabCase = tagName
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^a-z0-9-]/g, '');
+
+    // Extract numeric modifier from patterns like "(-1 Ongoing)" or "(-2 to Resist)"
+    const modifierMatch = status.match(/\(-?(\d+)/);
+    const modifier = modifierMatch ? modifierMatch[1] : '2'; // Default to -2 if no modifier specified
+
+    // Return in format "tag-name-modifier" (e.g., "shaken-1")
+    return `${kebabCase}-${modifier}`;
+}
+
 function applyStatusToPlayer(player, status) {
     // Add ongoing status to player (MC-controlled, applies as penalty until removed)
     // Statuses applied from MC App are harmful/negative effects that persist
-    if (!player.tags.status.includes(status)) {
+
+    // Format the status for broadcast (e.g., "Shaken (-1 Ongoing)" → "shaken-1")
+    const formattedStatus = formatStatusForBroadcast(status);
+
+    // Check if already applied (check formatted version)
+    const alreadyApplied = player.tags.status.some(s => {
+        const formatted = formatStatusForBroadcast(s);
+        return formatted === formattedStatus;
+    });
+
+    if (!alreadyApplied) {
+        // Store the original display format for MC App UI
         player.tags.status.push(status);
         updatePlayerTagsDisplay();
         saveToLocalStorage();
-        // Broadcast the updated tags to Player App
+        // Broadcast the formatted version to Player App
         // These will apply as ongoing penalties to rolls
         broadcastTagsOnly();
     }
@@ -2097,7 +2129,8 @@ async function broadcastTagsOnly() {
             players: players.map(p => ({
                 name: p.name,
                 storyTags: p.tags.story || [],
-                currentStatuses: p.tags.status || []
+                // Format status tags for Player App (e.g., "Shaken (-1 Ongoing)" → "shaken-1")
+                currentStatuses: (p.tags.status || []).map(status => formatStatusForBroadcast(status))
             })),
             spotlightedPlayer: activePlayerIndex >= 0 ? players[activePlayerIndex]?.name : null,
             counters: counters,
@@ -2136,7 +2169,8 @@ async function broadcastToPlayers() {
             players: players.map(p => ({
                 name: p.name,
                 storyTags: p.tags.story || [],
-                currentStatuses: p.tags.status || []
+                // Format status tags for Player App (e.g., "Shaken (-1 Ongoing)" → "shaken-1")
+                currentStatuses: (p.tags.status || []).map(status => formatStatusForBroadcast(status))
             })),
             spotlightedPlayer: activePlayerIndex >= 0 ? players[activePlayerIndex]?.name : null,
             counters: counters,
