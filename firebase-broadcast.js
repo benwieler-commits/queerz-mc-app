@@ -35,6 +35,17 @@ export function broadcast(payload) {
     return Promise.reject(new Error('Empty payload'));
   }
   
+  // Convert 'environment' to 'location' for Player App compatibility
+  if (payload.environment) {
+    payload.location = {
+      name: payload.environment.name || 'Unknown Location',
+      description: payload.environment.description || '',
+      imageUrl: payload.environment.imageUrl || '',
+      tags: payload.environment.tags || []
+    };
+    delete payload.environment; // Remove old key
+  }
+  
   console.log('📡 Broadcasting to players:', payload);
   
   return set(ref(db, "mcBroadcast"), {
@@ -65,7 +76,7 @@ export function broadcastNPC(npcData) {
     npc: {
       name: npcData.name || 'Unknown NPC',
       description: npcData.description || '',
-      portraitUrl: npcData.portraitUrl || ''
+      portraitUrl: npcData.portraitUrl || npcData.imageUrl || ''
     }
   });
 }
@@ -79,7 +90,8 @@ export function broadcastMusic(musicData) {
       name: musicData.name || 'Unknown Track',
       url: musicData.url || '',
       isPlaying: !!musicData.isPlaying,
-      loop: !!musicData.loop
+      loop: !!musicData.loop,
+      isLooping: !!musicData.isLooping
     }
   });
 }
@@ -429,3 +441,4 @@ console.log('   📡 MC broadcasts → mcBroadcast');
 console.log('   📥 MC listens ← playerCharacters, playerRolls');
 console.log('   🏷️ Tag format: "text-text-number" (number = negative modifier)');
 console.log('   🎲 Player roll detection with MC move prompts active');
+console.log('   🔄 Data structure: environment → location (Player App compatible)');
