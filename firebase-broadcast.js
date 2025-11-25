@@ -97,21 +97,57 @@ export function broadcastMusic(musicData) {
 }
 
 /**
- * Broadcast tags (status and story) to players
- * @param {Object} tagData - { status: [], story: [] }
+ * FIXED: Broadcast tags using the `players[]` structure that Player App actually reads
  */
-export function broadcastTags(tagData) {
+export function broadcastTags(tagData, targetPlayerName = null) {
   if (!tagData || (!tagData.status && !tagData.story)) {
-    console.warn('⚠️ No tags to broadcast');
+    console.warn('No tags to broadcast');
     return Promise.resolve();
   }
-  
+
+  const playersPayload = [];
+
+  if (targetPlayerName) {
+    // Specific player
+    playersPayload.push({
+      name: targetPlayerName,
+      storyTags: tagData.story || [],
+      currentStatuses: (tagData.status || []).map(status => {
+        // Use your existing formatStatusForBroadcast if it exists, otherwise fallback
+        if (typeof window.formatStatusForBroadcast === 'function') {
+          return window.formatStatusForBroadcast(status);
+        }
+        const clean = status.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+        const match = status.match(/\(?-(\d+)/);
+        const mod = match ? match[1] : '2';
+        return clean.includes(`-${mod}`) ? clean : `${clean}-${mod}`;
+      })
+    });
+  } else {
+    // Global effect — Player App will apply if its character name is in the list
+    playersPayload.push({
+      name: "ALL_PLAYERS",
+      storyTags: tagData.story || [],
+      currentStatuses: (tagData.status || []).map(status => {
+        if (typeof window.formatStatusForBroadcast === 'function') return window.formatStatusForBroadcast(status);
+        const clean = status.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+        const match = status.match(/\(?-(\d+)/);
+        const mod = match ? match[1] : '2';
+        return clean.includes(`-${mod}`) ? clean : `${clean}-${mod}`;
+      })
+    });
+  }
+
   const payload = {
-    tags: {
-      status: [],
-      story: []
-    }
+    players: playersPayload,
+    spotlightedPlayer: targetPlayerName || null,
+    tagsOnly: true,
+    timestamp: Date.now()
   };
+
+  console.log('Broadcasting FIXED tags → players array:', payload);
+  return broadcast(payload);
+}
   
   // Format status tags with modifiers
   if (tagData.status && Array.isArray(tagData.status)) {
@@ -146,7 +182,7 @@ export function broadcastTags(tagData) {
   
   console.log('🏷️ Broadcasting tags:', payload.tags);
   
-  return broadcast(payload);
+  return broadcast(payload);{
 }
 
 /**
@@ -253,7 +289,9 @@ export function listenToPlayerRolls(callback) {
       if (!rollData || !rollData.result) return;
       
       const result = rollData.result.toLowerCase();
-      const characterName = rollData.characterName || 'Unknown Player';
+      const characterName = rollData.characterName || 
+                            (await resolvePlayerNameFromUid(userId)) || 
+                            'Unknown Player';
       const move = rollData.move || 'Unknown Move';
       const roll = rollData.roll || 0;
       
@@ -435,6 +473,18 @@ window.listenToPlayerTags = listenToPlayerTags;
 window.createStatusTag = createStatusTag;
 window.createStoryTag = createStoryTag;
 window.parseStatusTag = parseStatusTag;
+
+/**
+ * Helper: Get player name from UID (for dice rolls)
+ */
+async function resolvePlayerNameFromUid(uid) {
+  try {
+    const snap = await get(ref(db, `playerCharacters/${uid}/name`));
+    return snap.val();
+  } catch (e) {
+    return null;
+  }
+}
 
 console.log('✅ mc-firebase-broadcast.js loaded');
 console.log('   📡 MC broadcasts → mcBroadcast');
