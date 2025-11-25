@@ -3,7 +3,7 @@
 // Main Application Logic
 // ===================================
 
-import { broadcast, listenToPlayers } from './firebase-broadcast.js';
+import { broadcast, listenToPlayers, listenToPlayerRolls } from './firebase-broadcast.js';
 import {
     createCampaign,
     addScene,
@@ -67,6 +67,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Listen for player data from Player App
     setupPlayerListener();
+
+    // Listen for player rolls
+    setupRollsListener();
 
     console.log('✅ MC Companion initialized');
 });
@@ -148,6 +151,64 @@ function setupPlayerListener() {
     });
 
     console.log('✅ Player listener setup - MC App ready to receive player broadcasts');
+}
+
+// ===================================
+// PLAYER ROLLS LISTENER
+// ===================================
+
+function setupRollsListener() {
+    listenToPlayerRolls((rollsData) => {
+        console.log('🎲 Received player rolls:', rollsData);
+
+        // rollsData structure:
+        // playerRolls/[playerName]: {
+        //   move: string,
+        //   dice: [num, num],
+        //   power: number,
+        //   total: number,
+        //   result: string,
+        //   resultType: 'hit'|'partial'|'miss',
+        //   timestamp: number
+        // }
+
+        Object.entries(rollsData).forEach(([playerName, rollData]) => {
+            // Find the player
+            const player = players.find(p => p.name === playerName);
+            if (!player) {
+                console.warn(`Roll received for unknown player: ${playerName}`);
+                return;
+            }
+
+            // Ensure rolls array exists
+            if (!player.rolls) player.rolls = [];
+
+            // Check if this is a new roll (not already processed)
+            const isDuplicate = player.rolls.some(r =>
+                r.timestamp === rollData.timestamp &&
+                r.move === rollData.move
+            );
+
+            if (!isDuplicate) {
+                // Add roll to player's history
+                player.rolls.push(rollData);
+
+                // Keep only last 10 rolls
+                if (player.rolls.length > 10) {
+                    player.rolls = player.rolls.slice(-10);
+                }
+
+                // Show notification
+                showRollNotification(playerName, rollData);
+
+                // Update UI
+                renderPlayerOverview();
+                saveToLocalStorage();
+            }
+        });
+    });
+
+    console.log('✅ Rolls listener setup - MC App ready to receive player rolls');
 }
 
 // ===================================
@@ -1100,14 +1161,25 @@ function getSelectedPlayer() {
 }
 
 function applyStatusToPlayer(player, status) {
-    // Add status to player's status tags if not already present
+    // Add ongoing status to player (MC-controlled, applies as penalty until removed)
+    // Statuses applied from MC App are harmful/negative effects that persist
     if (!player.tags.status.includes(status)) {
         player.tags.status.push(status);
         updatePlayerTagsDisplay();
         saveToLocalStorage();
-        // Broadcast the updated tags
+        // Broadcast the updated tags to Player App
+        // These will apply as ongoing penalties to rolls
         broadcastTagsOnly();
     }
+}
+
+function removeStatusFromPlayer(player, status) {
+    // Remove ongoing status from player
+    player.tags.status = player.tags.status.filter(s => s !== status);
+    updatePlayerTagsDisplay();
+    saveToLocalStorage();
+    // Broadcast the removal to Player App
+    broadcastTagsOnly();
 }
 
 function showFeedback(message, type) {
@@ -1122,6 +1194,65 @@ function showFeedback(message, type) {
     document.body.appendChild(feedback);
 
     setTimeout(() => feedback.remove(), 2000);
+}
+
+// Show roll notification with MC move prompt
+function showRollNotification(playerName, rollData) {
+    // Remove existing roll notification if any
+    const existing = document.querySelector('.roll-notification');
+    if (existing) existing.remove();
+
+    // Create notification
+    const notification = document.createElement('div');
+    notification.className = 'roll-notification';
+
+    // Determine result color and MC move prompt
+    let resultColor, mcMovePrompt, notificationClass;
+
+    if (rollData.resultType === 'miss') {
+        resultColor = '#ff6b6b';
+        mcMovePrompt = '⚠️ HARD MOVE: Make a harsh, direct consequence';
+        notificationClass = 'miss';
+    } else if (rollData.resultType === 'partial') {
+        resultColor = '#F4D35E';
+        mcMovePrompt = '⚡ SOFT MOVE: Offer a cost, complication, or hard choice';
+        notificationClass = 'partial';
+    } else {
+        resultColor = '#4ADE80';
+        mcMovePrompt = '✓ Success! Player gets what they want';
+        notificationClass = 'hit';
+    }
+
+    notification.innerHTML = `
+        <div class="roll-notif-header ${notificationClass}">
+            <h3>🎲 ${playerName} rolled ${rollData.move}</h3>
+            <button class="close-notif-btn" onclick="this.parentElement.parentElement.remove()">×</button>
+        </div>
+        <div class="roll-notif-body">
+            <div class="roll-result" style="color: ${resultColor};">
+                <strong>Roll:</strong> ${rollData.dice[0]} + ${rollData.dice[1]} ${rollData.power >= 0 ? '+' : ''}${rollData.power} = ${rollData.total}
+                ${rollData.burntTagUsed ? ' 🔥' : ''}
+            </div>
+            <div class="roll-outcome" style="color: ${resultColor}; font-weight: bold;">
+                ${rollData.result}
+            </div>
+            <div class="mc-move-prompt">
+                ${mcMovePrompt}
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(notification);
+
+    // Auto-dismiss after 10 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 10000);
+
+    // Play sound or visual effect
+    notification.classList.add('slide-in');
 }
 
 // Track used tags across scenes
@@ -1388,12 +1519,15 @@ function updatePlayerTagsDisplay() {
         </div>
 
         <div class="tag-section">
-            <h4>Status Tags</h4>
+            <h4>Status Tags <span style="font-size: 0.8em; color: #E89B9B; font-weight: normal;">(Ongoing Penalties - Click × to Remove)</span></h4>
             <div class="tags-display" id="statusTagsDisplay">
                 ${renderTags(player.tags.status, 'status')}
                 <button class="add-tag-btn" onclick="showAddTagDialog('status')">+ Add Status Tag</button>
                 <button class="add-tag-btn" onclick="showBroadcastTagDialog('status')" style="background: rgba(232, 155, 155, 0.3); margin-left: 5px;" title="Apply tag to all players">📢 Broadcast Tag</button>
             </div>
+            <p style="font-size: 0.85em; color: #888; font-style: italic; margin-top: 8px;">
+                ℹ️ Status tags are ongoing effects that apply penalties to player rolls until you remove them.
+            </p>
         </div>
     `;
 

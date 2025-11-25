@@ -35,4 +35,16 @@ export function listenToPlayers(callback) {
   });
 }
 
+// Listen for player dice rolls
+export function listenToPlayerRolls(callback) {
+  const rollsRef = ref(db, "playerRolls");
+  onValue(rollsRef, (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      console.log('🎲 Received player rolls:', data);
+      callback(data);
+    }
+  });
+}
+
 console.log('✅ firebase-broadcast.js loaded');
