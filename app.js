@@ -1390,18 +1390,16 @@ function showRollNotification(playerName, rollData) {
 
     document.body.appendChild(notification);
     
-    console.log('✅ Roll notification displayed on screen');
+    console.log('✅ Roll notification displayed on screen - waiting for MC to dismiss');
 
-    // Auto-dismiss after 15 seconds (increased from 10)
-    setTimeout(() => {
-        if (notification.parentElement) {
-            notification.remove();
-            console.log('🕒 Roll notification auto-dismissed after 15 seconds');
-        }
-    }, 15000);
-
+    // NO AUTO-DISMISS - MC must click the X button to dismiss
+    // This gives MC time to read and respond to the roll result
+    
     // Play sound or visual effect
     notification.classList.add('slide-in');
+    
+    // Add pulsing effect to draw attention
+    notification.classList.add('notification-pulse');
 }
 
 // Render Dice Rolls Panel
@@ -2946,19 +2944,70 @@ function initInnerSpace() {
 }
 
 // ===================================
+// DOWNTIME CONTROLS
+// ===================================
+
+let isDowntimeActive = false;
+
+function toggleDowntime() {
+    isDowntimeActive = !isDowntimeActive;
+    
+    // Broadcast downtime status to all players
+    const payload = {
+        downtimeUnlocked: isDowntimeActive,
+        timestamp: Date.now(),
+        tagsOnly: true  // Don't interrupt music
+    };
+    
+    broadcast(payload);
+    
+    // Update UI
+    const downtimeBtn = document.getElementById('downtimeBtn');
+    if (downtimeBtn) {
+        if (isDowntimeActive) {
+            downtimeBtn.textContent = '🔒 End Downtime';
+            downtimeBtn.classList.add('active');
+            showNotification('🌙 DOWNTIME STARTED - Players can now edit Growth/Shade/Release');
+        } else {
+            downtimeBtn.textContent = '🌙 Start Downtime';
+            downtimeBtn.classList.remove('active');
+            showNotification('🔒 DOWNTIME ENDED - Growth/Shade/Release locked');
+        }
+    }
+    
+    console.log(`🌙 Downtime ${isDowntimeActive ? 'STARTED' : 'ENDED'}`);
+    saveToLocalStorage();
+}
+
+// ===================================
 // EXPORT GLOBALS
 // ===================================
 
-// Expose roll notification functions for firebase-broadcast.js
+// Roll notification functions for firebase-broadcast.js
 window.showRollNotification = showRollNotification;
 window.renderDiceRolls = renderDiceRolls;
 window.recentRolls = recentRolls;
 
-// Expose player management for external access
+// Player management
 window.players = players;
 window.renderPlayers = renderPlayers;
 window.renderPlayerOverview = renderPlayerOverview;
 window.saveToLocalStorage = saveToLocalStorage;
 
+// Broadcast functions
+window.broadcast = broadcast;
+window.broadcastToPlayers = broadcastToPlayers;
+window.broadcastTagsOnly = broadcastTagsOnly;
+
+// Downtime controls
+window.toggleDowntime = toggleDowntime;
+window.isDowntimeActive = isDowntimeActive;
+
+// Notification
+window.showNotification = showNotification;
+window.showExportIndicator = showExportIndicator;
+
 console.log('✅ MC Companion App loaded successfully');
-console.log('   🎲 Roll functions exposed globally for firebase-broadcast.js');
+console.log('   🎲 Roll notification: MC manually dismisses (no auto-dismiss)');
+console.log('   🌙 Downtime toggle available for Growth/Shade/Release');
+console.log('   📡 All broadcast functions exposed globally');
