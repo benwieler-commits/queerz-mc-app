@@ -480,58 +480,63 @@ export function listenToPlayers(callback) {
           if (!lastSeenRolls[sessionId] || lastSeenRolls[sessionId] < rollTimestamp) {
             lastSeenRolls[sessionId] = rollTimestamp;
             
-            // This is a new roll - process it
-            const total = playerData.lastRoll.total || 0;
-            const result = (playerData.lastRoll.result || '').toLowerCase();
-            const move = playerData.lastRoll.moveName || playerData.lastRoll.move || 'Unknown Move';
-            
-            // Determine move type
-            let moveType = 'success';
-            if (result.includes('miss') || result.includes('fail') || total <= 6) {
-              moveType = 'hard';
-            } else if (result.includes('partial') || (total >= 7 && total <= 9)) {
-              moveType = 'soft';
-            }
-            
-            // Create roll data object
+            // Create roll data object matching MC App's expected format
             const rollData = {
-              characterName: playerName,
-              roll: total,
-              total: total,
+              move: playerData.lastRoll.move,
+              moveId: playerData.lastRoll.move,
+              moveName: playerData.lastRoll.moveName || playerData.lastRoll.move || 'Unknown Move',
               dice: playerData.lastRoll.dice || [0, 0],
               power: playerData.lastRoll.power || 0,
+              total: playerData.lastRoll.total || 0,
               result: playerData.lastRoll.result,
+              resultType: playerData.lastRoll.result,
               resultText: playerData.lastRoll.resultText,
-              move: playerData.lastRoll.move,
-              moveName: move,
               timestamp: rollTimestamp,
-              sessionId: sessionId,
-              moveType: moveType
+              burntTagUsed: playerData.lastRoll.burntTagUsed || false,
+              guaranteedHit: playerData.lastRoll.guaranteedHit || false
             };
             
-            console.log('🎲 NEW ROLL detected from playerCharacters:', rollData);
+            console.log('🎲 NEW ROLL detected from playerCharacters:', {
+              player: playerName,
+              move: rollData.moveName,
+              total: rollData.total,
+              result: rollData.result
+            });
             
-            // Generate move prompt
-            let movePrompt = '';
-            if (moveType === 'hard') {
-              movePrompt = `❌ MISS - ${playerName} rolled ${total} on ${move}\n\n⚠️ MAKE A HARD MOVE:\n- Deal damage or apply severe status (tier 2-3)\n- Create major complication\n- Take away something important`;
-            } else if (moveType === 'soft') {
-              movePrompt = `⚡ PARTIAL - ${playerName} rolled ${total} on ${move}\n\n💡 MAKE A SOFT MOVE:\n- Offer tough choice\n- Apply minor status (tier 1)\n- Complicate situation`;
+            // ================================
+            // CALL MC APP'S NOTIFICATION SYSTEM
+            // ================================
+            // The MC App's showRollNotification() function already has:
+            // - Beautiful notification styling
+            // - CORE_MOVES_REFERENCE integration
+            // - Move-specific Hard/Soft/Success prompts
+            // - Auto-dismiss after 15 seconds
+            
+            if (typeof window.showRollNotification === 'function') {
+              console.log('✅ Calling MC App showRollNotification()');
+              window.showRollNotification(playerName, rollData);
             } else {
-              movePrompt = `✅ SUCCESS! - ${playerName} rolled ${total} on ${move}\n\n🌟 Player succeeds!`;
+              console.log('⚠️ showRollNotification not found, dispatching event instead');
+              // Dispatch event as fallback
+              document.dispatchEvent(new CustomEvent('player-roll-detected', {
+                detail: { playerName, rollData }
+              }));
             }
             
-            // Dispatch event for MC App to display
-            document.dispatchEvent(new CustomEvent('player-roll-detected', {
-              detail: { 
-                prompt: movePrompt, 
-                rollData: rollData, 
-                moveType: moveType 
+            // Also update recentRolls if available (for dice rolls panel)
+            if (typeof window.recentRolls !== 'undefined' && Array.isArray(window.recentRolls)) {
+              window.recentRolls.unshift({
+                playerName: playerName,
+                ...rollData
+              });
+              if (window.recentRolls.length > 10) {
+                window.recentRolls = window.recentRolls.slice(0, 10);
               }
-            }));
-            
-            // Also try to display directly
-            displayMcMovePrompt(movePrompt, rollData, moveType);
+              // Update the dice rolls panel if function exists
+              if (typeof window.renderDiceRolls === 'function') {
+                window.renderDiceRolls();
+              }
+            }
           }
         }
       });
