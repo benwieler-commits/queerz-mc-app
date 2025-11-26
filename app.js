@@ -1390,16 +1390,16 @@ function showRollNotification(playerName, rollData) {
 
     document.body.appendChild(notification);
     
-    console.log('✅ Roll notification displayed on screen - waiting for MC to dismiss');
+    console.log('✅ Roll notification displayed on screen - MC must click X to dismiss');
 
-    // NO AUTO-DISMISS - MC must click the X button to dismiss
+    // NO AUTO-DISMISS - MC must click the X button to close
     // This gives MC time to read and respond to the roll result
     
+    // Add pulsing animation to draw attention
+    notification.classList.add('notification-pulse');
+
     // Play sound or visual effect
     notification.classList.add('slide-in');
-    
-    // Add pulsing effect to draw attention
-    notification.classList.add('notification-pulse');
 }
 
 // Render Dice Rolls Panel
@@ -2436,6 +2436,125 @@ function showExportIndicator(message) {
     }, 3000);
 }
 
+/**
+ * Import campaign progress from a JSON file
+ */
+function importCampaignProgress() {
+    // Create hidden file input
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.json';
+    
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const importData = JSON.parse(event.target.result);
+                
+                // Validate the import data
+                if (!importData.campaign || !importData.players) {
+                    alert('Invalid campaign file. Missing required data.');
+                    return;
+                }
+                
+                // Confirm before overwriting
+                const confirmMsg = `Import campaign progress?\n\n` +
+                    `Campaign: ${importData.campaign.id || 'Unknown'}\n` +
+                    `Session: ${importData.session || 'Unknown'}\n` +
+                    `Players: ${importData.players?.length || 0}\n` +
+                    `Exported: ${importData.exportDate || 'Unknown'}\n\n` +
+                    `This will overwrite your current session data.`;
+                
+                if (!confirm(confirmMsg)) return;
+                
+                // Apply imported data
+                if (importData.campaign) {
+                    currentCampaignId = importData.campaign.id || currentCampaignId;
+                    currentArc = importData.campaign.arc || currentArc;
+                    currentChapter = importData.campaign.chapter || currentChapter;
+                }
+                
+                if (importData.session) {
+                    currentSession.name = importData.session;
+                }
+                
+                if (importData.players && Array.isArray(importData.players)) {
+                    players = importData.players;
+                    renderPlayers();
+                    renderPlayerOverview();
+                }
+                
+                if (importData.checkpoints) {
+                    checkpoints = importData.checkpoints;
+                }
+                
+                if (importData.counters) {
+                    counters = importData.counters;
+                }
+                
+                // Save to local storage
+                saveToLocalStorage();
+                
+                // Update UI
+                if (typeof updateCampaignUI === 'function') {
+                    updateCampaignUI();
+                }
+                
+                showExportIndicator('✅ Campaign progress imported!');
+                console.log('✅ Campaign progress imported:', importData);
+                
+            } catch (error) {
+                console.error('Error importing campaign:', error);
+                alert('Error reading campaign file. Make sure it is a valid JSON file.');
+            }
+        };
+        
+        reader.readAsText(file);
+    });
+    
+    // Trigger file selection
+    fileInput.click();
+}
+
+// ===================================
+// DOWNTIME CONTROLS
+// ===================================
+
+let isDowntimeActive = false;
+
+function toggleDowntime() {
+    isDowntimeActive = !isDowntimeActive;
+    
+    // Broadcast downtime status to all players
+    const payload = {
+        downtimeUnlocked: isDowntimeActive,
+        timestamp: Date.now(),
+        tagsOnly: true  // Don't interrupt music or location
+    };
+    
+    broadcast(payload);
+    
+    // Update UI
+    const downtimeBtn = document.getElementById('downtimeBtn');
+    if (downtimeBtn) {
+        if (isDowntimeActive) {
+            downtimeBtn.textContent = '🔒 End Downtime';
+            downtimeBtn.classList.add('active');
+            showNotification('🌙 DOWNTIME STARTED - Players can now edit Growth/Shade/Release');
+        } else {
+            downtimeBtn.textContent = '🌙 Start Downtime';
+            downtimeBtn.classList.remove('active');
+            showNotification('🔒 DOWNTIME ENDED - Growth/Shade/Release locked');
+        }
+    }
+    
+    console.log(`🌙 Downtime ${isDowntimeActive ? 'STARTED' : 'ENDED'}`);
+    saveToLocalStorage();
+}
+
 // ===================================
 // SESSION MANAGEMENT
 // ===================================
@@ -2944,46 +3063,10 @@ function initInnerSpace() {
 }
 
 // ===================================
-// DOWNTIME CONTROLS
-// ===================================
-
-let isDowntimeActive = false;
-
-function toggleDowntime() {
-    isDowntimeActive = !isDowntimeActive;
-    
-    // Broadcast downtime status to all players
-    const payload = {
-        downtimeUnlocked: isDowntimeActive,
-        timestamp: Date.now(),
-        tagsOnly: true  // Don't interrupt music
-    };
-    
-    broadcast(payload);
-    
-    // Update UI
-    const downtimeBtn = document.getElementById('downtimeBtn');
-    if (downtimeBtn) {
-        if (isDowntimeActive) {
-            downtimeBtn.textContent = '🔒 End Downtime';
-            downtimeBtn.classList.add('active');
-            showNotification('🌙 DOWNTIME STARTED - Players can now edit Growth/Shade/Release');
-        } else {
-            downtimeBtn.textContent = '🌙 Start Downtime';
-            downtimeBtn.classList.remove('active');
-            showNotification('🔒 DOWNTIME ENDED - Growth/Shade/Release locked');
-        }
-    }
-    
-    console.log(`🌙 Downtime ${isDowntimeActive ? 'STARTED' : 'ENDED'}`);
-    saveToLocalStorage();
-}
-
-// ===================================
 // EXPORT GLOBALS
 // ===================================
 
-// Roll notification functions for firebase-broadcast.js
+// Roll notification functions
 window.showRollNotification = showRollNotification;
 window.renderDiceRolls = renderDiceRolls;
 window.recentRolls = recentRolls;
@@ -2999,6 +3082,10 @@ window.broadcast = broadcast;
 window.broadcastToPlayers = broadcastToPlayers;
 window.broadcastTagsOnly = broadcastTagsOnly;
 
+// Campaign management
+window.exportCampaignProgress = exportCampaignProgress;
+window.importCampaignProgress = importCampaignProgress;
+
 // Downtime controls
 window.toggleDowntime = toggleDowntime;
 window.isDowntimeActive = isDowntimeActive;
@@ -3008,6 +3095,7 @@ window.showNotification = showNotification;
 window.showExportIndicator = showExportIndicator;
 
 console.log('✅ MC Companion App loaded successfully');
-console.log('   🎲 Roll notification: MC manually dismisses (no auto-dismiss)');
-console.log('   🌙 Downtime toggle available for Growth/Shade/Release');
-console.log('   📡 All broadcast functions exposed globally');
+console.log('   🎲 Roll notifications persist until dismissed');
+console.log('   🌙 Downtime toggle: toggleDowntime()');
+console.log('   📥 Campaign import: importCampaignProgress()');
+console.log('   📤 Campaign export: exportCampaignProgress()');
