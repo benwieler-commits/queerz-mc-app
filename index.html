@@ -34,6 +34,7 @@
                 <button class="header-btn" id="campaignSettingsBtn" title="Campaign Settings">⚙️ Settings</button>
                 <button class="header-btn" id="sessionMgmtBtn" title="Session Management">💾 Sessions</button>
                 <button class="header-btn" id="exportCampaignBtn" title="Export Campaign Progress">📤 Export</button>
+                <button id="importCampaignBtn" class="btn-import" onclick="importCampaignProgress()">📥 Import Campaign</button>
             </div>
         </div>
         <div class="campaign-info">
@@ -154,6 +155,7 @@
         <section class="panel">
             <div class="panel-header">
                 <h3>🏷️ Player Tags</h3>
+                <button id="downtimeBtn" class="downtime-btn" onclick="toggleDowntime()">🌙 Start Downtime</button>
                 <button class="header-btn" id="playerOverviewBtn">👥 All Players</button>
                 <button id="downtimeBtn" class="downtime-btn" onclick="toggleDowntime()">
     🌙 Start Downtime
