@@ -43,50 +43,92 @@ try {
 export function formatStatusTag(status) {
   if (!status || typeof status !== 'string') return '';
   
-  // Already in correct format? (ends with -1 through -6)
-  if (/^[a-z0-9-]+-[1-6]$/.test(status)) {
-    return status;
+  // Normalize: trim and convert to lowercase for pattern matching
+  const normalized = status.trim().toLowerCase();
+  
+  // Already in correct format? (ends with -1 through -6, all lowercase)
+  if (/^[a-z0-9-]+-[1-6]$/.test(normalized)) {
+    return normalized;
   }
   
-  // Extract the base name (remove any existing numbers/modifiers)
+  // ================================
+  // STEP 1: Extract the modifier number FIRST (before cleaning the name)
+  // This ensures we capture the modifier before any text manipulation
+  // ================================
+  let modifier = null; // Start with null, we'll default to 2 only if nothing found
+  
+  // Priority order for finding modifier:
+  // 1. Explicit format: "tag-1" at end
+  // 2. Parenthetical: "(-1)" or "(1)" or "(-1 Ongoing)"
+  // 3. Tier notation: "Tier 1" or "tier 1"
+  // 4. Space + number at end: "tag 1"
+  
+  // Check for -1 through -6 at end of string (highest priority)
+  const endNumberMatch = status.match(/-([1-6])(?:\s|$)/);
+  if (endNumberMatch) {
+    modifier = parseInt(endNumberMatch[1]);
+  }
+  
+  // Check for parenthetical modifier: (-1), (1), (-2 Ongoing), etc.
+  if (modifier === null) {
+    const parenMatch = status.match(/\(\s*-?\s*([1-6])\s*(?:ongoing|to|penalty)?\s*\)/i);
+    if (parenMatch) {
+      modifier = parseInt(parenMatch[1]);
+    }
+  }
+  
+  // Check for "Tier X" notation
+  if (modifier === null) {
+    const tierMatch = status.match(/tier\s*([1-6])/i);
+    if (tierMatch) {
+      modifier = parseInt(tierMatch[1]);
+    }
+  }
+  
+  // Check for just a number at the end after space
+  if (modifier === null) {
+    const spaceNumMatch = status.match(/\s([1-6])$/);
+    if (spaceNumMatch) {
+      modifier = parseInt(spaceNumMatch[1]);
+    }
+  }
+  
+  // Default to 2 if no modifier found
+  if (modifier === null) {
+    modifier = 2;
+    console.log(`ℹ️ No modifier found in "${status}", defaulting to -2`);
+  }
+  
+  // ================================
+  // STEP 2: Extract the base name (remove modifiers, parentheticals, etc.)
+  // ================================
   let baseName = status
-    .replace(/\s*\([^)]*\)/g, '')  // Remove anything in parentheses
-    .replace(/-\d+$/, '')           // Remove trailing -number
+    .replace(/\s*\([^)]*\)/g, '')     // Remove anything in parentheses
+    .replace(/\s*tier\s*\d+/gi, '')   // Remove "Tier X"
+    .replace(/-[1-6](?:\s|$)/g, '')   // Remove -1 through -6 at word boundary
+    .replace(/\s+[1-6]$/g, '')        // Remove trailing space + number
     .trim();
   
-  // Convert to kebab-case
+  // If baseName is empty after cleaning, use the original (minus parentheses)
+  if (!baseName) {
+    baseName = status.replace(/\s*\([^)]*\)/g, '').trim();
+  }
+  
+  // ================================
+  // STEP 3: Convert to kebab-case
+  // ================================
   const kebabCase = baseName
     .toLowerCase()
-    .replace(/['']/g, '')           // Remove apostrophes
+    .replace(/[''`]/g, '')          // Remove apostrophes and backticks
     .replace(/\s+/g, '-')           // Spaces to hyphens
     .replace(/[^a-z0-9-]/g, '')     // Remove special characters
     .replace(/-+/g, '-')            // Collapse multiple hyphens
     .replace(/^-|-$/g, '');         // Remove leading/trailing hyphens
   
-  // Extract the modifier number (1-6)
-  // Look for patterns like: (-1), (-2), -1, -2, (1), (2), Tier 1, Tier 2, etc.
-  let modifier = 2; // Default to -2 if no modifier specified
-  
-  const modifierPatterns = [
-    /\(-?(\d+)/,           // (-1 or (1
-    /-(\d+)$/,             // ends with -1
-    /tier\s*(\d+)/i,       // Tier 1, tier 2
-    /\s(\d+)$/             // ends with space and number
-  ];
-  
-  for (const pattern of modifierPatterns) {
-    const match = status.match(pattern);
-    if (match) {
-      const num = parseInt(match[1]);
-      if (num >= 1 && num <= 6) {
-        modifier = num;
-        break;
-      }
-    }
-  }
-  
   // Return formatted tag: "kebab-case-number"
-  return `${kebabCase}-${modifier}`;
+  const result = `${kebabCase}-${modifier}`;
+  console.log(`📌 Formatted status: "${status}" → "${result}"`);
+  return result;
 }
 
 /**
@@ -415,13 +457,85 @@ export function broadcastCompleteScene(sceneData) {
 
 /**
  * Listen for player character data
+ * Also checks for lastRoll data as a backup for dice roll detection
  */
 export function listenToPlayers(callback) {
   const playersRef = ref(db, "playerCharacters");
+  
+  // Track last seen roll timestamps to avoid duplicate notifications
+  const lastSeenRolls = {};
+  
   onValue(playersRef, (snapshot) => {
     const data = snapshot.val();
     if (data) {
       console.log('📥 Received player data:', Object.keys(data));
+      
+      // Check each player for new rolls (backup detection)
+      Object.entries(data).forEach(([sessionId, playerData]) => {
+        if (playerData.lastRoll && playerData.lastRoll.timestamp) {
+          const rollTimestamp = playerData.lastRoll.timestamp;
+          const playerName = playerData.name || 'Unknown';
+          
+          // Check if this is a new roll we haven't seen
+          if (!lastSeenRolls[sessionId] || lastSeenRolls[sessionId] < rollTimestamp) {
+            lastSeenRolls[sessionId] = rollTimestamp;
+            
+            // This is a new roll - process it
+            const total = playerData.lastRoll.total || 0;
+            const result = (playerData.lastRoll.result || '').toLowerCase();
+            const move = playerData.lastRoll.moveName || playerData.lastRoll.move || 'Unknown Move';
+            
+            // Determine move type
+            let moveType = 'success';
+            if (result.includes('miss') || result.includes('fail') || total <= 6) {
+              moveType = 'hard';
+            } else if (result.includes('partial') || (total >= 7 && total <= 9)) {
+              moveType = 'soft';
+            }
+            
+            // Create roll data object
+            const rollData = {
+              characterName: playerName,
+              roll: total,
+              total: total,
+              dice: playerData.lastRoll.dice || [0, 0],
+              power: playerData.lastRoll.power || 0,
+              result: playerData.lastRoll.result,
+              resultText: playerData.lastRoll.resultText,
+              move: playerData.lastRoll.move,
+              moveName: move,
+              timestamp: rollTimestamp,
+              sessionId: sessionId,
+              moveType: moveType
+            };
+            
+            console.log('🎲 NEW ROLL detected from playerCharacters:', rollData);
+            
+            // Generate move prompt
+            let movePrompt = '';
+            if (moveType === 'hard') {
+              movePrompt = `❌ MISS - ${playerName} rolled ${total} on ${move}\n\n⚠️ MAKE A HARD MOVE:\n- Deal damage or apply severe status (tier 2-3)\n- Create major complication\n- Take away something important`;
+            } else if (moveType === 'soft') {
+              movePrompt = `⚡ PARTIAL - ${playerName} rolled ${total} on ${move}\n\n💡 MAKE A SOFT MOVE:\n- Offer tough choice\n- Apply minor status (tier 1)\n- Complicate situation`;
+            } else {
+              movePrompt = `✅ SUCCESS! - ${playerName} rolled ${total} on ${move}\n\n🌟 Player succeeds!`;
+            }
+            
+            // Dispatch event for MC App to display
+            document.dispatchEvent(new CustomEvent('player-roll-detected', {
+              detail: { 
+                prompt: movePrompt, 
+                rollData: rollData, 
+                moveType: moveType 
+              }
+            }));
+            
+            // Also try to display directly
+            displayMcMovePrompt(movePrompt, rollData, moveType);
+          }
+        }
+      });
+      
       callback(data);
     }
   });
@@ -594,4 +708,5 @@ console.log('   📥 MC listens ← playerCharacters, playerRolls');
 console.log('   🏷️ STATUS TAGS: "example-tag-1" through "example-tag-6"');
 console.log('   📖 STORY TAGS: "example-tag" (no modifier)');
 console.log('   🎵 Music only stops on LOCATION change');
-console.log('   🎲 Roll detection: 6- = Hard Move, 7-9 = Soft Move, 10+ = Success');
+console.log('   🎲 Roll detection: playerRolls (primary) + playerCharacters.lastRoll (backup)');
+console.log('   ⚡ Move prompts: 6- = Hard Move, 7-9 = Soft Move, 10+ = Success');
