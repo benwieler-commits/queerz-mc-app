@@ -2949,4 +2949,16 @@ function initInnerSpace() {
 // EXPORT GLOBALS
 // ===================================
 
+// Expose roll notification functions for firebase-broadcast.js
+window.showRollNotification = showRollNotification;
+window.renderDiceRolls = renderDiceRolls;
+window.recentRolls = recentRolls;
+
+// Expose player management for external access
+window.players = players;
+window.renderPlayers = renderPlayers;
+window.renderPlayerOverview = renderPlayerOverview;
+window.saveToLocalStorage = saveToLocalStorage;
+
 console.log('✅ MC Companion App loaded successfully');
+console.log('   🎲 Roll functions exposed globally for firebase-broadcast.js');
