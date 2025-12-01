@@ -728,6 +728,11 @@ function displayScriptTab(chapter, tabId, sceneData = null) {
         return;
     }
 
+    // Unload Inner Space data when switching away from Inner Space tab
+    if (tabId !== 'innerSpace') {
+        unloadInnerSpaceData();
+    }
+
     switch (tabId) {
         case 'overview':
             html = `
@@ -752,6 +757,9 @@ function displayScriptTab(chapter, tabId, sceneData = null) {
             break;
 
         case 'innerSpace':
+            // Load Inner Space data into the main Inner Space Clocks panel
+            loadInnerSpaceData(chapter);
+
             if (chapter.innerSpace) {
                 // Render youAreEnough/proveYourWorth counters for Inner Space
                 const youAreEnoughLimit = chapter.innerSpace.counters?.youAreEnough?.triggers?.length || 7;
@@ -3203,37 +3211,71 @@ function renderPlayerOverview() {
 const innerSpaceClocks = {
     youAreEnough: 0,
     proveYourWorth: 0,
-    active: false
+    active: false,
+    data: null  // Will hold chapter.innerSpace data when loaded
 };
 
 function renderInnerSpaceClocks() {
+    // If no data loaded, show placeholder
+    if (!innerSpaceClocks.data) {
+        return `
+            <p class="placeholder-text">Select the Inner Space tab in the script panel to load Inner Space data.</p>
+        `;
+    }
+
     if (!innerSpaceClocks.active) {
+        const locationName = innerSpaceClocks.data.location || 'Unknown';
+        const titleText = innerSpaceClocks.data.title || 'Inner Space';
         return `
             <div class="inner-space-toggle">
+                <h4 style="color: #E89B9B; margin-bottom: 15px;">📍 ${titleText}</h4>
+                <p style="color: #F5EFE6; margin-bottom: 15px; line-height: 1.6;">${innerSpaceClocks.data.description ? innerSpaceClocks.data.description.substring(0, 200) + '...' : ''}</p>
                 <button onclick="activateInnerSpace()" class="activate-btn">
-                    🌌 Activate Inner Space Clocks (Chapter 1)
+                    🌌 Activate Inner Space Clocks
                 </button>
             </div>
         `;
     }
 
+    // Get limits from JSON data
+    const youAreEnoughMax = innerSpaceClocks.data.counters?.youAreEnough?.max || 7;
+    const proveYourWorthMax = innerSpaceClocks.data.counters?.proveYourWorth?.max || 6;
+
+    // Get triggers/point guides from JSON
+    const youAreEnoughTriggers = innerSpaceClocks.data.counters?.youAreEnough?.triggers || [
+        '+3: Core wound addressed',
+        '+2: Significant progress',
+        '+1: Small step forward'
+    ];
+    const proveYourWorthTriggers = innerSpaceClocks.data.counters?.proveYourWorth?.triggers || [
+        '+2: Major setback',
+        '+1: Minor setback'
+    ];
+
+    // Get core wounds summary
+    const coreWoundsList = innerSpaceClocks.data.coreWounds?.map(w => w.name).join(', ') || 'None specified';
+
     return `
         <div class="inner-space-clocks">
             <div class="clocks-header">
-                <h2>🌌 Inner Space: The Childhood Kitchen</h2>
+                <h2>🌌 ${innerSpaceClocks.data.title || 'Inner Space'}</h2>
                 <button onclick="deactivateInnerSpace()" class="deactivate-btn">Close Inner Space</button>
+            </div>
+
+            <div class="inner-space-info">
+                <p><strong>Core Wounds:</strong> ${coreWoundsList}</p>
             </div>
 
             <div class="clocks-container">
                 <div class="clock you-are-enough">
                     <h3>You Are Enough</h3>
                     <div class="clock-description">
-                        Showing Kaylin she's valuable WITHOUT earning it
+                        Healing and redemption
                     </div>
                     <div class="clock-track">
-                        ${renderClockBoxes(innerSpaceClocks.youAreEnough, 7, 'success')}
+                        ${renderClockBoxes(innerSpaceClocks.youAreEnough, youAreEnoughMax, 'success')}
                     </div>
-                    <div class="clock-total">${innerSpaceClocks.youAreEnough} / 7</div>
+                    <div class="clock-total">${innerSpaceClocks.youAreEnough} / ${youAreEnoughMax}</div>
                     <div class="clock-controls">
                         <button onclick="adjustClock('youAreEnough', 1)">+1</button>
                         <button onclick="adjustClock('youAreEnough', 2)">+2</button>
@@ -3241,29 +3283,26 @@ function renderInnerSpaceClocks() {
                         <button onclick="adjustClock('youAreEnough', -1)" class="minus">-1</button>
                     </div>
                     <div class="point-guide">
-                        <strong>+3:</strong> Core wound addressed<br>
-                        <strong>+2:</strong> Significant progress<br>
-                        <strong>+1:</strong> Small step forward
+                        ${youAreEnoughTriggers.map(t => `${t}`).join('<br>')}
                     </div>
                 </div>
 
                 <div class="clock prove-your-worth">
                     <h3>Prove Your Worth</h3>
                     <div class="clock-description">
-                        Kaylin's Ignorance fighting back
+                        Ignorance fighting back
                     </div>
                     <div class="clock-track">
-                        ${renderClockBoxes(innerSpaceClocks.proveYourWorth, 6, 'danger')}
+                        ${renderClockBoxes(innerSpaceClocks.proveYourWorth, proveYourWorthMax, 'danger')}
                     </div>
-                    <div class="clock-total">${innerSpaceClocks.proveYourWorth} / 6</div>
+                    <div class="clock-total">${innerSpaceClocks.proveYourWorth} / ${proveYourWorthMax}</div>
                     <div class="clock-controls">
                         <button onclick="adjustClock('proveYourWorth', 1)">+1</button>
                         <button onclick="adjustClock('proveYourWorth', 2)">+2</button>
                         <button onclick="adjustClock('proveYourWorth', -1)" class="minus">-1</button>
                     </div>
                     <div class="point-guide">
-                        <strong>+2:</strong> Major setback<br>
-                        <strong>+1:</strong> Minor setback
+                        ${proveYourWorthTriggers.map(t => `${t}`).join('<br>')}
                     </div>
                 </div>
             </div>
@@ -3293,11 +3332,14 @@ window.deactivateInnerSpace = function() {
 window.adjustClock = function(clockName, amount) {
     innerSpaceClocks[clockName] = Math.max(0, innerSpaceClocks[clockName] + amount);
 
-    // Check max values
+    // Check max values from data
+    const youAreEnoughMax = innerSpaceClocks.data?.counters?.youAreEnough?.max || 7;
+    const proveYourWorthMax = innerSpaceClocks.data?.counters?.proveYourWorth?.max || 6;
+
     if (clockName === 'youAreEnough') {
-        innerSpaceClocks.youAreEnough = Math.min(7, innerSpaceClocks.youAreEnough);
+        innerSpaceClocks.youAreEnough = Math.min(youAreEnoughMax, innerSpaceClocks.youAreEnough);
     } else {
-        innerSpaceClocks.proveYourWorth = Math.min(6, innerSpaceClocks.proveYourWorth);
+        innerSpaceClocks.proveYourWorth = Math.min(proveYourWorthMax, innerSpaceClocks.proveYourWorth);
     }
 
     updateInnerSpaceDisplay();
@@ -3318,32 +3360,52 @@ function renderClockBoxes(filled, total, type) {
 }
 
 function checkInnerSpaceOutcome() {
-    if (innerSpaceClocks.youAreEnough >= 7) {
+    const youAreEnoughMax = innerSpaceClocks.data?.counters?.youAreEnough?.max || 7;
+    const proveYourWorthMax = innerSpaceClocks.data?.counters?.proveYourWorth?.max || 6;
+
+    if (innerSpaceClocks.youAreEnough >= youAreEnoughMax) {
         return `
             <div class="outcome success">
                 <div class="outcome-icon">🎉</div>
-                <div class="outcome-title">KAYLIN SAVED!</div>
+                <div class="outcome-title">SUCCESS!</div>
                 <div class="outcome-text">
-                    You Are Enough reached 7. Kaylin has broken through her core wound.
-                    She remembers she doesn't have to earn love.
+                    You Are Enough reached ${youAreEnoughMax}. The core wound has been addressed.
+                    Healing and redemption achieved!
                 </div>
                 <button onclick="resetInnerSpace()" class="outcome-btn">Complete & Reset</button>
             </div>
         `;
-    } else if (innerSpaceClocks.proveYourWorth >= 6) {
+    } else if (innerSpaceClocks.proveYourWorth >= proveYourWorthMax) {
         return `
             <div class="outcome failure">
                 <div class="outcome-icon">💔</div>
-                <div class="outcome-title">KAYLIN LOST</div>
+                <div class="outcome-title">LOST TO IGNORANCE</div>
                 <div class="outcome-text">
-                    Prove Your Worth reached 6. The Keeper remains in control.
-                    Kaylin is deeper in Ignorance. Redemption possible in future, but much harder.
+                    Prove Your Worth reached ${proveYourWorthMax}. Ignorance has taken hold.
+                    Redemption is still possible in the future, but will be much harder.
                 </div>
                 <button onclick="resetInnerSpace()" class="outcome-btn">Complete & Reset</button>
             </div>
         `;
     }
     return '';
+}
+
+// Load Inner Space data from chapter
+function loadInnerSpaceData(chapter) {
+    if (chapter && chapter.innerSpace) {
+        innerSpaceClocks.data = chapter.innerSpace;
+        innerSpaceClocks.data.title = chapter.innerSpace.title || `Inner Space: ${chapter.name}`;
+        updateInnerSpaceDisplay();
+    }
+}
+
+// Unload Inner Space data
+function unloadInnerSpaceData() {
+    // Keep the clock values but clear the data (so it shows placeholder)
+    // This allows resuming if they return to Inner Space tab
+    innerSpaceClocks.data = null;
+    updateInnerSpaceDisplay();
 }
 
 window.resetInnerSpace = function() {
