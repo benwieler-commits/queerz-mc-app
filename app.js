@@ -78,6 +78,17 @@ let counters = {
     acceptance: { current: 0 },
     rejection: { current: 0 }
 };
+
+// Encounter state management
+let encounterState = {
+    active: false,              // Is an encounter currently active?
+    sceneId: null,              // Which scene's encounter is this?
+    campaignId: null,           // Which campaign this encounter belongs to
+    enemies: [],                // Array of enemy objects from JSON
+    selectedEnemyIndex: 0,      // Currently selected enemy (0-based)
+    enemyTrackers: {}           // Per-enemy ignorance tracking { "enemyName": { ignorance: 0 } }
+};
+
 let playlist = [];
 let isLooping = false;
 let currentPlaylistIndex = 0;
@@ -90,7 +101,8 @@ let currentSession = {
     name: 'Default Session',
     players: [],
     checkpoints: [],
-    counters: {...counters}
+    counters: {...counters},
+    encounterState: {...encounterState}
 };
 let savedSessions = [];
 
@@ -301,6 +313,14 @@ function loadFromLocalStorage() {
             players = currentSession.players || [];
             checkpoints = currentSession.checkpoints || [];
             counters = currentSession.counters || {ignorance: {current: 0}, acceptance: {current: 0}, rejection: {current: 0}};
+            encounterState = currentSession.encounterState || {
+                active: false,
+                sceneId: null,
+                campaignId: null,
+                enemies: [],
+                selectedEnemyIndex: 0,
+                enemyTrackers: {}
+            };
         }
 
         const savedRecentRolls = localStorage.getItem('mcApp_recentRolls');
@@ -317,6 +337,7 @@ function saveToLocalStorage() {
         currentSession.players = players;
         currentSession.checkpoints = checkpoints;
         currentSession.counters = counters;
+        currentSession.encounterState = encounterState;
 
         localStorage.setItem('mcApp_players_v2', JSON.stringify(players));
         localStorage.setItem('mcApp_checkpoints', JSON.stringify(checkpoints));
@@ -696,10 +717,20 @@ function displayScriptTab(chapter, tabId, sceneData = null) {
         // Add Encounter Details if present in scene data
         if (sceneData.encounter) {
             renderEncounterDetails(sceneData.encounter);
+            // Load encounter into main Encounter Counters section
+            loadEncounter(sceneData, currentCampaignId);
+        } else {
+            // No encounter in this scene - deactivate encounter panel
+            deactivateEncounter();
         }
 
         attachCounterListeners();
         return;
+    }
+
+    // Unload Inner Space data when switching away from Inner Space tab
+    if (tabId !== 'innerSpace') {
+        unloadInnerSpaceData();
     }
 
     switch (tabId) {
@@ -726,6 +757,9 @@ function displayScriptTab(chapter, tabId, sceneData = null) {
             break;
 
         case 'innerSpace':
+            // Load Inner Space data into the main Inner Space Clocks panel
+            loadInnerSpaceData(chapter);
+
             if (chapter.innerSpace) {
                 // Render youAreEnough/proveYourWorth counters for Inner Space
                 const youAreEnoughLimit = chapter.innerSpace.counters?.youAreEnough?.triggers?.length || 7;
@@ -2163,6 +2197,247 @@ window.resetCounter = function(type) {
     saveToLocalStorage();
 };
 
+// ===================================
+// ENCOUNTER MANAGEMENT
+// ===================================
+
+// Load encounter from scene data
+function loadEncounter(scene, campaignId) {
+    if (!scene || !scene.encounter || !scene.encounter.enemies || scene.encounter.enemies.length === 0) {
+        // No encounter in this scene - deactivate
+        deactivateEncounter();
+        return;
+    }
+
+    const encounter = scene.encounter;
+    const sceneIdentifier = `${campaignId}-scene-${scene.number}`;
+
+    // Check if we're loading the same encounter (preserve state)
+    const isSameEncounter = encounterState.active &&
+                           encounterState.sceneId === sceneIdentifier &&
+                           encounterState.campaignId === campaignId;
+
+    if (!isSameEncounter) {
+        // Fresh encounter - initialize state
+        encounterState = {
+            active: true,
+            sceneId: sceneIdentifier,
+            campaignId: campaignId,
+            enemies: encounter.enemies,
+            selectedEnemyIndex: 0,
+            enemyTrackers: {}
+        };
+
+        // Initialize ignorance trackers for each enemy
+        encounter.enemies.forEach(enemy => {
+            const enemyKey = getEnemyKey(enemy);
+            encounterState.enemyTrackers[enemyKey] = {
+                ignorance: 0
+            };
+        });
+    } else {
+        // Same encounter - just update enemies array (in case JSON changed)
+        encounterState.enemies = encounter.enemies;
+    }
+
+    renderEncounterPanel();
+    saveToLocalStorage();
+}
+
+// Deactivate encounter
+function deactivateEncounter() {
+    encounterState.active = false;
+    encounterState.sceneId = null;
+    encounterState.enemies = [];
+    renderEncounterPanel();
+    saveToLocalStorage();
+}
+
+// Generate unique key for enemy (handles pawns with count)
+function getEnemyKey(enemy) {
+    if (enemy.count && enemy.count > 1) {
+        return `${enemy.name}-collective`;
+    }
+    return enemy.name;
+}
+
+// Get display name for enemy
+function getEnemyDisplayName(enemy) {
+    if (enemy.count && enemy.count > 1) {
+        return `${enemy.name} (${enemy.count}x ${enemy.type})`;
+    }
+    return `${enemy.name} (${enemy.type})`;
+}
+
+// Select enemy from dropdown
+window.selectEnemy = function(index) {
+    encounterState.selectedEnemyIndex = parseInt(index);
+    renderEncounterPanel();
+    saveToLocalStorage();
+};
+
+// Update enemy ignorance
+window.updateEnemyIgnorance = function(delta) {
+    const enemy = encounterState.enemies[encounterState.selectedEnemyIndex];
+    if (!enemy) return;
+
+    const enemyKey = getEnemyKey(enemy);
+    const tracker = encounterState.enemyTrackers[enemyKey];
+
+    if (!tracker) return;
+
+    const newValue = Math.max(0, Math.min(enemy.ignoranceLimit, tracker.ignorance + delta));
+    tracker.ignorance = newValue;
+
+    // Check if limit reached
+    if (newValue >= enemy.ignoranceLimit) {
+        showFeedback(`${enemy.name} has reached their Ignorance Limit!`, 'success');
+    }
+
+    renderEncounterPanel();
+    saveToLocalStorage();
+};
+
+// Reset enemy ignorance
+window.resetEnemyIgnorance = function() {
+    const enemy = encounterState.enemies[encounterState.selectedEnemyIndex];
+    if (!enemy) return;
+
+    const enemyKey = getEnemyKey(enemy);
+    const tracker = encounterState.enemyTrackers[enemyKey];
+
+    if (!tracker) return;
+
+    if (confirm(`Reset ${enemy.name}'s Ignorance to 0?`)) {
+        tracker.ignorance = 0;
+        renderEncounterPanel();
+        saveToLocalStorage();
+    }
+};
+
+// Render encounter panel in UI
+function renderEncounterPanel() {
+    const container = document.getElementById('encounterCountersContent');
+    if (!container) return;
+
+    // If no active encounter, show placeholder
+    if (!encounterState.active || encounterState.enemies.length === 0) {
+        container.innerHTML = `
+            <p class="placeholder-text">No active encounter. Select a scene with combat to see enemy details.</p>
+        `;
+        return;
+    }
+
+    const selectedEnemy = encounterState.enemies[encounterState.selectedEnemyIndex];
+    const enemyKey = getEnemyKey(selectedEnemy);
+    const tracker = encounterState.enemyTrackers[enemyKey];
+
+    if (!selectedEnemy || !tracker) {
+        container.innerHTML = '<p class="placeholder-text">Error loading enemy data</p>';
+        return;
+    }
+
+    // Build enemy dropdown
+    let dropdownHTML = '<select id="enemySelect" class="enemy-dropdown" onchange="selectEnemy(this.value)">';
+    encounterState.enemies.forEach((enemy, index) => {
+        const selected = index === encounterState.selectedEnemyIndex ? 'selected' : '';
+        dropdownHTML += `<option value="${index}" ${selected}>${getEnemyDisplayName(enemy)}</option>`;
+    });
+    dropdownHTML += '</select>';
+
+    // Build ignorance tracker visual
+    let trackerHTML = '<div class="enemy-ignorance-tracker">';
+    trackerHTML += '<div class="ignorance-tracker-label">';
+    trackerHTML += `Ignorance: <span class="ignorance-value">${tracker.ignorance}/${selectedEnemy.ignoranceLimit}</span>`;
+    trackerHTML += '</div>';
+    trackerHTML += '<div class="ignorance-tracker-bar">';
+    for (let i = 0; i < selectedEnemy.ignoranceLimit; i++) {
+        const filled = i < tracker.ignorance ? 'filled' : 'empty';
+        trackerHTML += `<div class="ignorance-segment ${filled}" onclick="setEnemyIgnorance(${i + 1})"></div>`;
+    }
+    trackerHTML += '</div>';
+    trackerHTML += '<div class="ignorance-controls">';
+    trackerHTML += '<button onclick="updateEnemyIgnorance(-1)" class="counter-btn">−</button>';
+    trackerHTML += '<button onclick="updateEnemyIgnorance(1)" class="counter-btn">+</button>';
+    trackerHTML += '<button onclick="resetEnemyIgnorance()" class="counter-btn reset-btn">Reset</button>';
+    trackerHTML += '</div>';
+    trackerHTML += '</div>';
+
+    // Build enemy details
+    let detailsHTML = `<div class="enemy-details-card ${selectedEnemy.type.toLowerCase().replace(/\s/g, '-')}">`;
+    detailsHTML += `<h4 class="enemy-name">${selectedEnemy.name}</h4>`;
+    detailsHTML += `<div class="enemy-type-badge">${selectedEnemy.type}</div>`;
+
+    // Signature moves or moves
+    const moves = selectedEnemy.signatureMoves || selectedEnemy.moves || [];
+    if (moves.length > 0) {
+        detailsHTML += '<div class="enemy-moves-section">';
+        detailsHTML += '<h5>Moves:</h5>';
+        detailsHTML += '<ul class="enemy-moves-list">';
+        moves.forEach(move => {
+            detailsHTML += `<li class="enemy-move">`;
+            detailsHTML += `<strong>${move.name}</strong>: ${move.effect}`;
+            if (move.statusApplied && move.statusApplied.length > 0) {
+                detailsHTML += `<div class="move-status">→ ${move.statusApplied.join(', ')}</div>`;
+            }
+            detailsHTML += '</li>';
+        });
+        detailsHTML += '</ul>';
+        detailsHTML += '</div>';
+    }
+
+    // Weaknesses
+    if (selectedEnemy.weaknesses) {
+        detailsHTML += '<div class="enemy-weaknesses-section">';
+        detailsHTML += '<h5>Weaknesses:</h5>';
+        detailsHTML += `<p>${selectedEnemy.weaknesses}</p>`;
+        detailsHTML += '</div>';
+    }
+
+    // Notes
+    if (selectedEnemy.notes) {
+        detailsHTML += '<div class="enemy-notes-section">';
+        detailsHTML += '<h5>💡 MC Notes:</h5>';
+        detailsHTML += `<p class="enemy-notes">${selectedEnemy.notes}</p>`;
+        detailsHTML += '</div>';
+    }
+
+    detailsHTML += '</div>';
+
+    // Assemble full HTML
+    container.innerHTML = `
+        <div class="encounter-active-panel">
+            <div class="enemy-selector-section">
+                <label for="enemySelect">Target Enemy:</label>
+                ${dropdownHTML}
+            </div>
+            ${trackerHTML}
+            ${detailsHTML}
+        </div>
+    `;
+}
+
+// Set enemy ignorance to specific value (for clicking segments)
+window.setEnemyIgnorance = function(value) {
+    const enemy = encounterState.enemies[encounterState.selectedEnemyIndex];
+    if (!enemy) return;
+
+    const enemyKey = getEnemyKey(enemy);
+    const tracker = encounterState.enemyTrackers[enemyKey];
+
+    if (!tracker) return;
+
+    tracker.ignorance = Math.max(0, Math.min(enemy.ignoranceLimit, value));
+
+    // Check if limit reached
+    if (tracker.ignorance >= enemy.ignoranceLimit) {
+        showFeedback(`${enemy.name} has reached their Ignorance Limit!`, 'success');
+    }
+
+    renderEncounterPanel();
+    saveToLocalStorage();
+};
+
 
 // ===================================
 // DICE ROLLER
@@ -2936,37 +3211,71 @@ function renderPlayerOverview() {
 const innerSpaceClocks = {
     youAreEnough: 0,
     proveYourWorth: 0,
-    active: false
+    active: false,
+    data: null  // Will hold chapter.innerSpace data when loaded
 };
 
 function renderInnerSpaceClocks() {
+    // If no data loaded, show placeholder
+    if (!innerSpaceClocks.data) {
+        return `
+            <p class="placeholder-text">Select the Inner Space tab in the script panel to load Inner Space data.</p>
+        `;
+    }
+
     if (!innerSpaceClocks.active) {
+        const locationName = innerSpaceClocks.data.location || 'Unknown';
+        const titleText = innerSpaceClocks.data.title || 'Inner Space';
         return `
             <div class="inner-space-toggle">
+                <h4 style="color: #E89B9B; margin-bottom: 15px;">📍 ${titleText}</h4>
+                <p style="color: #F5EFE6; margin-bottom: 15px; line-height: 1.6;">${innerSpaceClocks.data.description ? innerSpaceClocks.data.description.substring(0, 200) + '...' : ''}</p>
                 <button onclick="activateInnerSpace()" class="activate-btn">
-                    🌌 Activate Inner Space Clocks (Chapter 1)
+                    🌌 Activate Inner Space Clocks
                 </button>
             </div>
         `;
     }
 
+    // Get limits from JSON data
+    const youAreEnoughMax = innerSpaceClocks.data.counters?.youAreEnough?.max || 7;
+    const proveYourWorthMax = innerSpaceClocks.data.counters?.proveYourWorth?.max || 6;
+
+    // Get triggers/point guides from JSON
+    const youAreEnoughTriggers = innerSpaceClocks.data.counters?.youAreEnough?.triggers || [
+        '+3: Core wound addressed',
+        '+2: Significant progress',
+        '+1: Small step forward'
+    ];
+    const proveYourWorthTriggers = innerSpaceClocks.data.counters?.proveYourWorth?.triggers || [
+        '+2: Major setback',
+        '+1: Minor setback'
+    ];
+
+    // Get core wounds summary
+    const coreWoundsList = innerSpaceClocks.data.coreWounds?.map(w => w.name).join(', ') || 'None specified';
+
     return `
         <div class="inner-space-clocks">
             <div class="clocks-header">
-                <h2>🌌 Inner Space: The Childhood Kitchen</h2>
+                <h2>🌌 ${innerSpaceClocks.data.title || 'Inner Space'}</h2>
                 <button onclick="deactivateInnerSpace()" class="deactivate-btn">Close Inner Space</button>
+            </div>
+
+            <div class="inner-space-info">
+                <p><strong>Core Wounds:</strong> ${coreWoundsList}</p>
             </div>
 
             <div class="clocks-container">
                 <div class="clock you-are-enough">
                     <h3>You Are Enough</h3>
                     <div class="clock-description">
-                        Showing Kaylin she's valuable WITHOUT earning it
+                        Healing and redemption
                     </div>
                     <div class="clock-track">
-                        ${renderClockBoxes(innerSpaceClocks.youAreEnough, 7, 'success')}
+                        ${renderClockBoxes(innerSpaceClocks.youAreEnough, youAreEnoughMax, 'success')}
                     </div>
-                    <div class="clock-total">${innerSpaceClocks.youAreEnough} / 7</div>
+                    <div class="clock-total">${innerSpaceClocks.youAreEnough} / ${youAreEnoughMax}</div>
                     <div class="clock-controls">
                         <button onclick="adjustClock('youAreEnough', 1)">+1</button>
                         <button onclick="adjustClock('youAreEnough', 2)">+2</button>
@@ -2974,29 +3283,26 @@ function renderInnerSpaceClocks() {
                         <button onclick="adjustClock('youAreEnough', -1)" class="minus">-1</button>
                     </div>
                     <div class="point-guide">
-                        <strong>+3:</strong> Core wound addressed<br>
-                        <strong>+2:</strong> Significant progress<br>
-                        <strong>+1:</strong> Small step forward
+                        ${youAreEnoughTriggers.map(t => `${t}`).join('<br>')}
                     </div>
                 </div>
 
                 <div class="clock prove-your-worth">
                     <h3>Prove Your Worth</h3>
                     <div class="clock-description">
-                        Kaylin's Ignorance fighting back
+                        Ignorance fighting back
                     </div>
                     <div class="clock-track">
-                        ${renderClockBoxes(innerSpaceClocks.proveYourWorth, 6, 'danger')}
+                        ${renderClockBoxes(innerSpaceClocks.proveYourWorth, proveYourWorthMax, 'danger')}
                     </div>
-                    <div class="clock-total">${innerSpaceClocks.proveYourWorth} / 6</div>
+                    <div class="clock-total">${innerSpaceClocks.proveYourWorth} / ${proveYourWorthMax}</div>
                     <div class="clock-controls">
                         <button onclick="adjustClock('proveYourWorth', 1)">+1</button>
                         <button onclick="adjustClock('proveYourWorth', 2)">+2</button>
                         <button onclick="adjustClock('proveYourWorth', -1)" class="minus">-1</button>
                     </div>
                     <div class="point-guide">
-                        <strong>+2:</strong> Major setback<br>
-                        <strong>+1:</strong> Minor setback
+                        ${proveYourWorthTriggers.map(t => `${t}`).join('<br>')}
                     </div>
                 </div>
             </div>
@@ -3026,11 +3332,14 @@ window.deactivateInnerSpace = function() {
 window.adjustClock = function(clockName, amount) {
     innerSpaceClocks[clockName] = Math.max(0, innerSpaceClocks[clockName] + amount);
 
-    // Check max values
+    // Check max values from data
+    const youAreEnoughMax = innerSpaceClocks.data?.counters?.youAreEnough?.max || 7;
+    const proveYourWorthMax = innerSpaceClocks.data?.counters?.proveYourWorth?.max || 6;
+
     if (clockName === 'youAreEnough') {
-        innerSpaceClocks.youAreEnough = Math.min(7, innerSpaceClocks.youAreEnough);
+        innerSpaceClocks.youAreEnough = Math.min(youAreEnoughMax, innerSpaceClocks.youAreEnough);
     } else {
-        innerSpaceClocks.proveYourWorth = Math.min(6, innerSpaceClocks.proveYourWorth);
+        innerSpaceClocks.proveYourWorth = Math.min(proveYourWorthMax, innerSpaceClocks.proveYourWorth);
     }
 
     updateInnerSpaceDisplay();
@@ -3051,32 +3360,52 @@ function renderClockBoxes(filled, total, type) {
 }
 
 function checkInnerSpaceOutcome() {
-    if (innerSpaceClocks.youAreEnough >= 7) {
+    const youAreEnoughMax = innerSpaceClocks.data?.counters?.youAreEnough?.max || 7;
+    const proveYourWorthMax = innerSpaceClocks.data?.counters?.proveYourWorth?.max || 6;
+
+    if (innerSpaceClocks.youAreEnough >= youAreEnoughMax) {
         return `
             <div class="outcome success">
                 <div class="outcome-icon">🎉</div>
-                <div class="outcome-title">KAYLIN SAVED!</div>
+                <div class="outcome-title">SUCCESS!</div>
                 <div class="outcome-text">
-                    You Are Enough reached 7. Kaylin has broken through her core wound.
-                    She remembers she doesn't have to earn love.
+                    You Are Enough reached ${youAreEnoughMax}. The core wound has been addressed.
+                    Healing and redemption achieved!
                 </div>
                 <button onclick="resetInnerSpace()" class="outcome-btn">Complete & Reset</button>
             </div>
         `;
-    } else if (innerSpaceClocks.proveYourWorth >= 6) {
+    } else if (innerSpaceClocks.proveYourWorth >= proveYourWorthMax) {
         return `
             <div class="outcome failure">
                 <div class="outcome-icon">💔</div>
-                <div class="outcome-title">KAYLIN LOST</div>
+                <div class="outcome-title">LOST TO IGNORANCE</div>
                 <div class="outcome-text">
-                    Prove Your Worth reached 6. The Keeper remains in control.
-                    Kaylin is deeper in Ignorance. Redemption possible in future, but much harder.
+                    Prove Your Worth reached ${proveYourWorthMax}. Ignorance has taken hold.
+                    Redemption is still possible in the future, but will be much harder.
                 </div>
                 <button onclick="resetInnerSpace()" class="outcome-btn">Complete & Reset</button>
             </div>
         `;
     }
     return '';
+}
+
+// Load Inner Space data from chapter
+function loadInnerSpaceData(chapter) {
+    if (chapter && chapter.innerSpace) {
+        innerSpaceClocks.data = chapter.innerSpace;
+        innerSpaceClocks.data.title = chapter.innerSpace.title || `Inner Space: ${chapter.name}`;
+        updateInnerSpaceDisplay();
+    }
+}
+
+// Unload Inner Space data
+function unloadInnerSpaceData() {
+    // Keep the clock values but clear the data (so it shows placeholder)
+    // This allows resuming if they return to Inner Space tab
+    innerSpaceClocks.data = null;
+    updateInnerSpaceDisplay();
 }
 
 window.resetInnerSpace = function() {
