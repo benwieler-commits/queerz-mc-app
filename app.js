@@ -78,6 +78,17 @@ let counters = {
     acceptance: { current: 0 },
     rejection: { current: 0 }
 };
+
+// Encounter state management
+let encounterState = {
+    active: false,              // Is an encounter currently active?
+    sceneId: null,              // Which scene's encounter is this?
+    campaignId: null,           // Which campaign this encounter belongs to
+    enemies: [],                // Array of enemy objects from JSON
+    selectedEnemyIndex: 0,      // Currently selected enemy (0-based)
+    enemyTrackers: {}           // Per-enemy ignorance tracking { "enemyName": { ignorance: 0 } }
+};
+
 let playlist = [];
 let isLooping = false;
 let currentPlaylistIndex = 0;
@@ -90,7 +101,8 @@ let currentSession = {
     name: 'Default Session',
     players: [],
     checkpoints: [],
-    counters: {...counters}
+    counters: {...counters},
+    encounterState: {...encounterState}
 };
 let savedSessions = [];
 
@@ -301,6 +313,14 @@ function loadFromLocalStorage() {
             players = currentSession.players || [];
             checkpoints = currentSession.checkpoints || [];
             counters = currentSession.counters || {ignorance: {current: 0}, acceptance: {current: 0}, rejection: {current: 0}};
+            encounterState = currentSession.encounterState || {
+                active: false,
+                sceneId: null,
+                campaignId: null,
+                enemies: [],
+                selectedEnemyIndex: 0,
+                enemyTrackers: {}
+            };
         }
 
         const savedRecentRolls = localStorage.getItem('mcApp_recentRolls');
@@ -317,6 +337,7 @@ function saveToLocalStorage() {
         currentSession.players = players;
         currentSession.checkpoints = checkpoints;
         currentSession.counters = counters;
+        currentSession.encounterState = encounterState;
 
         localStorage.setItem('mcApp_players_v2', JSON.stringify(players));
         localStorage.setItem('mcApp_checkpoints', JSON.stringify(checkpoints));
@@ -696,6 +717,11 @@ function displayScriptTab(chapter, tabId, sceneData = null) {
         // Add Encounter Details if present in scene data
         if (sceneData.encounter) {
             renderEncounterDetails(sceneData.encounter);
+            // Load encounter into main Encounter Counters section
+            loadEncounter(sceneData, currentCampaignId);
+        } else {
+            // No encounter in this scene - deactivate encounter panel
+            deactivateEncounter();
         }
 
         attachCounterListeners();
@@ -2160,6 +2186,247 @@ window.changeCounter = function(type, delta) {
 window.resetCounter = function(type) {
     counters[type].current = 0;
     updateCounterDisplays();
+    saveToLocalStorage();
+};
+
+// ===================================
+// ENCOUNTER MANAGEMENT
+// ===================================
+
+// Load encounter from scene data
+function loadEncounter(scene, campaignId) {
+    if (!scene || !scene.encounter || !scene.encounter.enemies || scene.encounter.enemies.length === 0) {
+        // No encounter in this scene - deactivate
+        deactivateEncounter();
+        return;
+    }
+
+    const encounter = scene.encounter;
+    const sceneIdentifier = `${campaignId}-scene-${scene.number}`;
+
+    // Check if we're loading the same encounter (preserve state)
+    const isSameEncounter = encounterState.active &&
+                           encounterState.sceneId === sceneIdentifier &&
+                           encounterState.campaignId === campaignId;
+
+    if (!isSameEncounter) {
+        // Fresh encounter - initialize state
+        encounterState = {
+            active: true,
+            sceneId: sceneIdentifier,
+            campaignId: campaignId,
+            enemies: encounter.enemies,
+            selectedEnemyIndex: 0,
+            enemyTrackers: {}
+        };
+
+        // Initialize ignorance trackers for each enemy
+        encounter.enemies.forEach(enemy => {
+            const enemyKey = getEnemyKey(enemy);
+            encounterState.enemyTrackers[enemyKey] = {
+                ignorance: 0
+            };
+        });
+    } else {
+        // Same encounter - just update enemies array (in case JSON changed)
+        encounterState.enemies = encounter.enemies;
+    }
+
+    renderEncounterPanel();
+    saveToLocalStorage();
+}
+
+// Deactivate encounter
+function deactivateEncounter() {
+    encounterState.active = false;
+    encounterState.sceneId = null;
+    encounterState.enemies = [];
+    renderEncounterPanel();
+    saveToLocalStorage();
+}
+
+// Generate unique key for enemy (handles pawns with count)
+function getEnemyKey(enemy) {
+    if (enemy.count && enemy.count > 1) {
+        return `${enemy.name}-collective`;
+    }
+    return enemy.name;
+}
+
+// Get display name for enemy
+function getEnemyDisplayName(enemy) {
+    if (enemy.count && enemy.count > 1) {
+        return `${enemy.name} (${enemy.count}x ${enemy.type})`;
+    }
+    return `${enemy.name} (${enemy.type})`;
+}
+
+// Select enemy from dropdown
+window.selectEnemy = function(index) {
+    encounterState.selectedEnemyIndex = parseInt(index);
+    renderEncounterPanel();
+    saveToLocalStorage();
+};
+
+// Update enemy ignorance
+window.updateEnemyIgnorance = function(delta) {
+    const enemy = encounterState.enemies[encounterState.selectedEnemyIndex];
+    if (!enemy) return;
+
+    const enemyKey = getEnemyKey(enemy);
+    const tracker = encounterState.enemyTrackers[enemyKey];
+
+    if (!tracker) return;
+
+    const newValue = Math.max(0, Math.min(enemy.ignoranceLimit, tracker.ignorance + delta));
+    tracker.ignorance = newValue;
+
+    // Check if limit reached
+    if (newValue >= enemy.ignoranceLimit) {
+        showFeedback(`${enemy.name} has reached their Ignorance Limit!`, 'success');
+    }
+
+    renderEncounterPanel();
+    saveToLocalStorage();
+};
+
+// Reset enemy ignorance
+window.resetEnemyIgnorance = function() {
+    const enemy = encounterState.enemies[encounterState.selectedEnemyIndex];
+    if (!enemy) return;
+
+    const enemyKey = getEnemyKey(enemy);
+    const tracker = encounterState.enemyTrackers[enemyKey];
+
+    if (!tracker) return;
+
+    if (confirm(`Reset ${enemy.name}'s Ignorance to 0?`)) {
+        tracker.ignorance = 0;
+        renderEncounterPanel();
+        saveToLocalStorage();
+    }
+};
+
+// Render encounter panel in UI
+function renderEncounterPanel() {
+    const container = document.getElementById('encounterCountersContent');
+    if (!container) return;
+
+    // If no active encounter, show placeholder
+    if (!encounterState.active || encounterState.enemies.length === 0) {
+        container.innerHTML = `
+            <p class="placeholder-text">No active encounter. Select a scene with combat to see enemy details.</p>
+        `;
+        return;
+    }
+
+    const selectedEnemy = encounterState.enemies[encounterState.selectedEnemyIndex];
+    const enemyKey = getEnemyKey(selectedEnemy);
+    const tracker = encounterState.enemyTrackers[enemyKey];
+
+    if (!selectedEnemy || !tracker) {
+        container.innerHTML = '<p class="placeholder-text">Error loading enemy data</p>';
+        return;
+    }
+
+    // Build enemy dropdown
+    let dropdownHTML = '<select id="enemySelect" class="enemy-dropdown" onchange="selectEnemy(this.value)">';
+    encounterState.enemies.forEach((enemy, index) => {
+        const selected = index === encounterState.selectedEnemyIndex ? 'selected' : '';
+        dropdownHTML += `<option value="${index}" ${selected}>${getEnemyDisplayName(enemy)}</option>`;
+    });
+    dropdownHTML += '</select>';
+
+    // Build ignorance tracker visual
+    let trackerHTML = '<div class="enemy-ignorance-tracker">';
+    trackerHTML += '<div class="ignorance-tracker-label">';
+    trackerHTML += `Ignorance: <span class="ignorance-value">${tracker.ignorance}/${selectedEnemy.ignoranceLimit}</span>`;
+    trackerHTML += '</div>';
+    trackerHTML += '<div class="ignorance-tracker-bar">';
+    for (let i = 0; i < selectedEnemy.ignoranceLimit; i++) {
+        const filled = i < tracker.ignorance ? 'filled' : 'empty';
+        trackerHTML += `<div class="ignorance-segment ${filled}" onclick="setEnemyIgnorance(${i + 1})"></div>`;
+    }
+    trackerHTML += '</div>';
+    trackerHTML += '<div class="ignorance-controls">';
+    trackerHTML += '<button onclick="updateEnemyIgnorance(-1)" class="counter-btn">−</button>';
+    trackerHTML += '<button onclick="updateEnemyIgnorance(1)" class="counter-btn">+</button>';
+    trackerHTML += '<button onclick="resetEnemyIgnorance()" class="counter-btn reset-btn">Reset</button>';
+    trackerHTML += '</div>';
+    trackerHTML += '</div>';
+
+    // Build enemy details
+    let detailsHTML = `<div class="enemy-details-card ${selectedEnemy.type.toLowerCase().replace(/\s/g, '-')}">`;
+    detailsHTML += `<h4 class="enemy-name">${selectedEnemy.name}</h4>`;
+    detailsHTML += `<div class="enemy-type-badge">${selectedEnemy.type}</div>`;
+
+    // Signature moves or moves
+    const moves = selectedEnemy.signatureMoves || selectedEnemy.moves || [];
+    if (moves.length > 0) {
+        detailsHTML += '<div class="enemy-moves-section">';
+        detailsHTML += '<h5>Moves:</h5>';
+        detailsHTML += '<ul class="enemy-moves-list">';
+        moves.forEach(move => {
+            detailsHTML += `<li class="enemy-move">`;
+            detailsHTML += `<strong>${move.name}</strong>: ${move.effect}`;
+            if (move.statusApplied && move.statusApplied.length > 0) {
+                detailsHTML += `<div class="move-status">→ ${move.statusApplied.join(', ')}</div>`;
+            }
+            detailsHTML += '</li>';
+        });
+        detailsHTML += '</ul>';
+        detailsHTML += '</div>';
+    }
+
+    // Weaknesses
+    if (selectedEnemy.weaknesses) {
+        detailsHTML += '<div class="enemy-weaknesses-section">';
+        detailsHTML += '<h5>Weaknesses:</h5>';
+        detailsHTML += `<p>${selectedEnemy.weaknesses}</p>`;
+        detailsHTML += '</div>';
+    }
+
+    // Notes
+    if (selectedEnemy.notes) {
+        detailsHTML += '<div class="enemy-notes-section">';
+        detailsHTML += '<h5>💡 MC Notes:</h5>';
+        detailsHTML += `<p class="enemy-notes">${selectedEnemy.notes}</p>`;
+        detailsHTML += '</div>';
+    }
+
+    detailsHTML += '</div>';
+
+    // Assemble full HTML
+    container.innerHTML = `
+        <div class="encounter-active-panel">
+            <div class="enemy-selector-section">
+                <label for="enemySelect">Target Enemy:</label>
+                ${dropdownHTML}
+            </div>
+            ${trackerHTML}
+            ${detailsHTML}
+        </div>
+    `;
+}
+
+// Set enemy ignorance to specific value (for clicking segments)
+window.setEnemyIgnorance = function(value) {
+    const enemy = encounterState.enemies[encounterState.selectedEnemyIndex];
+    if (!enemy) return;
+
+    const enemyKey = getEnemyKey(enemy);
+    const tracker = encounterState.enemyTrackers[enemyKey];
+
+    if (!tracker) return;
+
+    tracker.ignorance = Math.max(0, Math.min(enemy.ignoranceLimit, value));
+
+    // Check if limit reached
+    if (tracker.ignorance >= enemy.ignoranceLimit) {
+        showFeedback(`${enemy.name} has reached their Ignorance Limit!`, 'success');
+    }
+
+    renderEncounterPanel();
     saveToLocalStorage();
 };
 

@@ -577,6 +577,250 @@ body {
     font-size: 0.9rem;
 }
 
+/* === ENCOUNTER SYSTEM === */
+.encounter-active-panel {
+    padding: 10px 0;
+}
+
+/* Enemy Selector */
+.enemy-selector-section {
+    margin-bottom: 20px;
+}
+
+.enemy-selector-section label {
+    display: block;
+    font-size: 0.9rem;
+    color: #E89B9B;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.enemy-dropdown {
+    width: 100%;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(232, 155, 155, 0.3);
+    border-radius: 8px;
+    color: #F5EFE6;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.enemy-dropdown:hover {
+    border-color: rgba(232, 155, 155, 0.6);
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.enemy-dropdown:focus {
+    outline: none;
+    border-color: #E89B9B;
+}
+
+/* Enemy Ignorance Tracker */
+.enemy-ignorance-tracker {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 2px solid rgba(220, 38, 38, 0.3);
+}
+
+.ignorance-tracker-label {
+    font-size: 1.1rem;
+    color: #dc2626;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.ignorance-value {
+    font-weight: bold;
+    color: #ef4444;
+    font-size: 1.3rem;
+}
+
+.ignorance-tracker-bar {
+    display: flex;
+    gap: 5px;
+    margin: 15px 0;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.ignorance-segment {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #dc2626;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.ignorance-segment.empty {
+    background: rgba(220, 38, 38, 0.1);
+}
+
+.ignorance-segment.filled {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+    box-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+}
+
+.ignorance-segment:hover {
+    transform: scale(1.1);
+    border-color: #ef4444;
+}
+
+.ignorance-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.ignorance-controls .counter-btn {
+    width: 50px;
+    height: 50px;
+}
+
+.ignorance-controls .reset-btn {
+    width: auto;
+    padding: 10px 20px;
+    border-radius: 8px;
+}
+
+/* Enemy Details Card */
+.enemy-details-card {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid rgba(232, 155, 155, 0.3);
+    margin-top: 20px;
+}
+
+/* Color themes for enemy types */
+.enemy-details-card.justice-knight {
+    border-color: rgba(220, 38, 38, 0.5);
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.1), rgba(0, 0, 0, 0.3));
+}
+
+.enemy-details-card.pawn {
+    border-color: rgba(234, 179, 8, 0.5);
+    background: linear-gradient(135deg, rgba(234, 179, 8, 0.1), rgba(0, 0, 0, 0.3));
+}
+
+.enemy-name {
+    font-size: 1.5rem;
+    color: #F4D35E;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px rgba(244, 211, 94, 0.3);
+}
+
+.enemy-type-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 15px;
+}
+
+.justice-knight .enemy-type-badge {
+    background: rgba(220, 38, 38, 0.3);
+    border: 1px solid #dc2626;
+    color: #fca5a5;
+}
+
+.pawn .enemy-type-badge {
+    background: rgba(234, 179, 8, 0.3);
+    border: 1px solid #eab308;
+    color: #fde047;
+}
+
+/* Enemy Moves Section */
+.enemy-moves-section {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(245, 239, 230, 0.2);
+}
+
+.enemy-moves-section h5 {
+    color: #E89B9B;
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.enemy-moves-list {
+    list-style: none;
+    padding: 0;
+}
+
+.enemy-move {
+    padding: 10px;
+    margin-bottom: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-left: 3px solid #4A7C7E;
+    border-radius: 4px;
+}
+
+.enemy-move strong {
+    color: #F4D35E;
+}
+
+.move-status {
+    margin-top: 5px;
+    font-size: 0.9rem;
+    color: #a78bfa;
+    font-style: italic;
+}
+
+/* Enemy Weaknesses Section */
+.enemy-weaknesses-section {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(245, 239, 230, 0.2);
+}
+
+.enemy-weaknesses-section h5 {
+    color: #4ADE80;
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.enemy-weaknesses-section p {
+    color: #F5EFE6;
+    line-height: 1.6;
+}
+
+/* Enemy Notes Section */
+.enemy-notes-section {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(167, 139, 250, 0.1);
+    border-left: 3px solid #a78bfa;
+    border-radius: 4px;
+}
+
+.enemy-notes-section h5 {
+    color: #a78bfa;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.enemy-notes {
+    color: #F5EFE6;
+    line-height: 1.6;
+    font-style: italic;
+}
+
 /* === INNER SPACE COUNTERS === */
 .inner-space-counters {
     display: grid;
