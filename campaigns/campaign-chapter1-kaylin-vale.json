@@ -306,72 +306,6 @@
               ]
             }
           }
-        },
-        {
-          "number": 7,
-          "name": "Kaylin's Inner Space - The Kitchen",
-          "location": "inner-space-kitchen",
-          "music": "inner-space-piano",
-          "content": "**READ ALOUD:**\n\n'The world dissolves. You're no longer in The Lighthouse - you're standing in a kitchen. But something's wrong with it.\n\nThe kitchen is spotless. Obsessively clean. Every surface gleams. The refrigerator is covered in papers - report cards, all A's. Achievement certificates. Hand-drawn gold stars. A chore chart with every box checked.\n\nBut the kitchen is also falling apart. Paint peeling. Appliances broken. It's like two realities overlapping - the perfect kitchen a child tried to maintain, and the neglected reality underneath.\n\nThere's a figure at the kitchen table - young Kaylin, maybe twelve years old, wearing a green dress that's too small for her. She's making a list in a notebook:\n\n\u2610 Perfect Grades\n\u2610 Make Dad Happy\n\u2610 Keep House Clean\n\u2610 Don't Ask for Anything\n\u2610 Be Worth Keeping\n\nA voice calls from somewhere beyond the kitchen - male, tired, frustrated:\n\n\"Kaylin, did you finish your chores? Did you make dinner? Did you check on your brother? Because your mother LEFT us, Kaylin. Left because we weren't ENOUGH. So you need to be enough for BOTH of you now. You need to EARN your place in this family. Love isn't free. Your mother proved that.\"\n\nYoung Kaylin flinches and adds another item to her list with shaking hands.\n\nThis is where Kaylin learned that love has conditions. This is the prison she never left.'\n\n**INNER SPACE STRUCTURE:**\n\nThree aspects of Kaylin are present:\n1. **Young Kaylin (Age 12)** - Still trying to be perfect, crying while making lists\n2. **Current Kaylin (Adult)** - Justice Knight form flickering, standing between table and empty chair, terrified but exhausted\n3. **The Father's Voice** - The internalized voice of conditional love, not physical, an echo that judges\n\n**ENVIRONMENTAL DETAILS:**\n- Kitchen Table: Two seats - one for Kaylin, one empty (mom's chair)\n- Refrigerator: Covered in achievements AND has note \"Kay - I'm sorry. This isn't your fault. I just can't anymore. Love, Mom\"\n- Young Kaylin's Dress: Tag says \"Made with Love\" sewn by mother\n- Messenger Bag: Overflowing with everyone's problems, photo of Kaylin and mom underneath\n- Ledger Pages: All count what she GAVE, none count what she RECEIVED\n\n**MECHANIC: Two Competing Clocks**\n- **\"You Are Enough\" Clock (0-7)** - Healing/redemption\n- **\"Prove Your Worth\" Clock (0-6)** - Deeper Ignorance\n\n**GOAL:** Get \"You Are Enough\" to 7 before \"Prove Your Worth\" reaches 6\n\n**KEY INTERACTIONS:**\n\n*Young Kaylin:* Frantically writing lists, crying but hiding it. Believes if she's perfect enough, mom will come back. Can be helped by taking pen away, removing \"Must Be Perfect\" status, telling her she's enough.\n\n*Current Kaylin:* Standing by fridge staring at achievements. Visor flickering. Can be reached by addressing the transactional thinking, showing unconditional help, referencing the messenger bag and mom's photo.\n\n*The Father's Voice:* Reinforces \"love must be earned.\" Can be confronted with Slay (verbal attack), or by helping Kaylin hear the difference between his voice and truth.\n\n**CRITICAL MOMENT - The List:**\nYoung Kaylin crossed out \"Be Worth Keeping\" and wrote \"Be Worth Mom Coming Back.\" Addressing this directly: \"She's not coming back, Kay. But that doesn't mean you weren't worth staying for.\" \u2192 +3 You Are Enough (THE core wound)",
-          "npcs": [
-            "young-kaylin",
-            "current-kaylin",
-            "fathers-voice"
-          ],
-          "tags": [],
-          "mcGuide": {
-            "stuckPoints": [
-              {
-                "trigger": "Player doesn't know how to interact with Inner Space",
-                "suggestion": "Young Kaylin asks directly: 'Can you help me finish my list?' This is a trap - the right answer is to help her STOP making the list."
-              },
-              {
-                "trigger": "Player is trying to rush through",
-                "suggestion": "Young Kaylin says: 'Why are you in such a hurry? Are you leaving too?' Forces player to slow down and be present."
-              },
-              {
-                "trigger": "'You Are Enough' clock stuck at 4-5",
-                "suggestion": "Have Current Kaylin ask the real question: 'If I'm enough without earning it, why did Mom leave?' Player must answer this honestly to break through."
-              },
-              {
-                "trigger": "'Prove Your Worth' climbing too fast",
-                "suggestion": "Young Kaylin starts panicking about abandonment. Current Kaylin's visor reforms. Player needs to use Care or Be Vulnerable to stabilize."
-              }
-            ],
-            "importantNPCNotes": "Young Kaylin is scared but wants to be helped - she's exhausted from trying to be perfect. Current Kaylin is the hardest to reach because she has the most defenses. The Father's Voice has no physical form - it's everywhere and nowhere. Attacking it directly (Slay) can work but requires good roll. The core wound is Mom's abandonment - everything else stems from that.",
-            "pacingTips": "60-90 minutes. This is the HEART of the campaign - take your time. Let emotional beats land. If clock math feels confusing, focus on narrative: are players showing Kaylin unconditional love? Then 'You Are Enough' rises. Are they accidentally reinforcing conditional thinking? Then 'Prove Your Worth' rises. Break at 'You Are Enough' = 5 to let tension build before final push."
-          }
-        },
-        {
-          "number": 8,
-          "name": "Resolution: Aftermath",
-          "location": "lighthouse-main-hall",
-          "music": [
-            "hopeful-strings",
-            "ominous-resolution"
-          ],
-          "content": "**IF KAYLIN IS SAVED (You Are Enough = 7):**\n\n'You return to The Lighthouse. The oppressive atmosphere has lifted. Kaylin stands in civilian form - green dress, messy hair, no messenger bag. She looks younger, more real.\n\n\"I...I need to make this right. Oh god, I need to make SO MUCH right. The people I turned away. The system I created. Devon. Marcus. I\u2014\"\n\nShe stops, taking a breath.\n\n\"No. That's the old pattern. 'I have to FIX everything to be worthy.' I can't make it right all at once. But I can start. One apology at a time. One genuine connection at a time. No ledger.\"\n\nThe Indebted look uncertain. Some angry. Some relieved. Kaylin addresses them:\n\n\"I'm sorry. I told you this system would free you from guilt, but all it did was replace one prison with another. You don't owe me anything. Not for the help I gave. Real help doesn't come with a price tag.\"\n\nSome leave. Some stay. It's messy. But it's real.'\n\n**IMMEDIATE ACTIONS:**\n1. Dismantling Jade Exchange - Kaylin publicly apologizes, credit system abolished\n2. Personal Amends - Reaches out to Devon (no guarantees), partners with Marcus again\n3. The Indebted's Healing - Released from philosophy, community support offered\n4. Kaylin's New Understanding - Keeps green dress (mom's gift), gets new bag, learns to receive help\n\n**MAMA JAY'S RESPONSE:**\nAt Caf\u00e9 Greenwich: \"Welcome back, baby. Not back to who you were - you can't go back. But back to the truth: you were always enough.\"\n\n**FUTURE HOOKS:**\n- Kaylin asks: \"The Seven approached me. Who else did they find?\"\n- The Lighthouse begins restoration as true community space\n- Devon texts: \"Can we talk?\"\n\n---\n\n**IF KAYLIN IS LOST (Prove Your Worth = 6):**\n\n'The Keeper remains standing. Visor reforms, stronger than before. Ledger pages multiply.\n\n\"You almost had me. For a second, I almost believed the pretty lies. But I know better. I've LIVED it. Love is conditional. Worth must be proven. And you've just proven that even your 'unconditional' care had limits.\n\nLook - you're leaving. You're giving up on me. Just like everyone else. JUST LIKE I KNEW YOU WOULD.\n\nAt least my system is HONEST.\"\n\nShe retreats deeper into Ignorance. Inner Space collapses. You're ejected back to The Lighthouse.'\n\n**CONSEQUENCES:**\n1. Community Split - Some embrace Jade Exchange, others resist, Lighthouse becomes contested\n2. The Keeper's Evolution - Doubles down, recruits more, Ignorance grows to 6-7\n3. Personal Cost - Devon gives up, Marcus closes kitchen to JE members, Kaylin more isolated\n4. Future Impact - Seven use this \"success\", other chapters harder, Kaylin might be Chapter 5 ultimate boss\n\n**BUT:** Door not completely closed. Future chapters might show moments of doubt. Redemption possible, but much harder.\n\n**MAMA JAY'S RESPONSE:**\n\"You tried, baby. Sometimes people aren't ready to be saved. But don't you give up on community. Someone has to remember what we're fighting for.\"",
-          "npcs": [
-            "kaylin-redeemed",
-            "mama-jay",
-            "the-indebted"
-          ],
-          "tags": [
-            "helped-kaylin-heal",
-            "lighthouse-community-connection",
-            "the-keepers-vendetta",
-            "jade-exchange-spreads"
-          ],
-          "mcGuide": {
-            "stuckPoints": [
-              {
-                "trigger": "Player unsure how to roleplay aftermath",
-                "suggestion": "Let them witness rather than control. Kaylin's healing is her journey now. Player's job is to be present and supportive."
-              }
-            ],
-            "importantNPCNotes": "Redeemed Kaylin is fragile but determined. She'll slip into old patterns sometimes - that's normal. The Indebted need their own healing. Marcus and Devon are cautiously hopeful but protecting themselves. Mama Jay is proud of everyone involved.",
-            "pacingTips": "15-30 minutes. Let the emotional resolution breathe. If saved, this should feel hopeful but realistic. If lost, this should feel tragic but with a hint that future redemption is possible. End with a quiet moment - maybe Kaylin looking at the photo of her and her mom, or The Keeper alone in the dark."
-          }
         }
       ],
       "innerSpace": {
@@ -422,7 +356,38 @@
               "+1 Point: Player shows subtle conditional language, Young Kaylin's abandonment fear triggers, Father's Voice makes valid-sounding argument, moment of doubt creeps in"
             ]
           }
-        }
+        },
+        "location": "inner-space-kitchen",
+        "music": "inner-space-piano",
+        "npcs": [
+          "young-kaylin",
+          "current-kaylin",
+          "fathers-voice"
+        ],
+        "mcGuide": {
+          "stuckPoints": [
+            {
+              "trigger": "Player doesn't know how to interact with Inner Space",
+              "suggestion": "Young Kaylin asks directly: 'Can you help me finish my list?' This is a trap - the right answer is to help her STOP making the list."
+            },
+            {
+              "trigger": "Player is trying to rush through",
+              "suggestion": "Young Kaylin says: 'Why are you in such a hurry? Are you leaving too?' Forces player to slow down and be present."
+            },
+            {
+              "trigger": "'You Are Enough' clock stuck at 4-5",
+              "suggestion": "Have Current Kaylin ask the real question: 'If I'm enough without earning it, why did Mom leave?' Player must answer this honestly to break through."
+            },
+            {
+              "trigger": "'Prove Your Worth' climbing too fast",
+              "suggestion": "Young Kaylin starts panicking about abandonment. Current Kaylin's visor reforms. Player needs to use Care or Be Vulnerable to stabilize."
+            }
+          ],
+          "importantNPCNotes": "Young Kaylin is scared but wants to be helped - she's exhausted from trying to be perfect. Current Kaylin is the hardest to reach because she has the most defenses. The Father's Voice has no physical form - it's everywhere and nowhere. Attacking it directly (Slay) can work but requires good roll. The core wound is Mom's abandonment - everything else stems from that.",
+          "pacingTips": "60-90 minutes. This is the HEART of the campaign - take your time. Let emotional beats land. If clock math feels confusing, focus on narrative: are players showing Kaylin unconditional love? Then 'You Are Enough' rises. Are they accidentally reinforcing conditional thinking? Then 'Prove Your Worth' rises. Break at 'You Are Enough' = 5 to let tension build before final push."
+        },
+        "content": "**READ ALOUD:**\n\n'The world dissolves. You're no longer in The Lighthouse - you're standing in a kitchen. But something's wrong with it.\n\nThe kitchen is spotless. Obsessively clean. Every surface gleams. The refrigerator is covered in papers - report cards, all A's. Achievement certificates. Hand-drawn gold stars. A chore chart with every box checked.\n\nBut the kitchen is also falling apart. Paint peeling. Appliances broken. It's like two realities overlapping - the perfect kitchen a child tried to maintain, and the neglected reality underneath.\n\nThere's a figure at the kitchen table - young Kaylin, maybe twelve years old, wearing a green dress that's too small for her. She's making a list in a notebook:\n\n\u2610 Perfect Grades\n\u2610 Make Dad Happy\n\u2610 Keep House Clean\n\u2610 Don't Ask for Anything\n\u2610 Be Worth Keeping\n\nA voice calls from somewhere beyond the kitchen - male, tired, frustrated:\n\n\"Kaylin, did you finish your chores? Did you make dinner? Did you check on your brother? Because your mother LEFT us, Kaylin. Left because we weren't ENOUGH. So you need to be enough for BOTH of you now. You need to EARN your place in this family. Love isn't free. Your mother proved that.\"\n\nYoung Kaylin flinches and adds another item to her list with shaking hands.\n\nThis is where Kaylin learned that love has conditions. This is the prison she never left.'\n\n**INNER SPACE STRUCTURE:**\n\nThree aspects of Kaylin are present:\n1. **Young Kaylin (Age 12)** - Still trying to be perfect, crying while making lists\n2. **Current Kaylin (Adult)** - Justice Knight form flickering, standing between table and empty chair, terrified but exhausted\n3. **The Father's Voice** - The internalized voice of conditional love, not physical, an echo that judges\n\n**ENVIRONMENTAL DETAILS:**\n- Kitchen Table: Two seats - one for Kaylin, one empty (mom's chair)\n- Refrigerator: Covered in achievements AND has note \"Kay - I'm sorry. This isn't your fault. I just can't anymore. Love, Mom\"\n- Young Kaylin's Dress: Tag says \"Made with Love\" sewn by mother\n- Messenger Bag: Overflowing with everyone's problems, photo of Kaylin and mom underneath\n- Ledger Pages: All count what she GAVE, none count what she RECEIVED\n\n**MECHANIC: Two Competing Clocks**\n- **\"You Are Enough\" Clock (0-7)** - Healing/redemption\n- **\"Prove Your Worth\" Clock (0-6)** - Deeper Ignorance\n\n**GOAL:** Get \"You Are Enough\" to 7 before \"Prove Your Worth\" reaches 6\n\n**KEY INTERACTIONS:**\n\n*Young Kaylin:* Frantically writing lists, crying but hiding it. Believes if she's perfect enough, mom will come back. Can be helped by taking pen away, removing \"Must Be Perfect\" status, telling her she's enough.\n\n*Current Kaylin:* Standing by fridge staring at achievements. Visor flickering. Can be reached by addressing the transactional thinking, showing unconditional help, referencing the messenger bag and mom's photo.\n\n*The Father's Voice:* Reinforces \"love must be earned.\" Can be confronted with Slay (verbal attack), or by helping Kaylin hear the difference between his voice and truth.\n\n**CRITICAL MOMENT - The List:**\nYoung Kaylin crossed out \"Be Worth Keeping\" and wrote \"Be Worth Mom Coming Back.\" Addressing this directly: \"She's not coming back, Kay. But that doesn't mean you weren't worth staying for.\" \u2192 +3 You Are Enough (THE core wound)",
+        "title": "Inner Space: The Kitchen"
       },
       "aftermath": {
         "description": "The resolution shows the consequences of success or failure. Kaylin's redemption creates ripples of healing through the community, while her loss deepens the Ignorant Seven's hold and sets up future conflicts.",
@@ -448,7 +413,35 @@
             ],
             "nextChapterImpact": "The Ignorant Seven use this 'success' to recruit others more easily. Future chapters are harder because the ideology has spread. Kaylin might appear as antagonist in later chapters or as ultimate boss in Chapter 5. However, moments of doubt remain - redemption is still possible but requires much more effort."
           }
-        ]
+        ],
+        "location": "lighthouse-main-hall",
+        "music": [
+          "hopeful-strings",
+          "ominous-resolution"
+        ],
+        "npcs": [
+          "kaylin-redeemed",
+          "mama-jay",
+          "the-indebted"
+        ],
+        "tags": [
+          "helped-kaylin-heal",
+          "lighthouse-community-connection",
+          "the-keepers-vendetta",
+          "jade-exchange-spreads"
+        ],
+        "mcGuide": {
+          "stuckPoints": [
+            {
+              "trigger": "Player unsure how to roleplay aftermath",
+              "suggestion": "Let them witness rather than control. Kaylin's healing is her journey now. Player's job is to be present and supportive."
+            }
+          ],
+          "importantNPCNotes": "Redeemed Kaylin is fragile but determined. She'll slip into old patterns sometimes - that's normal. The Indebted need their own healing. Marcus and Devon are cautiously hopeful but protecting themselves. Mama Jay is proud of everyone involved.",
+          "pacingTips": "15-30 minutes. Let the emotional resolution breathe. If saved, this should feel hopeful but realistic. If lost, this should feel tragic but with a hint that future redemption is possible. End with a quiet moment - maybe Kaylin looking at the photo of her and her mom, or The Keeper alone in the dark."
+        },
+        "content": "**IF KAYLIN IS SAVED (You Are Enough = 7):**\n\n'You return to The Lighthouse. The oppressive atmosphere has lifted. Kaylin stands in civilian form - green dress, messy hair, no messenger bag. She looks younger, more real.\n\n\"I...I need to make this right. Oh god, I need to make SO MUCH right. The people I turned away. The system I created. Devon. Marcus. I\u2014\"\n\nShe stops, taking a breath.\n\n\"No. That's the old pattern. 'I have to FIX everything to be worthy.' I can't make it right all at once. But I can start. One apology at a time. One genuine connection at a time. No ledger.\"\n\nThe Indebted look uncertain. Some angry. Some relieved. Kaylin addresses them:\n\n\"I'm sorry. I told you this system would free you from guilt, but all it did was replace one prison with another. You don't owe me anything. Not for the help I gave. Real help doesn't come with a price tag.\"\n\nSome leave. Some stay. It's messy. But it's real.'\n\n**IMMEDIATE ACTIONS:**\n1. Dismantling Jade Exchange - Kaylin publicly apologizes, credit system abolished\n2. Personal Amends - Reaches out to Devon (no guarantees), partners with Marcus again\n3. The Indebted's Healing - Released from philosophy, community support offered\n4. Kaylin's New Understanding - Keeps green dress (mom's gift), gets new bag, learns to receive help\n\n**MAMA JAY'S RESPONSE:**\nAt Caf\u00e9 Greenwich: \"Welcome back, baby. Not back to who you were - you can't go back. But back to the truth: you were always enough.\"\n\n**FUTURE HOOKS:**\n- Kaylin asks: \"The Seven approached me. Who else did they find?\"\n- The Lighthouse begins restoration as true community space\n- Devon texts: \"Can we talk?\"\n\n---\n\n**IF KAYLIN IS LOST (Prove Your Worth = 6):**\n\n'The Keeper remains standing. Visor reforms, stronger than before. Ledger pages multiply.\n\n\"You almost had me. For a second, I almost believed the pretty lies. But I know better. I've LIVED it. Love is conditional. Worth must be proven. And you've just proven that even your 'unconditional' care had limits.\n\nLook - you're leaving. You're giving up on me. Just like everyone else. JUST LIKE I KNEW YOU WOULD.\n\nAt least my system is HONEST.\"\n\nShe retreats deeper into Ignorance. Inner Space collapses. You're ejected back to The Lighthouse.'\n\n**CONSEQUENCES:**\n1. Community Split - Some embrace Jade Exchange, others resist, Lighthouse becomes contested\n2. The Keeper's Evolution - Doubles down, recruits more, Ignorance grows to 6-7\n3. Personal Cost - Devon gives up, Marcus closes kitchen to JE members, Kaylin more isolated\n4. Future Impact - Seven use this \"success\", other chapters harder, Kaylin might be Chapter 5 ultimate boss\n\n**BUT:** Door not completely closed. Future chapters might show moments of doubt. Redemption possible, but much harder.\n\n**MAMA JAY'S RESPONSE:**\n\"You tried, baby. Sometimes people aren't ready to be saved. But don't you give up on community. Someone has to remember what we're fighting for.\"",
+        "title": "Aftermath & Resolution"
       },
       "scalingAndPacing": {
         "partySize": {
@@ -489,7 +482,9 @@
             "innerSpaceAdjustment": "Prove Your Worth only needs 5 points instead of 6 to trigger worst outcome",
             "note": "Add environmental hazards. The Keeper's ledger constructs are more powerful. The Father's Voice is louder. Inner Space requires more nuanced approaches. For experienced players wanting challenge."
           }
-        }
+        },
+        "title": "Scaling & Pacing",
+        "content": "**PARTY SIZE ADJUSTMENTS:**\n\n**Solo (1 player):**\n- Ignorance Limit: 4\n- Pawns: 0\n- Remove Indebted from confrontation. Reduce investigation scenes to 2-3. Inner Space is 1-on-1 focus. Kaylin's Ignorance Limit reduced to 4. Give player NPC ally (Devon or Marcus) for moral support.\n\n**Small Group (2-3 players):**\n- Ignorance Limit: 5\n- Pawns: 2\n- Run as written. Each player can focus on different aspects of Kaylin's healing in Inner Space. 2 Indebted support The Keeper.\n\n**Full Group (4-7 players):**\n- Ignorance Limit: 6\n- Pawns: 4\n- Add more Indebted (4-6 total). Increase environmental complications. Inner Space can involve players splitting up to help Young Kaylin and Current Kaylin simultaneously. More elaborate constructs from The Keeper.\n\n---\n\n**SESSION LENGTH:**\n\n**One-Shot (3-4 hours):**\n3-4 hours - Combine investigation scenes. Focus on Devon OR Marcus, not both. Skip Lighthouse exterior investigation. Go straight from investigation to confrontation. Streamline Inner Space to 3-4 key moments.\n\n**Two Sessions:**\nSession 1: Scenes 1-4 Investigation (2-3 hours). Break after gathering all clues. Session 2: Scene 5-6 Confrontation & Inner Space (2-3 hours). Allows deep emotional processing.\n\n**Epic (3 sessions):**\n3 sessions - Session 1: Full investigation with ALL NPCs (2-3 hours). Session 2: Confrontation and beginning of Inner Space (2-3 hours). Session 3: Complete Inner Space journey and aftermath (2-3 hours). For maximum emotional depth.\n\n---\n\n**DIFFICULTY ADJUSTMENTS:**\n\n**Easier:**\nGive more story tags from investigation. Young Kaylin is more responsive. The Father's Voice is weaker. Good for first-time players or emotional safety.\n- Inner Space: You Are Enough only needs 5 points instead of 7\n\n**Harder:**\nAdd environmental hazards. The Keeper's ledger constructs are more powerful. The Father's Voice is louder. Inner Space requires more nuanced approaches. For experienced players wanting challenge.\n- Inner Space: Prove Your Worth only needs 5 points instead of 6 to trigger worst outcome"
       },
       "consequences": {
         "description": "This chapter establishes the player's approach to Fallen Icons and the Ignorant Seven. Success or failure here ripples through future chapters.",
