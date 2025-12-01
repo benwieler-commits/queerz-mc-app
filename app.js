@@ -456,6 +456,39 @@ function loadCampaignScript(campaignId) {
 
     // Display overview by default
     displayScriptTab(chapter, 'overview');
+
+    // Load checkpoints from campaign JSON if available
+    loadCampaignCheckpoints(campaign);
+}
+
+// Load checkpoints from campaign JSON
+function loadCampaignCheckpoints(campaign) {
+    if (!campaign || !campaign.checkpoints || !Array.isArray(campaign.checkpoints)) {
+        return;
+    }
+
+    // Check if we need to reload checkpoints:
+    // 1. If checkpoints array is empty, OR
+    // 2. If the campaign has changed (different campaign ID)
+    const lastLoadedCampaign = localStorage.getItem('mcApp_lastLoadedCampaign');
+    const shouldReloadCheckpoints = checkpoints.length === 0 || lastLoadedCampaign !== campaign.id;
+
+    if (shouldReloadCheckpoints) {
+        // Load fresh checkpoints from campaign JSON
+        checkpoints = campaign.checkpoints.map(checkpoint => ({
+            description: checkpoint.description,
+            nextChapter: checkpoint.triggersChapter || null,
+            completed: false,
+            timestamp: Date.now(),
+            optional: checkpoint.optional !== undefined ? checkpoint.optional : false
+        }));
+
+        // Store which campaign these checkpoints belong to
+        localStorage.setItem('mcApp_lastLoadedCampaign', campaign.id);
+
+        renderCheckpoints();
+        saveToLocalStorage();
+    }
 }
 
 // Populate environment dropdown from campaign data
@@ -2055,7 +2088,10 @@ function renderCheckpoints() {
             <input type="checkbox" class="checkpoint-checkbox"
                    ${checkpoint.completed ? 'checked' : ''}
                    onchange="toggleCheckpoint(${index})">
-            <div class="checkpoint-label">${checkpoint.description}</div>
+            <div class="checkpoint-label">
+                ${checkpoint.description}
+                ${checkpoint.optional ? '<span class="optional-badge">(optional)</span>' : ''}
+            </div>
         </div>
     `).join('');
 }
