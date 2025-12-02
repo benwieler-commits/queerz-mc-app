@@ -792,7 +792,7 @@
     {
       "id": "lighthouse-exterior",
       "name": "The Lighthouse Community Center - Exterior",
-      "imageUrl": "https://drive.google.com/uc?export=view&id=[LIGHTHOUSE-EXTERIOR-IMAGE-ID]",
+      "imageUrl": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/locations/lighthouse-ext-temp.png",
       "description": "Three-story brick building with colorful murals showing diverse hands reaching toward a lighthouse beam. 'All Are Welcome' painted in rainbow letters - now partially covered by new signage about Jade Exchange.",
       "atmosphere": "What was once welcoming now feels conditional. The warmth is gone.",
       "musicSuggestions": [
