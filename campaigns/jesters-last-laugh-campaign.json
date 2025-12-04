@@ -16,8 +16,8 @@
           "name": "The Call to Action",
           "location": "cafe-greenwich",
           "music": [
-            "contemplative-indie-1",
-            "contemplative-indie-2"
+            "cafe-greenwich-1",
+            "cafe-greenwich-2"
           ],
           "content": "**READ ALOUD:**\n\n'The familiar warmth of Café Greenwich wraps around you like a well-worn leather jacket. Steam rises from mismatched mugs while indie music plays softly over conversations between artists, activists, and the beautifully ordinary people who make this neighborhood home. Mama Jay Rainbow moves between tables with practiced grace, her silver hair catching the morning light as she refills coffee cups and dispenses wisdom in equal measure.\n\nThe morning news drones from the vintage TV mounted in the corner, but something makes Mama Jay reach for the remote with unusual urgency. The volume rises just as a reporter's voice cuts through the café's gentle hum:\n\n\"...third incident this week involving what witnesses describe as aggressive street performers in the Theater District. Business owners report customers being harassed by individuals making crude jokes and demanding audiences 'toughen up' or face consequences. Police are investigating what appears to be organized intimidation tactics targeting LGBTQ+ establishments and community centers...\"\n\nMama Jay turns to face you, her expression mixing concern with determination.'\n\n**MAMA JAY'S BRIEFING:**\n\n\"Well, sugar, sounds like someone's trying to turn humor into a weapon. The Theater District's been good to House Rainbow over the years - we've got friends there, venues that gave us stages when nobody else would. Time to return the favor.\n\nI've heard whispers about some comedian stirring up trouble. Calls himself 'The Jester' now, but folks say he used to be Danny Carbone - 'Dice' they called him. Working-class guy, performed at Moretti's Comedy Cellar back in the day. Good heart, or so I thought. But something's changed.\n\nCan you look into this? Talk to folks in the Theater District. Find out what's really going on. And baby? Be careful. Sometimes the people who hurt the most are the ones who were hurt the worst themselves.\"\n\n**MAMA JAY DIALOGUE OPTIONS:**\n\nIf player asks \"Why me?\"\n\"Because you care, and you see people - really see them. That's what this situation needs. Not someone looking to crack skulls, but someone willing to understand why those skulls got cracked in the first place.\"\n\nIf player asks \"What do you know about Danny?\"\n\"Not much, honestly. He was before my time in the district. But I know Moretti's was his home. Maybe still is, in a way. Old venues hold memories like that.\"\n\nIf player asks \"Should I go to the Theater District first?\"\n\"That's where the action is, baby. Talk to the folks there. The performers, the venue owners. Someone's bound to know more about what's happening - and why.\"",
           "npcs": [
@@ -49,8 +49,8 @@
           "name": "Investigation: Theater District",
           "location": "theater-district",
           "music": [
-            "melancholic-acoustic-1",
-            "melancholic-acoustic-2"
+            "theater-district-investigation-1",
+            "theater-district-investigation-2"
           ],
           "content": "**LOCATION DESCRIPTION:**\n\nThe Theater District pulses with creative energy during the day, but there's an undercurrent of tension now. Some venues have 'CLOSED FOR REPAIRS' signs. Others have extra security. Street performers glance nervously at corners where the Tough Crowd might be lurking.\n\nSeveral NPCs can provide information. Use 'GET A CLUE' for investigation:\n\n**NPC: ROSA (Theater Owner, Rainbow Rose Cabaret)**\n\nRosa is in her 50s, proudly queer, running one of the district's longest-standing LGBTQ+ venues. She's scared but trying to stay strong.\n\n**Q: \"What's been happening?\"**\n\n\"Three weeks ago, it started. These people - they look like regular folks, you know? Working-class types. They'd buy tickets to shows, sit in the audience, and then... halfway through, they'd start heckling. Not normal heckling. Cruel stuff. Misgendering performers. Mocking Pride flags. Saying 'this used to be a REAL theater' before we 'ruined it with all this woke nonsense.'\n\nWhen we kicked them out, they'd gather outside. Make it so our customers were scared to leave. Eventually, people stopped coming. We've had to cancel shows. It's killing us.\"\n\n**Q: \"Who's leading them?\"**\n\n\"Guy who calls himself The Jester. I remember him - Danny Carbone. Used to perform here years ago, actually. Nice guy. Made self-deprecating jokes about being a 'dumb working-class schmuck trying to make it in showbiz.' People loved him. But then... I don't know what happened. He disappeared for a while. When he came back, he was different. Bitter. Started saying we'd 'sold out' by putting Pride flags up and booking drag shows.\"\n\n**Q: \"Where can I find him?\"**\n\n\"Moretti's Comedy Cellar. That old basement club that closed down in the 90s. Somehow he's got access to it. His gang - they call themselves the Tough Crowd - they hang out there. It's like he's trying to recreate some imaginary 'glory days' that never really existed.\"\n\n**NPC: MARCUS (Street Performer)**\n\nMarcus is young, Black, queer, and fabulous. He performs magic tricks on the corner. He's defiant but clearly shaken.\n\n**Q: \"Have you had problems with the Tough Crowd?\"**\n\n\"Problems? Baby, they threw bottles at me last week. Called me every slur you can imagine - and some I'd never heard before. All because I was doing card tricks while wearing rainbow suspenders. They said I was 'shoving my lifestyle in people's faces.' I told them it's suspenders, not a manifesto, but they weren't interested in logic.\"\n\n**Q: \"What do they want?\"**\n\n\"They want us gone. They want the district to be like it was in the 80s - before we 'took over,' as they put it. But here's the thing: we've ALWAYS been here. Theater has always been queer. We just weren't allowed to be open about it. They're not trying to preserve history - they're trying to erase us from it.\"\n\n**Q: \"Tell me about The Jester.\"**\n\n\"Danny? He's sad, honestly. Like, underneath all that anger, he's just... sad. I saw him once, after his gang chased some kids out of a venue. He was standing there, alone, and he looked like he wanted to cry. But then one of his Tough Crowd people came over, and he put the mask back on. Started laughing, making jokes about how 'soft' everyone's gotten.\"\n\n**NPC: DETECTIVE SARAH CHEN (Police, Reluctant Ally)**\n\nDetective Chen is investigating the harassment but feels her hands are tied. She's sympathetic but frustrated.\n\n**Q: \"Why hasn't this been stopped?\"**\n\n\"Because technically, they're not breaking enough laws. They buy tickets, they heckle - free speech, apparently. When they gather outside, it's a 'peaceful protest.' When they throw things, it's 'accidental.' And when we do arrest someone, Danny shows up with lawyers and bail money. It's organized. Strategic. Whoever's funding this knows what they're doing.\"\n\n**Q: \"What can you tell me about Danny Carbone?\"**\n\n\"Grew up in Queens. Working-class Italian family. Father was... not a good man, from what we've gathered. Danny made a name for himself in the 90s doing comedy about being the 'dumb ethnic guy' trying to make it. Self-deprecating stuff. But the industry changed. Comedy changed. Venues started booking more diverse acts, and guys like Danny... they felt left behind.\n\nI don't think he's a bad person. I think he's a hurt person who found an audience for his pain. And now he's hurting others.\"\n\n**Q: \"What should I do?\"**\n\n\"Officially? Stay out of it. Let us handle it. Unofficially? If you can get through to him - really get through to him - maybe we can end this without more violence. Just... be careful. He's got a lot of people who believe his narrative.\"\n\n**ADDITIONAL INVESTIGATION OPTIONS:**\n\nPlayers can also:\n- Talk to other performers (reinforces the fear and impact)\n- Investigate Tough Crowd graffiti (crude jokes, \"MORETTI'S FOREVER\" tags)\n- Follow Tough Crowd members (leads to Moretti's)\n- Ask about Danny's past (builds sympathy and context)",
           "npcs": [
@@ -131,8 +131,10 @@
           "name": "Inner Space: Danny's Apartment",
           "location": "dannys-inner-space",
           "music": [
-            "building-tension-1",
-            "keeper-kaylin-battle"
+            "danny-battle-1",
+            "danny-battle-2",
+            "inner-space-theme-1",
+            "inner-space-theme-2"
           ],
           "content": "**ENTERING THE INNER SPACE:**\n\nRead to players: \"The transition is disorienting. One moment you're in Moretti's basement, the next you're standing in a cramped studio apartment that smells like old Chinese takeout and failure. But this isn't just any apartment - it's a memory given form, held together by Danny's Ignorance.\n\nThe apartment is frozen in the late 1990s - wood-paneled walls, a box TV on a milk crate, a futon that's seen better days. Posters of comedy legends watch from the walls like disappointed gods. A desk is buried under rejection letters, unopened bills, and notes for jokes that never quite landed.\n\nBut the centerpiece is the answering machine on the desk - its red light blinking infinitely, demanding attention. You can hear a voice coming from it, tinny and distant: a man's voice, older, stern.\n\nThis is where Danny lives - not his physical home, but the emotional prison he built brick by bitter brick.\"\n\n**THE ANSWERING MACHINE (Ignorance Core):**\n\nIf players investigate, they can listen to messages. They're from Danny's father:\n\n*BEEP* \"Danny, it's your father. Heard you're doing that comedy thing again. When are you going to get a real job? Your mother's worried. I'm disappointed.\"\n\n*BEEP* \"Saw your show. Bunch of people laughing at you making fun of yourself. That's not success, Danny. That's pathetic.\"\n\n*BEEP* \"You could have been something. But you chose to be a clown. Don't come crying to me when it doesn't work out.\"\n\nThe messages loop. They never stop.\n\n**DANNY'S JUSTICE KNIGHT TRANSFORMATION:**\n\nWhen players enter his Inner Space, Danny transforms into The Jester - full Justice Knight form. He becomes a larger-than-life comedian in a gaudy suit with the Star of Ignorance gleaming on his chest. But he's not attacking yet. He's performing.\n\n\"Welcome to my one-man show! 'The Jester's Last Laugh: How I Learned to Stop Worrying and Embrace That Everyone Hates Me!' It's been running in my head for thirty years. Let me know what you think!\"\n\n**THE INNER SPACE CONFRONTATION:**\n\nThis is where the true battle happens - not just physical, but psychological. The players must help Danny confront his pain while managing the Ignorance that's trying to consume him.\n\n**ENVIRONMENTAL TAGS:**\n- \"Father's Voice Looping\" (ongoing) - The messages play constantly, creating pressure\n- \"Frozen in the 90s\" (ongoing) - Danny's stuck in the past\n- \"Rejection Letters Everywhere\"-2 (ongoing) - Visual reminder of failure\n\n**PLAYER OPTIONS:**\n\n**TALK IT OUT:** Address Danny's core wounds\n- \"Your father was wrong about you\" → Challenges the Ignorance Core\n- \"Comedy changed, but that doesn't mean you failed\" → Shifts perspective\n- \"You're not protecting the past - you're hiding from the present\" → Direct confrontation\n- \"The people you're hurting are just like you were - trying to belong\" → Empathy play\n\nSuccessful TALK IT OUT attempts build \"Accept-Himself\" meter (6 to succeed)\n\n**CARE:** Show Danny compassion\n- Physically stop the answering machine → Silences father's voice\n- Share own stories of feeling left behind → Connection\n- Acknowledge his pain without excusing his actions → Validation + Accountability\n- \"You deserve to be loved without earning it through cruelty\" → Core truth\n\nSuccessful CARE attempts build \"Accept-Himself\" meter and reduce his attacks\n\n**SLAY:** Fight the Ignorance manifestations\n- Danny conjures \"Tough Crowd\" constructs representing his internalized critics\n- Attacking him builds \"Rejection\" meter (5 = he retreats into Ignorance)\n- But fighting constructs can protect space for emotional work\n- Rainbow Flash attacks shatter crystallized cruel jokes\n\nThe goal is NOT to destroy Danny, but to shatter his Ignorance while keeping him safe\n\n**DANNY'S ATTACKS (Justice Knight Form):**\n\n1. \"Callback to Trauma\": Danny makes 'jokes' about players' insecurities (rejection-1 to target)\n2. \"You Had to Be There\": References 'better times' that exclude players (isolated-1)\n3. \"Bombing on Stage\": Summons Tough Crowd constructs that heckle and attack\n4. \"Die on Stage\": Desperate final attack if feeling cornered (overwhelmed-2 to all)\n\n**HARD MOVES (If Accept-Himself isn't building):**\n- Father's voice gets louder, more demanding\n- Apartment walls close in, representing Danny's isolation\n- More rejection letters materialize, piling up\n- Danny starts to believe his father: \"He was right. I'm nothing. I've always been nothing.\"\n\n**HARD MOVES (If Rejection builds too high):**\n- Danny becomes more aggressive, seeing players as 'just like everyone else'\n- Tough Crowd constructs multiply\n- The apartment begins to crystallize completely - Danny's retreating into Ignorance\n- If Rejection hits 5, Danny escapes but may return later in campaign as recurring antagonist\n\n**RESOLUTION PATHS:**\n\n**SUCCESS: Accept-Himself Reaches 6**\n\nThe apartment begins to change. The answering machine finally goes silent. Light streams in through windows that were previously blocked by posters. Danny's Justice Knight form cracks and falls away, leaving just Danny - tired, crying, but finally FREE.\n\n\"I... I just wanted to belong. Somewhere. Anywhere. And when comedy changed, when the world changed... I felt like there was no place for me anymore. So I tried to make everyone else feel how I felt. Small. Wrong. Not enough.\"\n\n*He looks at the silent answering machine.*\n\n\"But he was wrong. My father was wrong. I'm not pathetic for making people laugh. I'm not weak for caring. And I don't have to hurt people to protect myself.\"\n\nThe Star of Ignorance falls from his chest and shatters. The Tough Crowd members outside Moretti's are freed from their brainwashing - confused, ashamed, but free.\n\nDanny offers to help repair the damage he's done. He wants to perform again - real comedy, the kind that builds bridges.\n\nPotential Ongoing Story Tag: \"Reformed Comedian Ally\"\n\n**PARTIAL SUCCESS: Accept-Himself 4-5, Rejection Under 5**\n\nDanny understands what he's done was wrong, but he's not ready to forgive himself. He removes his Star of Ignorance but retreats into isolation. His Tough Crowd is freed, but Danny disappears.\n\nHe may return later in the campaign - not as an enemy, but as someone still struggling. A reminder that healing isn't instant.\n\nOutcome affects future chapters: Danny might help against worse threats while still dealing with his demons.\n\n**FAILURE: Rejection Reaches 5**\n\nDanny's apartment fully crystallizes. He flees deeper into his Ignorance, convinced that the world will never understand him. The Tough Crowd remains under his influence. The harassment continues.\n\nDanny becomes a recurring antagonist who might ally with other Justice Knights. The Theater District remains under threat. Future chapters may offer another chance at redemption.\n\n**POST-SCENE:**\n\nWhen players exit the Inner Space, they find themselves back at Moretti's. The venue looks different now - if Danny was saved, it's beginning to feel less oppressive. If he escaped, it's more crystallized than ever.\n\nDetective Chen may arrive to process the scene. Rosa and Marcus may appear to thank the players. Mama Jay can offer wisdom about healing and second chances.\n\nThis is also an opportunity to process what happened, prepare for future chapters, and decide how this outcome affects the player characters going forward.",
           "npcs": [
@@ -167,8 +169,161 @@
             "importantNPCNotes": "Danny is the star here, but he's also the victim. The father's voice is the real antagonist - the Ignorance Core. Players should feel they're fighting FOR Danny, not just against him. The apartment should feel claustrophobic and sad, not evil. This is about trauma, not villainy.",
             "pacingTips": "30-45 minutes. This is the emotional climax. Let moments breathe - when Danny cries, let it land. When the answering machine stops, let there be silence. But if energy drops, have constructs attack or Danny spiral deeper. Balance emotional beats with mechanical challenges. The goal is catharsis, not just victory."
           }
+        },
+        {
+          "number": 5,
+          "name": "The Aftermath",
+          "location": "theater-district",
+          "music": [
+            "theater-district-investigation-1",
+            "theater-district-investigation-2"
+          ],
+          "content": "**SCENE 5: THE AFTERMATH**\n\n**IF DANNY WAS REDEEMED (Accept-Himself reached 6):**\n\nRead to players: \"You emerge from Moretti's basement into the cool night air of the Theater District. Behind you, the venue that was a shrine to bitterness now feels lighter somehow - as if a weight has been lifted from its very foundations.\n\nDanny follows you out, looking exhausted but genuine. The Star of Ignorance is gone. So is the manic energy he wore like armor. What's left is a tired man in his sixties who just confronted thirty years of pain.\n\nAround the district, the Tough Crowd members are waking up - literally and figuratively. The Ignorance that held them is broken. They're confused, ashamed, but FREE. Some are crying. Others are apologizing to the people they harassed. It's messy and raw and real.\"\n\n**DANNY'S WORDS (If Redeemed):**\n\n\"I don't... I don't expect forgiveness. I know what I did. The people I hurt. The community I attacked. But I want to try. I want to be better than what my father taught me to be.\n\nMoretti's... maybe it can be something new. Not a shrine to the past, but a bridge. Comedy that brings people together instead of tearing them apart. If... if the community will let me try.\"\n\n**COMMUNITY REACTIONS:**\n\nRosa (if players talk to her): \"I'm not ready to trust him yet. But I'm willing to watch. To see if he means it. That's more than I'd give most people who hurt us like he did.\"\n\nMarcus (if players talk to him): \"He looked me in the eye and apologized. Like, really apologized. Said he was wrong to target me, wrong to use his pain as an excuse to cause pain. That's... that's a start.\"\n\nDetective Chen (arrives on scene): \"Good work. I don't know what you did in there, but the complaints have stopped, the Tough Crowd has dispersed, and Danny Carbone just turned himself in to make a statement about the harassment. He's taking responsibility. That's rare.\"\n\n**MAMA JAY'S WISDOM:**\n\nIf players return to Café Greenwich, Mama Jay hugs them: \"You did good, baby. You saw past the anger to the hurt underneath. That's real strength. Danny's got a long road ahead, but at least now he's walking it instead of hiding from it.\n\nThe Theater District is gonna heal. Might take time, but it'll heal. And you helped make that possible.\"\n\n**TAGS EARNED:**\n- \"Theater District Saved\" (ongoing)\n- \"Danny's Redemption\" (ongoing)\n- \"Reformed Comedian Ally\" (ongoing)\n- \"Mama Jay's Pride\" (ongoing)\n- \"Community Trust+1\" (ongoing)\n\n**IF DANNY PARTIALLY REFORMED (Accept-Himself 4-5, Rejection under 5):**\n\nDanny understands he was wrong but can't forgive himself yet. He disappears after freeing the Tough Crowd, leaving a note: \"I need time. I'm sorry. - D\"\n\nThe community is safe for now, but Danny's story isn't finished. He may return in later chapters - not as an enemy, but as someone still struggling.\n\n**TAGS EARNED:**\n- \"Theater District Stabilized\" (ongoing)\n- \"Danny's Flight\" (ongoing)\n- \"Unfinished Business\" (ongoing)\n\n**IF DANNY ESCAPED (Rejection reached 5):**\n\nDanny fled deeper into his Ignorance. Moretti's remains crystallized and dangerous. Some Tough Crowd members are still under his influence. The Theater District remains under threat.\n\nDetective Chen: \"This isn't over. He'll be back, probably with more followers. You bought us time, but we need a permanent solution.\"\n\n**TAGS EARNED:**\n- \"Danny's Vendetta\" (ongoing)\n- \"Theater District Under Threat\"-2 (ongoing)\n- \"Moretti's Remains Corrupted\" (ongoing)\n\n**CHAPTER REWARDS (All Outcomes):**\n\n- Experience with Inner Space mechanics\n- Understanding of how Nostalgic Ignorance works\n- Connections in Theater District (Rosa, Marcus, Detective Chen)\n- Knowledge that Justice Knights were once good people\n- Preparation for more complex conflicts ahead\n\n**LOOKING AHEAD:**\n\nMama Jay can provide intel on the next threat: \"There's word about something happening at the university. Dr. Pierce - he's talking about 'cognitive wellness' in ways that sound awful familiar to what Danny was preaching. Different words, same poison.\n\nBut that's for another day. Tonight, rest. You earned it.\"",
+          "npcs": [
+            "danny-civilian",
+            "rosa",
+            "marcus",
+            "detective-chen",
+            "mama-jay"
+          ],
+          "tags": [
+            "theater-district-saved",
+            "dannys-redemption",
+            "dannys-flight",
+            "dannys-vendetta",
+            "community-trust",
+            "chapter-complete"
+          ],
+          "mcGuide": {
+            "stuckPoints": [
+              {
+                "trigger": "Players don't know what to do after Inner Space",
+                "suggestion": "Have Detective Chen or Rosa find them outside Moretti's to provide direction and closure."
+              },
+              {
+                "trigger": "Players want to immediately move to next chapter",
+                "suggestion": "Mama Jay can encourage rest: 'Even heroes need to process, baby. Take a breath. The next fight will still be there tomorrow.'"
+              }
+            ],
+            "importantNPCNotes": "This scene is about emotional resolution and consequences. NPCs should respond authentically to whatever outcome happened - celebration for redemption, concern for partial success, fear for failure. Don't rush this. Let players feel the weight of their choices.",
+            "pacingTips": "15-20 minutes. This is denouement - wrapping up loose ends and emotional threads. If players saved Danny, let them enjoy the victory. If they didn't, let them feel the consequences. Either way, this scene transitions to the next chapter while honoring what came before."
+          }
         }
-      ]
+      ],
+      "scaling": {
+        "playerCount": {
+          "1-2": {
+            "adjustments": [
+              "Focus on investigation and Inner Space over combat",
+              "Reduce Tough Crowd to size factor 0 (narrative presence only)",
+              "Danny's Ignorance Limit drops to 3",
+              "Accept-Himself meter requires 4-5 instead of 6",
+              "More emphasis on TALK IT OUT and CARE moves",
+              "Extended investigation scenes with deeper NPC conversations"
+            ],
+            "mcNotes": "Solo/duo play should feel intimate and psychological. The threat is personal, not overwhelming. Give players time to investigate thoroughly."
+          },
+          "3-4": {
+            "adjustments": [
+              "Standard encounters as written",
+              "Balanced combat and social challenges",
+              "Full NPC roster available",
+              "All mechanics function as described in scenes"
+            ],
+            "mcNotes": "This is the 'default' difficulty. Encounters are balanced for a small group working together."
+          },
+          "5-6": {
+            "adjustments": [
+              "Increase all Ignorance Limits by +1",
+              "Add second wave of Tough Crowd in Moretti's confrontation",
+              "Danny's Inner Space includes more constructs",
+              "Environmental challenges: collapsing venue, fire hazard",
+              "Multiple NPCs need simultaneous help during attacks",
+              "Accept-Himself meter requires 7 instead of 6"
+            ],
+            "mcNotes": "Larger groups need more mechanical challenges to keep everyone engaged. Add environmental dangers and multi-front battles."
+          },
+          "7+": {
+            "adjustments": [
+              "Epic scale: Affects multiple Theater District venues simultaneously",
+              "Danny has lieutenant-level allies (other 'old school' comedians)",
+              "Multi-stage battle across several locations",
+              "Tough Crowd size factor increases to 3-4",
+              "City-wide consequences for success/failure",
+              "Complex Inner Space with multiple chambers",
+              "Requires coordinated team efforts - splitting party may be necessary"
+            ],
+            "mcNotes": "Epic play should feel like a major event. The Theater District is a war zone. Multiple objectives running simultaneously. Consider splitting the party for parallel missions."
+          }
+        },
+        "difficultyAdjustments": {
+          "easier": [
+            "Provide more obvious clues during investigation",
+            "Danny telegraphs attacks more clearly",
+            "Accept-Himself meter builds faster (each success = +2)",
+            "Rejection meter builds slower (each fail = +0.5)",
+            "NPCs provide more direct guidance",
+            "Environmental tags less punishing"
+          ],
+          "harder": [
+            "NPCs provide fewer hints",
+            "Danny's attacks are more aggressive and unpredictable",
+            "Accept-Himself meter builds slower (requires 8 instead of 6)",
+            "Rejection meter builds faster (each fail = +2)",
+            "Tough Crowd constructs respawn in Inner Space",
+            "Time pressure: answering machine messages intensify over time"
+          ]
+        }
+      },
+      "campaignProgress": {
+        "outcomes": [
+          {
+            "id": "danny-redeemed",
+            "name": "Danny Was Redeemed",
+            "description": "Danny confronted his trauma, removed his Star of Ignorance, and committed to making amends. The Tough Crowd was freed. Theater District is healing.",
+            "consequences": [
+              "Danny may appear as ally in future chapters",
+              "Theater District NPCs trust House Rainbow",
+              "Players gain reputation for redemption over destruction",
+              "Moretti's can become safe-space venue",
+              "Other Justice Knights may hear about Danny's change"
+            ],
+            "nextChapterImpact": "Dr. Pierce may reference 'that comedian who went soft' as an example of weakness. Danny might provide intel on Ignorant Seven tactics."
+          },
+          {
+            "id": "danny-partial",
+            "name": "Danny Partially Reformed",
+            "description": "Danny understands he was wrong but fled before fully healing. Tough Crowd was freed but Danny remains in hiding, processing his trauma alone.",
+            "consequences": [
+              "Danny is in limbo - not enemy, not ally",
+              "Theater District is safe but wary",
+              "Players may encounter Danny again struggling with guilt",
+              "Potential for future redemption or relapse",
+              "Unresolved emotional thread"
+            ],
+            "nextChapterImpact": "Danny might reach out for help during Chapter 2-3, creating a side mission opportunity. His story remains open."
+          },
+          {
+            "id": "danny-escaped",
+            "name": "Danny's Vendetta Continues",
+            "description": "Danny fled deeper into Ignorance. Tough Crowd remains partially active. Theater District remains under threat.",
+            "consequences": [
+              "Danny becomes recurring antagonist",
+              "May ally with other Justice Knights (especially Dr. Pierce)",
+              "Theater District requires ongoing protection",
+              "Moretti's remains corrupted",
+              "Future confrontations will be harder"
+            ],
+            "nextChapterImpact": "Danny might appear in Chapter 2 working with Dr. Pierce. His failure to change emboldens other Justice Knights. Theater District remains vulnerable."
+          }
+        ],
+        "tags": [
+          "completed-chapter-1",
+          "knows-nostalgic-ignorance",
+          "theater-district-reputation",
+          "inner-space-experienced"
+        ]
+      }
     }
   ],
   "locations": [
@@ -305,36 +460,36 @@
   ],
   "music": [
     {
-      "id": "contemplative-indie-1",
-      "name": "Contemplative Indie 1",
-      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/contemplative-indie-1.mp3",
+      "id": "cafe-greenwich-1",
+      "name": "Café Greenwich 1",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/cafe-greenwich-1.mp3",
       "category": "location",
       "mood": "peaceful",
       "description": "Café Greenwich atmosphere. Warm, indie, slightly melancholic."
     },
     {
-      "id": "contemplative-indie-2",
-      "name": "Contemplative Indie 2",
-      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/contemplative-indie-2.mp3",
+      "id": "cafe-greenwich-2",
+      "name": "Café Greenwich 2",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/cafe-greenwich-2.mp3",
       "category": "location",
       "mood": "peaceful",
       "description": "Café Greenwich atmosphere. Warm, indie, slightly melancholic."
     },
     {
-      "id": "melancholic-acoustic-1",
-      "name": "Melancholic Acoustic 1",
-      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/melancholic-acoustic-1.mp3",
-      "category": "emotional",
-      "mood": "sad",
-      "description": "Theater District investigation. Acoustic guitar, underlying tension."
+      "id": "theater-district-investigation-1",
+      "name": "Theater District Investigation 1",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/theater-district-investigation-1.mp3",
+      "category": "location",
+      "mood": "tense",
+      "description": "Theater District investigation. Underlying tension, mystery."
     },
     {
-      "id": "melancholic-acoustic-2",
-      "name": "Melancholic Acoustic 2",
-      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/melancholic-acoustic-2.mp3",
-      "category": "emotional",
-      "mood": "sad",
-      "description": "Theater District investigation. Acoustic guitar, underlying tension."
+      "id": "theater-district-investigation-2",
+      "name": "Theater District Investigation 2",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/theater-district-investigation-2.mp3",
+      "category": "location",
+      "mood": "tense",
+      "description": "Theater District investigation. Underlying tension, mystery."
     },
     {
       "id": "ominous-quiet-1",
@@ -353,20 +508,52 @@
       "description": "Moretti's Cellar. Something wrong. Loss of warmth. Creeping dread."
     },
     {
-      "id": "building-tension-1",
-      "name": "Building Tension 1",
-      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/locations/building-tension-1.mp3",
+      "id": "tough-crowd-work-1",
+      "name": "Tough Crowd Work 1",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/pawn-attack/tough-crowd-work-1.mp3",
       "category": "combat",
       "mood": "tense",
-      "description": "Inner Space entry. Electronic elements, rising intensity. Confrontation music."
+      "description": "Pawn/minion battle music. Tough Crowd confrontations."
     },
     {
-      "id": "keeper-kaylin-battle",
-      "name": "The Jester Battle (Danny)",
-      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/the-jester-1.mp3, https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/the-jester-2.mp3",
+      "id": "tough-crowd-work-2",
+      "name": "Tough Crowd Work 2",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/pawn-attack/tough-crowd-work-2.mp3",
+      "category": "combat",
+      "mood": "tense",
+      "description": "Pawn/minion battle music. Tough Crowd confrontations."
+    },
+    {
+      "id": "danny-battle-1",
+      "name": "The Jester Battle 1 (Danny)",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/danny-battle-1.mp3",
       "category": "combat",
       "mood": "intense",
       "description": "Justice Knight boss battle music for The Jester (Danny Carbone). Aggressive comedy club energy meets emotional trauma."
+    },
+    {
+      "id": "danny-battle-2",
+      "name": "The Jester Battle 2 (Danny)",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/boss-battles/danny-battle-2.mp3",
+      "category": "combat",
+      "mood": "intense",
+      "description": "Justice Knight boss battle music for The Jester (Danny Carbone). Aggressive comedy club energy meets emotional trauma."
+    },
+    {
+      "id": "inner-space-theme-1",
+      "name": "Inner Space Theme 1",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/emotional-themes/inner-space-theme-1.mp3",
+      "category": "emotional",
+      "mood": "melancholic",
+      "description": "Danny's Inner Space. Childhood apartment. Father's voice. Deep sadness and trauma."
+    },
+    {
+      "id": "inner-space-theme-2",
+      "name": "Inner Space Theme 2",
+      "url": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/music/emotional-themes/inner-space-theme-2.mp3",
+      "category": "emotional",
+      "mood": "melancholic",
+      "description": "Danny's Inner Space. Childhood apartment. Father's voice. Deep sadness and trauma."
     },
     {
       "id": "hero-rises",
