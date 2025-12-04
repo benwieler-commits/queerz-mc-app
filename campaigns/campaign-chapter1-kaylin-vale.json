@@ -733,7 +733,7 @@
       "id": "young-kaylin",
       "name": "Young Kaylin (Age 12 - Inner Space)",
       "role": "aspect",
-      "imageUrl": "https://drive.google.com/uc?export=view&id=[YOUNG-KAYLIN-IMAGE-ID]",
+      "imageUrl": "https://raw.githubusercontent.com/benwieler-commits/queerz-mc-app/main/images/characters/young-kaylin.png",
       "description": "12-year-old Kaylin in green dress (too small), frantically making lists, trying to be perfect. Represents the origin of her trauma.",
       "motivations": [
         "Be perfect enough that Mom comes back",
