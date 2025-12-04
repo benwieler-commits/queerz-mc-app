@@ -359,7 +359,7 @@ async function loadCampaigns() {
         // List of campaign files to load (excluding campaign-template.json)
         const campaignFiles = [
             'campaign-chapter1-kaylin-vale.json',
-            'example-campaign.json'
+            'jesters-last-laugh-campaign.json'
         ];
 
         // Load each campaign file
