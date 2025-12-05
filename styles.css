@@ -299,6 +299,81 @@ body {
     object-fit: contain;
 }
 
+/* Scene Display Styles for Overlay */
+.scene-section {
+    grid-column: 1 / -1; /* Take full width of the grid */
+}
+
+.scene-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.control-group label {
+    font-size: 0.85rem;
+    color: #67E8F9;
+    font-weight: 500;
+}
+
+.scene-display {
+    position: relative;
+    min-height: 400px;
+    max-height: 600px;
+    height: 600px;
+    background: #1a1a1a;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid rgba(103, 232, 249, 0.3);
+}
+
+.scene-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.scene-background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover for background images */
+}
+
+.scene-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 85%; /* NPC takes up 85% of the height */
+    width: auto;
+    max-width: 60%; /* Limit width to 60% of container */
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 2;
+    pointer-events: none; /* Allow clicks to pass through to background if needed */
+}
+
+.scene-overlay img {
+    height: 100%;
+    width: auto;
+    object-fit: contain; /* Maintain aspect ratio for portraits */
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5)); /* Add subtle shadow for depth */
+}
+
 .placeholder-text {
     color: rgba(245, 239, 230, 0.5);
     font-size: 0.9rem;
