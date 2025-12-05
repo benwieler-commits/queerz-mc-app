@@ -92,7 +92,9 @@
           "location": "morettis-cellar",
           "music": [
             "ominous-quiet-1",
-            "ominous-quiet-2"
+            "ominous-quiet-2",
+            "tough-crowd-work-1",
+            "tough-crowd-work-2"
           ],
           "content": "**LOCATION DESCRIPTION:**\n\nMoretti's Comedy Cellar was once the heart of the Theater District's comedy scene. Now it's a shrine to a past that Danny has reconstructed through the filter of his pain. The basement club is frozen in time - 1990s posters, old microphone stands, a stage with peeling red curtain. But there's something wrong. The laughter you hear isn't real - it's a recording, playing on loop. The Ignorance crystal formations glitter in the dim stage lights.\n\nDanny's Tough Crowd members are here - about 6-8 people, working-class, mostly older, all wearing the Star of Ignorance. They're not actively hostile yet, but they're watchful.\n\n**ARRIVING AT MORETTI'S:**\n\nRead to players: \"The door to Moretti's hangs slightly open, as if inviting you in. Or daring you. Inside, you can hear the sound of an old comedy routine playing - Jerry Seinfeld, maybe, or George Carlin. But it's distorted, echoing off walls that remember better days.\n\nThe basement stairs creak under your weight. At the bottom, the space opens up into what was once a vibrant comedy club. Now it's a museum to nostalgia. Posters of comedy legends line the walls. The bar is stocked with beer bottles covered in dust. And on the stage stands Danny Carbone.\n\nHe's not in his Justice Knight form yet - just a tired-looking man in his 60s wearing a leather jacket and jeans. But there's something about his eyes - they gleam with the Star of Ignorance.\"\n\n**DANNY'S OPENING:**\n\n\"So. House Rainbow finally shows up. Let me guess - Mama Jay sent you? Told you to come 'fix' me with your acceptance and your safe spaces?\"\n\n*He laughs, but it's not a happy sound.*\n\n\"This place - Moretti's - this was the last place comedy was honest. Before everyone got soft. Before you had to worry about every word, every look, every joke. You want to stop me? You'll have to understand me first. And trust me, kids - you're not ready for that truth.\"\n\n**PLAYER OPTIONS:**\n\n1. **TALK IT OUT:** Try to reason with Danny here (difficult - he's not ready yet)\n2. **GET A CLUE:** Investigate the venue, read Danny's journal (on bar), talk to Tough Crowd members\n3. **SLAY:** Combat with Danny (Ignorance 3) and Tough Crowd (Ignorance 1-2 each)\n4. **WAIT:** Danny may monologue more, giving clues to his Inner Space\n\n**IF PLAYERS INVESTIGATE THE JOURNAL:**\n\n*A worn notebook sits on the bar, pages yellowed and beer-stained. Danny's handwriting fills the pages.*\n\nEntries include:\n\n\"Moretti's was the last place I felt like I belonged. Before the world decided people like me were the problem.\"\n\n\"My father used to say 'only weak men cry.' I learned to make jokes instead. Now they tell me the jokes are wrong too. What's left?\"\n\n\"I'm not trying to hurt anyone. I'm just trying to protect the way things were. When comedy was honest. When you didn't have to walk on eggshells. When men were men and everyone knew the rules.\"\n\n\"But why does protecting the past hurt so much? Why do I feel worse every day?\"\n\n**IF PLAYERS TALK TO TOUGH CROWD MEMBERS:**\n\nTough Crowd members are sympathetic but misguided. They're not evil - they're hurting.\n\nOne might say: \"Danny gets it. The world changed and left us behind. We're just trying to hold onto something real.\"\n\nAnother: \"I lost my job to someone younger, smarter, more 'diverse.' Danny says it's okay to be angry about that. Nobody else does.\"\n\n**TRANSITION TO INNER SPACE:**\n\nWhether through combat, conversation, or investigation, the path eventually leads to Danny's Inner Space. When his Ignorance cracks (through damage, empathy, or realization), a door appears behind the stage - a door to a shabby apartment. Danny's apartment. His Inner Space.\n\n\"You want to understand me? Fine. Come see where the jokes died.\"",
           "npcs": [
@@ -124,206 +126,504 @@
             ],
             "importantNPCNotes": "Danny is hurt, not evil. He's using cruelty as armor. The Tough Crowd are victims too - people who felt abandoned by social progress and found community in Danny's bitterness. This scene should build sympathy even as it presents antagonism. The journal is KEY - it shows Danny's internal conflict.",
             "pacingTips": "20-30 minutes. This is the 'boss arena' before the real psychological confrontation. Let players investigate, talk, and understand before fighting. If dragging, Danny can become impatient and attack. If rushing, have Danny retreat quickly to his Inner Space, inviting them to follow."
-          }
-        },
-        {
-          "number": 4,
-          "name": "Inner Space: Danny's Apartment",
-          "location": "dannys-inner-space",
-          "music": [
-            "danny-battle-1",
-            "danny-battle-2",
-            "inner-space-theme-1",
-            "inner-space-theme-2"
-          ],
-          "content": "**ENTERING THE INNER SPACE:**\n\nRead to players: \"The transition is disorienting. One moment you're in Moretti's basement, the next you're standing in a cramped studio apartment that smells like old Chinese takeout and failure. But this isn't just any apartment - it's a memory given form, held together by Danny's Ignorance.\n\nThe apartment is frozen in the late 1990s - wood-paneled walls, a box TV on a milk crate, a futon that's seen better days. Posters of comedy legends watch from the walls like disappointed gods. A desk is buried under rejection letters, unopened bills, and notes for jokes that never quite landed.\n\nBut the centerpiece is the answering machine on the desk - its red light blinking infinitely, demanding attention. You can hear a voice coming from it, tinny and distant: a man's voice, older, stern.\n\nThis is where Danny lives - not his physical home, but the emotional prison he built brick by bitter brick.\"\n\n**THE ANSWERING MACHINE (Ignorance Core):**\n\nIf players investigate, they can listen to messages. They're from Danny's father:\n\n*BEEP* \"Danny, it's your father. Heard you're doing that comedy thing again. When are you going to get a real job? Your mother's worried. I'm disappointed.\"\n\n*BEEP* \"Saw your show. Bunch of people laughing at you making fun of yourself. That's not success, Danny. That's pathetic.\"\n\n*BEEP* \"You could have been something. But you chose to be a clown. Don't come crying to me when it doesn't work out.\"\n\nThe messages loop. They never stop.\n\n**DANNY'S JUSTICE KNIGHT TRANSFORMATION:**\n\nWhen players enter his Inner Space, Danny transforms into The Jester - full Justice Knight form. He becomes a larger-than-life comedian in a gaudy suit with the Star of Ignorance gleaming on his chest. But he's not attacking yet. He's performing.\n\n\"Welcome to my one-man show! 'The Jester's Last Laugh: How I Learned to Stop Worrying and Embrace That Everyone Hates Me!' It's been running in my head for thirty years. Let me know what you think!\"\n\n**THE INNER SPACE CONFRONTATION:**\n\nThis is where the true battle happens - not just physical, but psychological. The players must help Danny confront his pain while managing the Ignorance that's trying to consume him.\n\n**ENVIRONMENTAL TAGS:**\n- \"Father's Voice Looping\" (ongoing) - The messages play constantly, creating pressure\n- \"Frozen in the 90s\" (ongoing) - Danny's stuck in the past\n- \"Rejection Letters Everywhere\"-2 (ongoing) - Visual reminder of failure\n\n**PLAYER OPTIONS:**\n\n**TALK IT OUT:** Address Danny's core wounds\n- \"Your father was wrong about you\" → Challenges the Ignorance Core\n- \"Comedy changed, but that doesn't mean you failed\" → Shifts perspective\n- \"You're not protecting the past - you're hiding from the present\" → Direct confrontation\n- \"The people you're hurting are just like you were - trying to belong\" → Empathy play\n\nSuccessful TALK IT OUT attempts build \"Accept-Himself\" meter (6 to succeed)\n\n**CARE:** Show Danny compassion\n- Physically stop the answering machine → Silences father's voice\n- Share own stories of feeling left behind → Connection\n- Acknowledge his pain without excusing his actions → Validation + Accountability\n- \"You deserve to be loved without earning it through cruelty\" → Core truth\n\nSuccessful CARE attempts build \"Accept-Himself\" meter and reduce his attacks\n\n**SLAY:** Fight the Ignorance manifestations\n- Danny conjures \"Tough Crowd\" constructs representing his internalized critics\n- Attacking him builds \"Rejection\" meter (5 = he retreats into Ignorance)\n- But fighting constructs can protect space for emotional work\n- Rainbow Flash attacks shatter crystallized cruel jokes\n\nThe goal is NOT to destroy Danny, but to shatter his Ignorance while keeping him safe\n\n**DANNY'S ATTACKS (Justice Knight Form):**\n\n1. \"Callback to Trauma\": Danny makes 'jokes' about players' insecurities (rejection-1 to target)\n2. \"You Had to Be There\": References 'better times' that exclude players (isolated-1)\n3. \"Bombing on Stage\": Summons Tough Crowd constructs that heckle and attack\n4. \"Die on Stage\": Desperate final attack if feeling cornered (overwhelmed-2 to all)\n\n**HARD MOVES (If Accept-Himself isn't building):**\n- Father's voice gets louder, more demanding\n- Apartment walls close in, representing Danny's isolation\n- More rejection letters materialize, piling up\n- Danny starts to believe his father: \"He was right. I'm nothing. I've always been nothing.\"\n\n**HARD MOVES (If Rejection builds too high):**\n- Danny becomes more aggressive, seeing players as 'just like everyone else'\n- Tough Crowd constructs multiply\n- The apartment begins to crystallize completely - Danny's retreating into Ignorance\n- If Rejection hits 5, Danny escapes but may return later in campaign as recurring antagonist\n\n**RESOLUTION PATHS:**\n\n**SUCCESS: Accept-Himself Reaches 6**\n\nThe apartment begins to change. The answering machine finally goes silent. Light streams in through windows that were previously blocked by posters. Danny's Justice Knight form cracks and falls away, leaving just Danny - tired, crying, but finally FREE.\n\n\"I... I just wanted to belong. Somewhere. Anywhere. And when comedy changed, when the world changed... I felt like there was no place for me anymore. So I tried to make everyone else feel how I felt. Small. Wrong. Not enough.\"\n\n*He looks at the silent answering machine.*\n\n\"But he was wrong. My father was wrong. I'm not pathetic for making people laugh. I'm not weak for caring. And I don't have to hurt people to protect myself.\"\n\nThe Star of Ignorance falls from his chest and shatters. The Tough Crowd members outside Moretti's are freed from their brainwashing - confused, ashamed, but free.\n\nDanny offers to help repair the damage he's done. He wants to perform again - real comedy, the kind that builds bridges.\n\nPotential Ongoing Story Tag: \"Reformed Comedian Ally\"\n\n**PARTIAL SUCCESS: Accept-Himself 4-5, Rejection Under 5**\n\nDanny understands what he's done was wrong, but he's not ready to forgive himself. He removes his Star of Ignorance but retreats into isolation. His Tough Crowd is freed, but Danny disappears.\n\nHe may return later in the campaign - not as an enemy, but as someone still struggling. A reminder that healing isn't instant.\n\nOutcome affects future chapters: Danny might help against worse threats while still dealing with his demons.\n\n**FAILURE: Rejection Reaches 5**\n\nDanny's apartment fully crystallizes. He flees deeper into his Ignorance, convinced that the world will never understand him. The Tough Crowd remains under his influence. The harassment continues.\n\nDanny becomes a recurring antagonist who might ally with other Justice Knights. The Theater District remains under threat. Future chapters may offer another chance at redemption.\n\n**POST-SCENE:**\n\nWhen players exit the Inner Space, they find themselves back at Moretti's. The venue looks different now - if Danny was saved, it's beginning to feel less oppressive. If he escaped, it's more crystallized than ever.\n\nDetective Chen may arrive to process the scene. Rosa and Marcus may appear to thank the players. Mama Jay can offer wisdom about healing and second chances.\n\nThis is also an opportunity to process what happened, prepare for future chapters, and decide how this outcome affects the player characters going forward.",
-          "npcs": [
-            "danny-justice-knight",
-            "danny-father-voice",
-            "tough-crowd-constructs"
-          ],
-          "tags": [
-            "survived-inner-space",
-            "helped-danny-accept-himself",
-            "stopped-the-answering-machine",
-            "danny-redeemed",
-            "danny-escaped",
-            "danny-partially-healed",
-            "theater-district-saved"
-          ],
-          "mcGuide": {
-            "stuckPoints": [
+          },
+          "encounter": {
+            "type": "combat",
+            "enemies": [
               {
-                "trigger": "Players don't know how to build Accept-Himself meter",
-                "suggestion": "Danny can monologue, revealing wounds: 'My father said I was weak for trying to make people laugh. Maybe he was right.' This is a clear invitation to contradict him."
+                "name": "Danny Carbone (Pre-Transformation)",
+                "type": "Mid-Boss",
+                "ignoranceLimit": 3,
+                "moves": [
+                  {
+                    "name": "Cutting Remark",
+                    "effect": "Uses comedy to belittle and shame",
+                    "statusApplied": ["self-doubting-1", "mocked-1"]
+                  },
+                  {
+                    "name": "Call the Tough Crowd",
+                    "effect": "Summons Tough Crowd reinforcements"
+                  },
+                  {
+                    "name": "Defensive Humor",
+                    "effect": "Deflects emotional attacks with jokes, protecting Ignorance"
+                  }
+                ],
+                "weaknesses": "Direct empathy about his father, acknowledgment of his pain, references to what comedy used to mean to him",
+                "notes": "Danny is holding back here. He's testing the players. When Ignorance reaches 0-1, he transforms and retreats to Inner Space."
               },
               {
-                "trigger": "Players are only attacking, building Rejection",
-                "suggestion": "A Tough Crowd construct can pause and say: 'He's already hurt. Why are you making it worse?' This might prompt players to try CARE or TALK IT OUT."
-              },
-              {
-                "trigger": "Players are overwhelmed by complexity",
-                "suggestion": "Simplify to: Stop the answering machine (CARE), talk to Danny about his father (TALK IT OUT), fight constructs to create space (SLAY). Clear objectives help focus."
+                "name": "Tough Crowd Members",
+                "type": "Pawn",
+                "count": "2-4 (scale with party size)",
+                "ignoranceLimit": "1-2 each",
+                "moves": [
+                  {
+                    "name": "Heckle",
+                    "effect": "Verbal harassment that damages confidence"
+                  },
+                  {
+                    "name": "Mob Mentality",
+                    "effect": "Strength in numbers, harder to affect individually"
+                  },
+                  {
+                    "name": "Throw Debris",
+                    "effect": "Physical intimidation"
+                  }
+                ],
+                "notes": "NOT EVIL - burned out people who found relief in Danny's narrative. If shown genuine care without judgment, they might waver. They defend Danny out of loyalty, not malice."
               }
             ],
-            "importantNPCNotes": "Danny is the star here, but he's also the victim. The father's voice is the real antagonist - the Ignorance Core. Players should feel they're fighting FOR Danny, not just against him. The apartment should feel claustrophobic and sad, not evil. This is about trauma, not villainy.",
-            "pacingTips": "30-45 minutes. This is the emotional climax. Let moments breathe - when Danny cries, let it land. When the answering machine stops, let there be silence. But if energy drops, have constructs attack or Danny spiral deeper. Balance emotional beats with mechanical challenges. The goal is catharsis, not just victory."
-          }
-        },
-        {
-          "number": 5,
-          "name": "The Aftermath",
-          "location": "theater-district",
-          "music": [
-            "theater-district-investigation-1",
-            "theater-district-investigation-2"
-          ],
-          "content": "**SCENE 5: THE AFTERMATH**\n\n**IF DANNY WAS REDEEMED (Accept-Himself reached 6):**\n\nRead to players: \"You emerge from Moretti's basement into the cool night air of the Theater District. Behind you, the venue that was a shrine to bitterness now feels lighter somehow - as if a weight has been lifted from its very foundations.\n\nDanny follows you out, looking exhausted but genuine. The Star of Ignorance is gone. So is the manic energy he wore like armor. What's left is a tired man in his sixties who just confronted thirty years of pain.\n\nAround the district, the Tough Crowd members are waking up - literally and figuratively. The Ignorance that held them is broken. They're confused, ashamed, but FREE. Some are crying. Others are apologizing to the people they harassed. It's messy and raw and real.\"\n\n**DANNY'S WORDS (If Redeemed):**\n\n\"I don't... I don't expect forgiveness. I know what I did. The people I hurt. The community I attacked. But I want to try. I want to be better than what my father taught me to be.\n\nMoretti's... maybe it can be something new. Not a shrine to the past, but a bridge. Comedy that brings people together instead of tearing them apart. If... if the community will let me try.\"\n\n**COMMUNITY REACTIONS:**\n\nRosa (if players talk to her): \"I'm not ready to trust him yet. But I'm willing to watch. To see if he means it. That's more than I'd give most people who hurt us like he did.\"\n\nMarcus (if players talk to him): \"He looked me in the eye and apologized. Like, really apologized. Said he was wrong to target me, wrong to use his pain as an excuse to cause pain. That's... that's a start.\"\n\nDetective Chen (arrives on scene): \"Good work. I don't know what you did in there, but the complaints have stopped, the Tough Crowd has dispersed, and Danny Carbone just turned himself in to make a statement about the harassment. He's taking responsibility. That's rare.\"\n\n**MAMA JAY'S WISDOM:**\n\nIf players return to Café Greenwich, Mama Jay hugs them: \"You did good, baby. You saw past the anger to the hurt underneath. That's real strength. Danny's got a long road ahead, but at least now he's walking it instead of hiding from it.\n\nThe Theater District is gonna heal. Might take time, but it'll heal. And you helped make that possible.\"\n\n**TAGS EARNED:**\n- \"Theater District Saved\" (ongoing)\n- \"Danny's Redemption\" (ongoing)\n- \"Reformed Comedian Ally\" (ongoing)\n- \"Mama Jay's Pride\" (ongoing)\n- \"Community Trust+1\" (ongoing)\n\n**IF DANNY PARTIALLY REFORMED (Accept-Himself 4-5, Rejection under 5):**\n\nDanny understands he was wrong but can't forgive himself yet. He disappears after freeing the Tough Crowd, leaving a note: \"I need time. I'm sorry. - D\"\n\nThe community is safe for now, but Danny's story isn't finished. He may return in later chapters - not as an enemy, but as someone still struggling.\n\n**TAGS EARNED:**\n- \"Theater District Stabilized\" (ongoing)\n- \"Danny's Flight\" (ongoing)\n- \"Unfinished Business\" (ongoing)\n\n**IF DANNY ESCAPED (Rejection reached 5):**\n\nDanny fled deeper into his Ignorance. Moretti's remains crystallized and dangerous. Some Tough Crowd members are still under his influence. The Theater District remains under threat.\n\nDetective Chen: \"This isn't over. He'll be back, probably with more followers. You bought us time, but we need a permanent solution.\"\n\n**TAGS EARNED:**\n- \"Danny's Vendetta\" (ongoing)\n- \"Theater District Under Threat\"-2 (ongoing)\n- \"Moretti's Remains Corrupted\" (ongoing)\n\n**CHAPTER REWARDS (All Outcomes):**\n\n- Experience with Inner Space mechanics\n- Understanding of how Nostalgic Ignorance works\n- Connections in Theater District (Rosa, Marcus, Detective Chen)\n- Knowledge that Justice Knights were once good people\n- Preparation for more complex conflicts ahead\n\n**LOOKING AHEAD:**\n\nMama Jay can provide intel on the next threat: \"There's word about something happening at the university. Dr. Pierce - he's talking about 'cognitive wellness' in ways that sound awful familiar to what Danny was preaching. Different words, same poison.\n\nBut that's for another day. Tonight, rest. You earned it.\"",
-          "npcs": [
-            "danny-civilian",
-            "rosa",
-            "marcus",
-            "detective-chen",
-            "mama-jay"
-          ],
-          "tags": [
-            "theater-district-saved",
-            "dannys-redemption",
-            "dannys-flight",
-            "dannys-vendetta",
-            "community-trust",
-            "chapter-complete"
-          ],
-          "mcGuide": {
-            "stuckPoints": [
-              {
-                "trigger": "Players don't know what to do after Inner Space",
-                "suggestion": "Have Detective Chen or Rosa find them outside Moretti's to provide direction and closure."
-              },
-              {
-                "trigger": "Players want to immediately move to next chapter",
-                "suggestion": "Mama Jay can encourage rest: 'Even heroes need to process, baby. Take a breath. The next fight will still be there tomorrow.'"
-              }
+            "environmentalTags": [
+              "Morettis-Nostalgic-Shrine-2",
+              "Comedy-Recordings-Playing-1",
+              "Tough-Crowd-Territory-2",
+              "Dusty-and-Forgotten-1"
             ],
-            "importantNPCNotes": "This scene is about emotional resolution and consequences. NPCs should respond authentically to whatever outcome happened - celebration for redemption, concern for partial success, fear for failure. Don't rush this. Let players feel the weight of their choices.",
-            "pacingTips": "15-20 minutes. This is denouement - wrapping up loose ends and emotional threads. If players saved Danny, let them enjoy the victory. If they didn't, let them feel the consequences. Either way, this scene transitions to the next chapter while honoring what came before."
+            "quickStatusEffects": {
+              "helpful": [
+                "Supported-2",
+                "Confident-2",
+                "Understanding-2",
+                "Protected-1"
+              ],
+              "harmful": [
+                "Self-Doubting-1",
+                "Mocked-1",
+                "Overwhelmed-2",
+                "Intimidated-1"
+              ]
+            }
           }
         }
       ],
-      "scaling": {
-        "playerCount": {
-          "1-2": {
-            "adjustments": [
-              "Focus on investigation and Inner Space over combat",
-              "Reduce Tough Crowd to size factor 0 (narrative presence only)",
-              "Danny's Ignorance Limit drops to 3",
-              "Accept-Himself meter requires 4-5 instead of 6",
-              "More emphasis on TALK IT OUT and CARE moves",
-              "Extended investigation scenes with deeper NPC conversations"
-            ],
-            "mcNotes": "Solo/duo play should feel intimate and psychological. The threat is personal, not overwhelming. Give players time to investigate thoroughly."
+      "innerSpace": {
+        "description": "Danny's Inner Space manifests as his childhood apartment in Queens from the late 1990s - a cramped studio that smells like old Chinese takeout, cigarette smoke, and desperation. The space is frozen in time, held together by Danny's Ignorance. An answering machine blinks infinitely, playing messages from Danny's father on loop - the voice of conditional worth. Three aspects exist here: Young Danny (8) cowering with his joke book, Adult Danny flickering between civilian and Justice Knight forms, and The Father's Voice - the internalized message that strength comes from cruelty.",
+        "coreWounds": [
+          {
+            "name": "Only Weak Men Cry",
+            "description": "Danny's father was an abusive alcoholic who punished any display of emotion or vulnerability. When Danny cried, he was called weak, pathetic, a disappointment. Danny learned to turn pain into jokes - humor became his only acceptable outlet. But underneath the jokes, the hurt festered. The Ignorant Seven found him at his lowest and offered a philosophy: 'Your father was right. Weakness is dangerous. Cruelty is strength. Make others smaller before they make you small.'",
+            "approaches": {
+              "talkItOut": "Address the wound directly: 'Your father was wrong. Crying isn't weakness - it's human. Vulnerability isn't failure - it's courage. You don't have to be cruel to protect yourself.' Must be said to BOTH Young and Adult Danny. (+3 Accept-Himself if done well)",
+              "care": "Remove the 'Must Not Show Weakness' environmental tag from the space. This requires physically stopping the answering machine, silencing the father's voice, and sitting with Danny's tears without judgment. (+3 Accept-Himself, transforms the space)",
+              "slay": "Confront The Father's Voice directly: 'You're not his father. You're just Danny's fear wearing his father's voice. Danny is not weak. Danny is SURVIVING.' Requires strong roll. Success shatters the voice's hold. (+3 Accept-Himself on 10+)"
+            },
+            "tags": [
+              "core-wound-revealed",
+              "fathers-abuse",
+              "cruelty-as-armor"
+            ]
           },
-          "3-4": {
-            "adjustments": [
-              "Standard encounters as written",
-              "Balanced combat and social challenges",
-              "Full NPC roster available",
-              "All mechanics function as described in scenes"
-            ],
-            "mcNotes": "This is the 'default' difficulty. Encounters are balanced for a small group working together."
+          {
+            "name": "Comedy Was My Weapon",
+            "description": "Danny learned to make people laugh at him before they could laugh at him. Self-deprecating humor was armor. But somewhere, it twisted - he started making others the butt of the joke instead. 'If I hurt them first, they can't hurt me.' The Ignorant Seven reinforced this: 'The world is hostile. Comedy is war. Make them uncomfortable before they make you uncomfortable.'",
+            "approaches": {
+              "talkItOut": "Help Danny separate defensive humor from cruel humor: 'There's a difference between laughing with people and laughing at people. You knew that once. What happened?' Creates space for him to recognize the shift. (+2 Accept-Himself)",
+              "care": "Offer vulnerability with no punchline: 'Here's something real about me. No joke. No armor. Just truth.' Danny will try to deflect with humor - you must gently redirect without judgment. (+3 Accept-Himself if you maintain boundaries)",
+              "strikeAPose": "Create environmental tag 'Humor Heals, It Doesn't Hurt' or 'Comedy Builds Bridges' - embodying the truth Danny once knew. (+2 Accept-Himself, creates tag for others to use)"
+            },
+            "tags": [
+              "comedy-corrupted",
+              "defensive-humor",
+              "hurt-people-hurt-people"
+            ]
+          }
+        ],
+        "counters": {
+          "acceptHimself": {
+            "max": 6,
+            "triggers": [
+              "+3 Points: Directly addressing 'Only Weak Men Cry' core wound, creating powerful counter-narrative with Strike A Pose, using Slay to destroy Father's Voice (on 10+), offering vulnerability with no deflection",
+              "+2 Points: Stopping the answering machine with Care, sharing vulnerable personal experience, creating meaningful environmental tag, helping Young Danny cry safely",
+              "+1 Point: Kind words without full emotional resonance, passive presence, gathering information with Get A Clue that creates opening"
+            ]
           },
-          "5-6": {
-            "adjustments": [
-              "Increase all Ignorance Limits by +1",
-              "Add second wave of Tough Crowd in Moretti's confrontation",
-              "Danny's Inner Space includes more constructs",
-              "Environmental challenges: collapsing venue, fire hazard",
-              "Multiple NPCs need simultaneous help during attacks",
-              "Accept-Himself meter requires 7 instead of 6"
-            ],
-            "mcNotes": "Larger groups need more mechanical challenges to keep everyone engaged. Add environmental dangers and multi-front battles."
-          },
-          "7+": {
-            "adjustments": [
-              "Epic scale: Affects multiple Theater District venues simultaneously",
-              "Danny has lieutenant-level allies (other 'old school' comedians)",
-              "Multi-stage battle across several locations",
-              "Tough Crowd size factor increases to 3-4",
-              "City-wide consequences for success/failure",
-              "Complex Inner Space with multiple chambers",
-              "Requires coordinated team efforts - splitting party may be necessary"
-            ],
-            "mcNotes": "Epic play should feel like a major event. The Theater District is a war zone. Multiple objectives running simultaneously. Consider splitting the party for parallel missions."
+          "rejection": {
+            "max": 5,
+            "triggers": [
+              "+2 Points: Attacking Danny without addressing pain, reinforcing that he's 'wrong' without empathy, treating Tough Crowd as disposable, mocking his nostalgia",
+              "+1 Point: Dismissing his feelings, rushing through emotional moments, focusing only on fighting",
+              "CRITICAL: If Rejection reaches 5, Danny retreats deeper into Ignorance and escapes. He becomes recurring antagonist."
+            ]
           }
         },
-        "difficultyAdjustments": {
-          "easier": [
-            "Provide more obvious clues during investigation",
-            "Danny telegraphs attacks more clearly",
-            "Accept-Himself meter builds faster (each success = +2)",
-            "Rejection meter builds slower (each fail = +0.5)",
-            "NPCs provide more direct guidance",
-            "Environmental tags less punishing"
+        "content": "**READ ALOUD:**\n\n'The world dissolves. You're no longer in Moretti's basement - you're standing in a cramped studio apartment in Queens, circa 1998.\n\nThe apartment smells like stale cigarettes, cheap beer, and old Chinese takeout. Wood-paneled walls. A box TV on a milk crate playing static. A futon that's more spring than cushion. Posters of comedy legends watch from the walls - Carlin, Pryor, Murphy - their eyes seeming to judge.\n\nThe desk is buried under rejection letters, unopened bills, and notes for jokes that never quite landed. But the centerpiece - the thing that dominates the space - is the answering machine. Red light blinking. Eternally. Infinitely.\n\nA message plays. Then loops. Then plays again:\n\n*BEEP* \"Danny, it's your father. Heard you're doing that comedy thing again. When are you going to get a real job? Your mother's worried. I'm disappointed.\"\n\n*BEEP* \"Saw your show. Bunch of people laughing at you making fun of yourself. That's not success, Danny. That's pathetic.\"\n\n*BEEP* \"You could have been something. But you chose to be a clown. Don't come crying to me when it doesn't work out. Only weak men cry.\"\n\nThe messages loop. They never stop.\n\nIn the corner, huddled by a milk crate, is eight-year-old Danny. He's clutching a joke book from the library - \"101 Jokes to Make People Laugh.\" His face is red from crying, but he's trying to hide it. Trying to smile.\n\nAnd standing by the answering machine is Adult Danny - flickering between his civilian form and The Jester. Justice Knight armor trying to materialize. Failing. Reforming. He's staring at the machine like it's a bomb he can't defuse.\n\nThis is where Danny learned that pain turns to humor or it destroys you. This is where he learned that cruelty is strength. This is the prison he built from his father's words.'\n\n**INNER SPACE STRUCTURE:**\n\nThree aspects of Danny are present:\n1. **Young Danny (Age 8)** - Crying, hiding it, clutching his joke book, desperate to make the yelling stop\n2. **Adult Danny (Current)** - Justice Knight form flickering, standing frozen between the answering machine and the empty corner where he used to hide\n3. **The Father's Voice** - The internalized voice of toxic masculinity, not physical, an echo that judges and belittles\n\n**ENVIRONMENTAL DETAILS:**\n- Answering Machine: Ignorance Core - the source of all pain, can be stopped but Danny believes it's his anchor\n- Joke Book: \"101 Jokes to Make People Laugh\" - Young Danny's shield, represents when humor was joy\n- Rejection Letters: Stack of \"not what we're looking for\" - industry that changed, left Danny behind\n- Posters: Comedy legends who succeeded, Danny feels he failed them\n- Empty Beer Bottles: Father's influence, Danny's spiral\n- Corner: Where Young Danny hides, still feels safest making himself small\n\n**MECHANIC: Two Competing Clocks**\n- **\"Accept-Himself\" Clock (0-6)** - Healing/redemption\n- **\"Rejection\" Clock (0-5)** - Deeper Ignorance\n\n**GOAL:** Get \"Accept-Himself\" to 6 before \"Rejection\" reaches 5\n\n**KEY INTERACTIONS:**\n\n*Young Danny:* Frantically reading joke book, trying to make himself laugh through tears. Believes if he's funny enough, dad will stop being angry. Can be helped by taking the book gently, removing \"Must Be Funny\" status, telling him it's okay to cry.\n\n*Adult Danny:* Standing paralyzed by answering machine. The Jester armor keeps trying to form - his 'protection' from vulnerability. Can be reached by addressing the false choice between cruelty and weakness, showing that strength includes tenderness, referencing what comedy meant before fear corrupted it.\n\n*The Father's Voice:* Reinforces \"only weak men cry\" and \"comedy is war.\" Can be confronted with Slay (verbal attack), or by helping Danny hear the difference between his voice and his father's poison.\n\n**CRITICAL MOMENT - The Answering Machine:**\nThe machine represents Danny's belief that he NEEDS his father's judgment to stay 'strong.' Stopping it means confronting the silence underneath - the grief, the hurt, the scared little boy. Addressing this directly: \"You don't need his voice anymore, Danny. You can decide for yourself what strength means.\" → +3 Accept-Himself (THE core wound)\n\n**DANNY'S JUSTICE KNIGHT TRANSFORMATION:**\n\nWhen players enter Inner Space fully, Danny transforms into The Jester - full Justice Knight form. Gaudy comedian suit, Star of Ignorance gleaming. But he's not just attacking - he's performing.\n\n\"Welcome to the show, folks! Tonight's performance: 'How I Learned to Stop Worrying and Embrace That Everyone's Weak!' Laugh or cry, your choice. Me? I chose laughter. Much safer.\"\n\n**THE JESTER'S ATTACKS:**\n\n1. **Callback to Trauma**: Danny makes 'jokes' about players' insecurities (rejection-1 to target)\n2. **You Had to Be There**: References 'better times' that exclude players (isolated-1)\n3. **Dying on Stage**: Summons Tough Crowd constructs that heckle and attack\n4. **Kill the Lights**: Desperate final attack if cornered (overwhelmed-2 to all)\n\n**HARD MOVES (If Accept-Himself isn't building):**\n- Father's voice gets louder, more demanding\n- Apartment walls close in, representing isolation\n- More rejection letters materialize, piling up\n- Young Danny starts mimicking his father's cruelty: \"I'm not weak! I'm STRONG! I hurt them first!\"\n\n**HARD MOVES (If Rejection builds too high):**\n- Danny becomes more aggressive, seeing players as 'just like everyone else who doesn't understand'\n- Tough Crowd constructs multiply\n- The apartment begins to crystallize completely - Danny's retreating into Ignorance\n- If Rejection hits 5, Danny escapes and may return as recurring antagonist",
+        "title": "Inner Space: The Apartment",
+        "mcGuide": {
+          "stuckPoints": [
+            {
+              "trigger": "Players don't know how to build Accept-Himself meter",
+              "suggestion": "Danny can monologue, revealing wounds: 'My father said crying was for women and children. So I learned to laugh instead. Even when it hurt. Especially when it hurt.' This is a clear invitation to contradict him."
+            },
+            {
+              "trigger": "Players are only attacking, building Rejection",
+              "suggestion": "Young Danny can interrupt combat: 'Please stop hitting him. He's already hurt. Can't you see he's already hurt?' This might prompt players to try CARE or TALK IT OUT."
+            },
+            {
+              "trigger": "Players are overwhelmed by complexity",
+              "suggestion": "Simplify to clear objectives: Stop the answering machine (CARE), talk to Danny about his father (TALK IT OUT), fight constructs to create space (SLAY). Break it down."
+            },
+            {
+              "trigger": "'Accept-Himself' not building fast enough",
+              "suggestion": "Adult Danny can have a moment of clarity: 'I'm so tired. I'm so tired of being angry. But I don't know how to stop.' This is a vulnerability window - perfect for Care or Be Vulnerable."
+            },
+            {
+              "trigger": "'Rejection' climbing too fast",
+              "suggestion": "Young Danny starts panicking: 'Dad was right! We're weak! We deserve this!' Adult Danny's armor solidifies. Player needs immediate emotional pivot."
+            }
           ],
-          "harder": [
-            "NPCs provide fewer hints",
-            "Danny's attacks are more aggressive and unpredictable",
-            "Accept-Himself meter builds slower (requires 8 instead of 6)",
-            "Rejection meter builds faster (each fail = +2)",
-            "Tough Crowd constructs respawn in Inner Space",
-            "Time pressure: answering machine messages intensify over time"
+          "importantNPCNotes": "Young Danny is scared and wants permission to be soft - he's exhausted from performing strength. Adult Danny is the hardest to reach because he has the most armor, but underneath he's desperate for rest. The Father's Voice has no physical form - it's everywhere and nowhere. Attacking it directly (Slay) can work but requires good roll. The core wound is the answering machine - stopping it means choosing himself over his father's judgment.",
+          "pacingTips": "30-45 minutes. This is the emotional climax and HEART of the campaign - take your time. Let emotional beats land. When Danny cries, let there be silence. When the answering machine stops, pause. Balance emotional beats with mechanical challenges. If energy drops, constructs can attack. If rushing through emotions, Young Danny can force a pause by refusing to move forward until seen. The goal is catharsis, not just victory."
+        }
+      },
+      "aftermath": {
+        "description": "The resolution shows the consequences of success or failure. Danny's redemption creates ripples of healing through the Theater District, while his loss deepens the Ignorant Seven's hold and sets up future conflicts.",
+        "outcomes": [
+          {
+            "condition": "redeemed",
+            "description": "Danny removes his Star of Ignorance voluntarily. The Tough Crowd is freed from their brainwashing - confused, ashamed, but FREE. Danny commits to making amends: apologizing to Rosa, Marcus, and other performers, helping repair the damage, possibly turning Moretti's into a venue that honors the past while embracing the present. He offers to help the players understand other 'old school' entertainers who might be struggling. Begins therapy to process his father's abuse.",
+            "tags": [
+              "helped-danny-heal",
+              "theater-district-saved",
+              "morettis-redeemed",
+              "reformed-comedian-ally"
+            ],
+            "nextChapterImpact": "Danny becomes an ally in future chapters. Can provide information about the Ignorant Seven and their recruitment tactics. The Theater District is stronger and more unified. Other fallen icons might be easier to reach with Danny's testimony about redemption. However, Dr. Pierce may reference 'that comedian who went soft' as an example of weakness."
+          },
+          {
+            "condition": "lost",
+            "description": "Danny flees deeper into his Ignorance, convinced the world will never understand him. The Tough Crowd remains under his influence. The harassment continues. Moretti's stays crystallized and dangerous. Danny may ally with other Justice Knights, particularly Dr. Pierce, who validates his 'strength through cruelty' philosophy. The Theater District remains under threat.",
+            "tags": [
+              "dannys-vendetta",
+              "theater-district-under-threat",
+              "morettis-corrupted",
+              "ignorance-spreads"
+            ],
+            "nextChapterImpact": "Danny becomes a recurring antagonist who might appear in Chapters 2-5. His failure to change emboldens other Justice Knights and makes them harder to reach. The Theater District requires ongoing protection. Danny might serve as a lieutenant to Dr. Pierce or eventually become a Chapter 5 boss. However, door isn't completely closed - moments of doubt remain, redemption still possible but much harder."
+          }
+        ],
+        "location": "theater-district",
+        "music": [
+          "hero-rises",
+          "tide-turns",
+          "theater-district-investigation-1"
+        ],
+        "npcs": [
+          "danny-civilian",
+          "rosa",
+          "marcus",
+          "detective-chen",
+          "mama-jay",
+          "tough-crowd-members"
+        ],
+        "tags": [
+          "helped-danny-heal",
+          "theater-district-saved",
+          "dannys-vendetta",
+          "chapter-complete"
+        ],
+        "mcGuide": {
+          "stuckPoints": [
+            {
+              "trigger": "Players don't know what to do after Inner Space",
+              "suggestion": "Have Detective Chen or Rosa find them outside Moretti's to provide direction and closure."
+            },
+            {
+              "trigger": "Players want to immediately move to next chapter",
+              "suggestion": "Mama Jay can encourage rest: 'Even heroes need to process, baby. Take a breath. The next fight will still be there tomorrow.'"
+            }
+          ],
+          "importantNPCNotes": "This scene is about emotional resolution and consequences. NPCs should respond authentically to whatever outcome happened - celebration for redemption, concern for partial success, fear for failure. Don't rush this. Let players feel the weight of their choices. Redeemed Danny is fragile but determined. Lost Danny is bitter but showing cracks.",
+          "pacingTips": "15-20 minutes. This is denouement - wrapping up loose ends and emotional threads. If players saved Danny, let them enjoy the victory and see the community healing. If they lost him, let them feel the consequences and fear. Either way, this scene transitions to the next chapter while honoring what came before."
+        },
+        "content": "**IF DANNY IS REDEEMED (Accept-Himself = 6):**\n\n'You emerge from Moretti's basement into the cool night air of the Theater District. Behind you, the venue that was a shrine to bitterness now feels lighter somehow - as if a weight has been lifted from its very foundations.\n\nDanny follows you out, looking exhausted but genuine. The Star of Ignorance is gone. So is the manic energy he wore like armor. What's left is a tired man in his sixties who just confronted thirty years of pain.\n\n\"I... I just wanted to belong. Somewhere. Anywhere. And when comedy changed, when the world changed... I felt like there was no place for me anymore. So I tried to make everyone else feel how I felt. Small. Wrong. Not enough.\"\n\n*He looks at his empty hands where the Star used to be.*\n\n\"But my father was wrong. Crying isn't weakness. Vulnerability isn't failure. And I don't have to hurt people to protect myself.\"\n\nThe Tough Crowd members are waking up - literally and figuratively. The Ignorance that held them is broken. They're confused, ashamed, but FREE. Some are crying. Others are apologizing. It's messy and raw and real.'\n\n**DANNY'S COMMITMENTS:**\n\n1. **Personal Amends**: Reaches out to Rosa, Marcus, and other performers. Makes PUBLIC apologies, no excuses.\n2. **Tough Crowd Care**: Helps members process their own hurt, get resources, find healthier communities.\n3. **Moretti's Transformation**: Considers turning it into a venue that honors history while embracing present.\n4. **Therapy**: Starts processing father's abuse with professional help.\n5. **Future Ally**: Offers to help understand other 'old school' folks who feel left behind.\n\n**COMMUNITY REACTIONS:**\n\nRosa: \"I'm not ready to trust him yet. But I'm willing to watch. To see if he means it. That's more than I'd give most people who hurt us like he did.\"\n\nMarcus: \"He looked me in the eye and apologized. Like, really apologized. Said he was wrong to target me, wrong to use his pain as an excuse. That's... that's a start.\"\n\nDetective Chen: \"Good work. I don't know what you did in there, but complaints have stopped, Tough Crowd dispersed, and Danny Carbone just turned himself in to make a statement. Taking responsibility. That's rare.\"\n\n**MAMA JAY'S WISDOM** (at Café Greenwich):\n\n\"You did good, baby. You saw past the anger to the hurt underneath. That's real strength. Danny's got a long road ahead, but at least now he's walking it instead of hiding from it.\n\nThe Theater District is gonna heal. Might take time, but it'll heal. And you helped make that possible.\n\nNow... there's word about something happening at the university. Dr. Pierce - talking about 'cognitive wellness' in ways that sound awful familiar. But that's for another day. Tonight, rest. You earned it.\"\n\n---\n\n**IF DANNY IS LOST (Rejection = 5):**\n\n'The Jester remains standing. Star of Ignorance gleaming brighter than ever. His laugh echoes through the empty venue - manic, defensive, broken.\n\n\"You almost had me. For a second, I almost believed the pretty lies. But I know better. I've LIVED it. The world is cruel. Comedy is war. And you've just proven that even your 'empathy' has limits.\n\nLook - you're leaving. You're giving up on me. Just like the industry. Just like the audiences. JUST LIKE MY FATHER SAID EVERYONE WOULD.\n\nAt least I'm HONEST about it.\"\n\nHe retreats deeper into Moretti's. The door slams. The Ignorance crystals spread. You're ejected back to the street.'\n\n**CONSEQUENCES:**\n\n1. **Community Divided**: Some people sympathize with Danny's pain, others demand action. Theater District tense.\n2. **The Jester's Evolution**: Doubles down on philosophy, recruits more followers, Ignorance grows.\n3. **Moretti's Corrupted**: Becomes dangerous zone, possible future battleground.\n4. **Future Antagonist**: Danny may appear in later chapters, possibly allied with Dr. Pierce.\n5. **Tough Crowd Remains**: Some members freed, but core believers stay loyal.\n\n**BUT:** Door not completely closed. Moments of doubt remain. Danny cried in the apartment. He KNOWS something's wrong. Future redemption possible, just much harder.\n\n**MAMA JAY'S RESPONSE:**\n\n\"You tried, baby. Sometimes people aren't ready to be saved. But don't you give up on community. Someone has to remember what we're fighting for.\n\nAnd Danny? He's not gone. Not completely. I saw him looking at that poster of his first show. Touched it like it hurt. He's still in there. Just... buried deeper now.\n\nThe Theater District needs protection. Keep an eye out there. And... be ready. The Seven are watching how we respond to this. They're learning from us just like we're learning from them.\"",
+        "title": "Aftermath & Resolution"
+      },
+      "scalingAndPacing": {
+        "partySize": {
+          "1": {
+            "ignoranceLimit": 3,
+            "pawns": 0,
+            "difficulty": "Solo - Intimate & Psychological",
+            "adjustments": "Focus heavily on investigation and Inner Space over combat. Remove Tough Crowd from Moretti's confrontation (just Danny). Danny's Ignorance Limit drops to 3. Accept-Himself meter requires 4-5 instead of 6. More emphasis on TALK IT OUT and CARE moves. Extended investigation scenes with deeper NPC conversations. Give player moral support from NPCs (Detective Chen or Marcus can accompany)."
+          },
+          "2-3": {
+            "ignoranceLimit": 5,
+            "pawns": 2,
+            "difficulty": "Small Group - Standard",
+            "adjustments": "Run as written. Each player can focus on different aspects of Danny's healing in Inner Space. 2 Tough Crowd members support Danny at Moretti's. Balanced combat and social challenges."
+          },
+          "4-7": {
+            "ignoranceLimit": 6,
+            "pawns": 4,
+            "difficulty": "Full Group - Epic",
+            "adjustments": "Add more Tough Crowd (4-6 total). Increase environmental complications (collapsing venue, fire hazards, civilian evacuation). Inner Space can involve players splitting up to help Young Danny and Adult Danny simultaneously. Multiple theater venues affected. More elaborate constructs from The Jester. Consider adding lieutenant-level allies for Danny (other bitter comedians)."
+          }
+        },
+        "sessionLength": {
+          "oneShot": "4-5 hours - Combine investigation scenes. Focus on Rosa OR Marcus, not both. Skip detailed Moretti's investigation. Go straight from Scene 2 to confrontation. Streamline Inner Space to 3-4 key moments focusing on answering machine and Young Danny.",
+          "twoSession": "Session 1: Scenes 1-3 Investigation & Moretti's (2-3 hours). Break after gathering all clues and Danny retreats to Inner Space. Session 2: Inner Space & Aftermath (2-3 hours). Allows deep emotional processing.",
+          "epic": "3 sessions - Session 1: Full investigation with ALL NPCs, establish stakes (2-3 hours). Session 2: Moretti's discovery, confrontation, beginning of Inner Space (2-3 hours). Session 3: Complete Inner Space journey and aftermath with community healing (2-3 hours). For maximum emotional depth and character development."
+        },
+        "difficultyAdjustments": {
+          "easier": {
+            "ignoranceLimitModifier": -1,
+            "additionalTags": 3,
+            "innerSpaceAdjustment": "Accept-Himself only needs 4 points instead of 6",
+            "note": "Give more story tags from investigation. Young Danny is more responsive and eager for help. The Father's Voice is weaker and easier to challenge. Good for first-time players or when prioritizing emotional safety over challenge."
+          },
+          "harder": {
+            "ignoranceLimitModifier": 2,
+            "additionalPawns": 2,
+            "innerSpaceAdjustment": "Rejection only needs 4 points instead of 5 to trigger escape",
+            "note": "Add environmental hazards at Moretti's. The Jester's constructs are more powerful and numerous. The Father's Voice is overwhelming and relentless. Inner Space requires more nuanced approaches and perfect timing. For experienced players wanting serious challenge."
+          }
+        },
+        "title": "Scaling & Pacing",
+        "content": "**PARTY SIZE ADJUSTMENTS:**\n\n**Solo (1 player):**\nIntimate, psychological focus. Danny's Ignorance Limit: 3. No Tough Crowd at Moretti's. Accept-Himself needs 4-5 instead of 6. Player gets NPC ally for moral support. Investigation is deeper and more personal.\n\n**Small Group (2-3 players):**\nRun as written. Balanced combat and social challenges. Each player can take different emotional approaches in Inner Space. 2 Tough Crowd members. Ignorance Limit: 5.\n\n**Full Group (4-7 players):**\nEpic scale. Multiple theater venues affected. 4-6 Tough Crowd members. Environmental hazards (fire, collapse, evacuations). Inner Space allows party split (some help Young Danny, others help Adult Danny). More constructs. Ignorance Limit: 6.\n\n---\n\n**SESSION LENGTH:**\n\n**One-Shot (4-5 hours):**\nCombine investigation scenes. Choose Rosa OR Marcus, not both. Skip detailed Moretti's exploration. Streamline Inner Space to core moments: answering machine, Young Danny, final confrontation. Fast-paced but emotionally complete.\n\n**Two Sessions:**\nSession 1: Investigation & Moretti's (2-3 hours). Break when Danny opens Inner Space door.\nSession 2: Inner Space & Aftermath (2-3 hours). Deep emotional processing with time to breathe.\n\n**Epic (3 sessions):**\nSession 1: Full investigation, all NPCs, world-building (2-3 hours).\nSession 2: Moretti's discovery, confrontation, Inner Space begins (2-3 hours).\nSession 3: Complete Inner Space, aftermath, community healing (2-3 hours).\nMaximum emotional depth and character development.\n\n---\n\n**DIFFICULTY ADJUSTMENTS:**\n\n**Easier:**\n- Inner Space: Accept-Himself only needs 4 points instead of 6\n- Give more story tags from investigation\n- Young Danny more responsive\n- Father's Voice easier to challenge\n- Good for first-time players or emotional safety focus\n\n**Harder:**\n- Inner Space: Rejection only needs 4 points to trigger escape\n- Add environmental hazards\n- Jester's constructs more powerful\n- Father's Voice overwhelming\n- Requires nuanced timing and perfect emotional reads\n- For experienced players wanting serious challenge",
+        "consequences": {
+          "description": "This chapter establishes the player's approach to Fallen Icons and the Ignorant Seven. Success or failure here ripples through future chapters.",
+          "rippleEffects": [
+            "The approach taken with Danny sets precedent for future Fallen Icons",
+            "The Theater District community sees how the player handles complex moral situations",
+            "The Ignorant Seven adjust their tactics based on this outcome",
+            "Player's relationship with Mama Jay and House Rainbow deepens or strains",
+            "Moretti's role in the community is determined",
+            "Other Fallen Icons (especially Dr. Pierce) may be easier or harder to reach",
+            "Danny's fate affects recruitment strategies of the Ignorant Seven"
           ]
         }
       },
-      "campaignProgress": {
-        "outcomes": [
-          {
-            "id": "danny-redeemed",
-            "name": "Danny Was Redeemed",
-            "description": "Danny confronted his trauma, removed his Star of Ignorance, and committed to making amends. The Tough Crowd was freed. Theater District is healing.",
-            "consequences": [
-              "Danny may appear as ally in future chapters",
-              "Theater District NPCs trust House Rainbow",
-              "Players gain reputation for redemption over destruction",
-              "Moretti's can become safe-space venue",
-              "Other Justice Knights may hear about Danny's change"
-            ],
-            "nextChapterImpact": "Dr. Pierce may reference 'that comedian who went soft' as an example of weakness. Danny might provide intel on Ignorant Seven tactics."
+      "combatEncounters": [
+        {
+          "name": "The Jester + Tough Crowd",
+          "type": "combat",
+          "location": "morettis-cellar",
+          "ignoranceLimit": 5,
+          "pawns": "2-4 (scale with party size)",
+          "description": "Justice Knight confrontation. The Jester uses cruel comedy and nostalgic attacks. The Tough Crowd supports but can be swayed with genuine care.",
+          "specialMechanics": [
+            "Danny's attacks are primarily emotional/verbal rather than physical",
+            "The Jester gets more desperate as Ignorance lowers - more vulnerable",
+            "Comedy recordings play on loop, creating oppressive atmosphere",
+            "Helping Tough Crowd members without judgment weakens The Jester",
+            "Danny's journal can be used as leverage - reading passages aloud can trigger vulnerability",
+            "The stage at Moretti's is the portal to Inner Space - appears when Ignorance reaches 0-2",
+            "Environmental tag 'Moretti's-Nostalgic-Shrine-2' affects all actions"
+          ],
+          "weaknesses": [
+            "Direct empathy about his father's abuse - contradicts his armor",
+            "Acknowledgment of his pain without excusing his actions",
+            "References to what comedy meant before fear corrupted it",
+            "Showing vulnerability without expecting reciprocation",
+            "The Jester is exhausted underneath the Ignorance - fatigue is exploitable",
+            "Reminding him what Moretti's used to represent (joy, not anger)"
+          ],
+          "victoryCondition": "Reduce Ignorance to 0-2 to open Inner Space portal. Note: This is not defeat - this is breakthrough. The real healing happens in Inner Space."
+        },
+        {
+          "name": "Inner Space - The Jester (Full Form)",
+          "type": "psychological-combat",
+          "location": "dannys-inner-space",
+          "description": "Full Justice Knight psychological battle in Danny's apartment. Players must balance building Accept-Himself (6 to succeed) while preventing Rejection (5 = failure). Combat is emotional warfare - ANY move can affect both meters.",
+          "counters": {
+            "acceptHimself": {
+              "max": 6,
+              "buildBy": [
+                "+3: Stopping answering machine, destroying Father's Voice with Slay (10+), direct address of 'Only Weak Men Cry' wound, offering vulnerability with no deflection",
+                "+2: Helping Young Danny cry safely, sharing vulnerable experience, creating meaningful counter-narrative tag, removing 'Must Be Funny' status",
+                "+1: Kind words with emotional resonance, creating opening with Get A Clue, passive supportive presence"
+              ]
+            },
+            "rejection": {
+              "max": 5,
+              "buildBy": [
+                "+2: Attacking without addressing pain, treating Tough Crowd as disposable, mocking his nostalgia, reinforcing 'you're wrong' without empathy",
+                "+1: Dismissing feelings, rushing emotional moments, focusing only on combat, ignoring Young Danny"
+              ]
+            }
           },
-          {
-            "id": "danny-partial",
-            "name": "Danny Partially Reformed",
-            "description": "Danny understands he was wrong but fled before fully healing. Tough Crowd was freed but Danny remains in hiding, processing his trauma alone.",
-            "consequences": [
-              "Danny is in limbo - not enemy, not ally",
-              "Theater District is safe but wary",
-              "Players may encounter Danny again struggling with guilt",
-              "Potential for future redemption or relapse",
-              "Unresolved emotional thread"
-            ],
-            "nextChapterImpact": "Danny might reach out for help during Chapter 2-3, creating a side mission opportunity. His story remains open."
-          },
-          {
-            "id": "danny-escaped",
-            "name": "Danny's Vendetta Continues",
-            "description": "Danny fled deeper into Ignorance. Tough Crowd remains partially active. Theater District remains under threat.",
-            "consequences": [
-              "Danny becomes recurring antagonist",
-              "May ally with other Justice Knights (especially Dr. Pierce)",
-              "Theater District requires ongoing protection",
-              "Moretti's remains corrupted",
-              "Future confrontations will be harder"
-            ],
-            "nextChapterImpact": "Danny might appear in Chapter 2 working with Dr. Pierce. His failure to change emboldens other Justice Knights. Theater District remains vulnerable."
-          }
-        ],
-        "tags": [
-          "completed-chapter-1",
-          "knows-nostalgic-ignorance",
-          "theater-district-reputation",
-          "inner-space-experienced"
-        ]
-      }
+          "threeAspects": [
+            {
+              "name": "Young Danny (Age 8)",
+              "description": "Crying, hiding it, clutching joke book. Believes if he's funny enough, dad will stop being angry. Desperately needs permission to be soft.",
+              "canHelp": "Remove 'Must Be Funny' status, take joke book gently, tell him crying is okay, protect him from Father's Voice"
+            },
+            {
+              "name": "Adult Danny / The Jester",
+              "description": "Flickering between forms. Frozen by answering machine. Justice Knight armor is his 'protection' from vulnerability.",
+              "canHelp": "Address false choice between cruelty and weakness, show strength includes tenderness, reference pre-corruption comedy meaning, stop the answering machine"
+            },
+            {
+              "name": "The Father's Voice (Ignorance Core)",
+              "description": "Internalized toxic masculinity. No physical form - it's everywhere. Reinforces 'only weak men cry' and 'comedy is war.'",
+              "canHelp": "Confront with Slay (verbal attack on 10+), help Danny hear difference between his voice and father's poison, remove environmental dominance"
+            }
+          ],
+          "criticalMoment": "The Answering Machine represents Danny's belief he NEEDS his father's judgment to stay 'strong.' Stopping it means confronting the silence underneath - the grief, the hurt, the scared little boy. Addressing this directly: 'You don't need his voice anymore, Danny. You can decide for yourself what strength means.' → +3 Accept-Himself",
+          "specialMechanics": [
+            "ANY MOVE can affect Ignorance meters - not just Slay",
+            "Environmental tags are key: 'Father's Voice Looping', 'Frozen in the 90s', 'Rejection Letters Everywhere'",
+            "Joke Book represents when humor was joy - can be used to show contrast",
+            "Answering Machine is Ignorance Core - stopping it is game-changing",
+            "Young Danny's tears are a breakthrough moment - NOT a failure",
+            "Adult Danny's flickering shows the real person underneath trying to break free"
+          ]
+        }
+      ]
+    }
+  ],
+  "storyTags": {
+    "investigation": [
+      "Mama Jay's Blessing",
+      "Theater District Mission",
+      "Knows About Moretti's",
+      "Looking for The Jester",
+      "Theater District Investigation",
+      "Knows The Jester Is Danny",
+      "Heard About Moretti's",
+      "Understands The Hurt",
+      "Rosa Trusts You",
+      "Marcus Shared His Story",
+      "Detective Chen Ally",
+      "Inside Moretti's",
+      "Direct Confrontation With Danny",
+      "Read Danny's Journal",
+      "Talked to Tough Crowd",
+      "Danny's Pain Visible",
+      "He Mentioned His Father",
+      "Saw Him Vulnerable",
+      "Witnessed The Transformation",
+      "Tough Crowd Doubts Rising"
+    ],
+    "emotional": [
+      "Helped Danny Heal",
+      "Theater District Saved",
+      "Moretti's Redeemed",
+      "Reformed Comedian Ally",
+      "Danny's Vendetta",
+      "Theater District Under Threat",
+      "Moretti's Corrupted",
+      "Stopped The Answering Machine",
+      "Young Danny Protected",
+      "Father's Voice Challenged",
+      "Comedy Restored",
+      "Vulnerability Is Strength",
+      "Cruelty Is Not Armor",
+      "Saw Young Danny Cry",
+      "Witnessed The Break",
+      "Only Weak Men Cry - Challenged",
+      "Comedy Was Weapon - Healed"
+    ],
+    "consequences": [
+      "Community Trust +1",
+      "Ignorant Seven Watching",
+      "Danny Becomes Ally",
+      "Danny Becomes Enemy",
+      "Tough Crowd Freed",
+      "Tough Crowd Still Loyal",
+      "Moretti's Safe Space",
+      "Moretti's Danger Zone",
+      "Chapter Complete"
+    ]
+  },
+  "statusTags": {
+    "beneficial": [
+      "+1 Forward",
+      "+1 Ongoing",
+      "Inspired-2",
+      "Protected-2",
+      "Understanding-2",
+      "Supported-2",
+      "Confident-2",
+      "Validated-2",
+      "Clear-Headed-1",
+      "Determined-2",
+      "Empowered-2",
+      "Rosa's Gratitude-1",
+      "Marcus's Trust-1",
+      "Detective Chen's Backup-1",
+      "Mama Jay's Pride-2",
+      "Tough Crowd Hesitation-1"
+    ],
+    "harmful": [
+      "Self-Doubting-1",
+      "Mocked-1",
+      "Overwhelmed-2",
+      "Intimidated-1",
+      "Rejection-1",
+      "Isolated-1",
+      "Guilt-Tripped-1",
+      "Heckled-2",
+      "Shaken-1",
+      "Father's Voice Echo-2",
+      "Must Be Funny-2",
+      "Comedy Is War-2",
+      "Frozen By Nostalgia-1",
+      "Trapped In Past-2"
+    ]
+  },
+  "checkpoints": [
+    {
+      "description": "Learned about The Jester from Mama Jay",
+      "optional": false
+    },
+    {
+      "description": "Investigated Theater District (spoke with Rosa)",
+      "optional": true
+    },
+    {
+      "description": "Investigated Theater District (spoke with Marcus)",
+      "optional": true
+    },
+    {
+      "description": "Investigated Theater District (spoke with Detective Chen)",
+      "optional": true
+    },
+    {
+      "description": "Discovered Moretti's Comedy Cellar",
+      "optional": false
+    },
+    {
+      "description": "Read Danny's journal",
+      "optional": true
+    },
+    {
+      "description": "Talked to Tough Crowd members",
+      "optional": true
+    },
+    {
+      "description": "Confronted Danny at Moretti's",
+      "optional": false
+    },
+    {
+      "description": "Entered Danny's Inner Space",
+      "optional": false
+    },
+    {
+      "description": "Addressed 'Only Weak Men Cry' core wound",
+      "optional": false
+    },
+    {
+      "description": "Helped Young Danny",
+      "optional": false
+    },
+    {
+      "description": "Confronted Adult Danny / The Jester",
+      "optional": false
+    },
+    {
+      "description": "Challenged The Father's Voice",
+      "optional": false
+    },
+    {
+      "description": "Stopped the answering machine",
+      "optional": true
+    },
+    {
+      "description": "Reached breakthrough moment (Accept-Himself = 6 OR Rejection = 5)",
+      "optional": false,
+      "triggersChapter": null
     }
   ],
   "locations": [
@@ -405,8 +705,8 @@
       "powers": [
         "Callback to Trauma (rejection-1)",
         "You Had to Be There (isolated-1)",
-        "Bombing on Stage (summons constructs)",
-        "Die on Stage (overwhelmed-2)"
+        "Dying on Stage (summons constructs)",
+        "Kill the Lights (overwhelmed-2)"
       ],
       "vulnerability": "Compassion about his father's abuse. Acknowledgment that he's hurting. Recognition that comedy can evolve without erasing him.",
       "keyQuote": "I'm not trying to hurt anyone. I'm just trying to protect the way things were."
